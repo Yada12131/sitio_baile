@@ -1,0 +1,96 @@
+'use client';
+
+import { useState } from 'react';
+import { Trash2, Plus, Users, Calendar, User } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+
+export default function ClassesManager({ initialClasses }: { initialClasses: any[] }) {
+    const [classes, setClasses] = useState(initialClasses);
+    const [isAdding, setIsAdding] = useState(false);
+    const [formData, setFormData] = useState({ name: '', instructor: '', schedule: '', capacity: 20 });
+    const router = useRouter();
+
+    async function handleDelete(id: number) {
+        if (!confirm('¿Seguro que deseas eliminar esta clase?')) return;
+        await fetch(`/api/classes?id=${id}`, { method: 'DELETE' });
+        setClasses(classes.filter(c => c.id !== id));
+        router.refresh();
+    }
+
+    async function handleSubmit(e: React.FormEvent) {
+        e.preventDefault();
+        const res = await fetch('/api/classes', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData),
+        });
+
+        if (res.ok) {
+            setIsAdding(false);
+            setFormData({ name: '', instructor: '', schedule: '', capacity: 20 });
+            router.refresh();
+            window.location.reload();
+        }
+    }
+
+    return (
+        <div>
+            <div className="flex justify-between items-center mb-8">
+                <h1 className="text-3xl font-bold text-white">Gestión de Clases</h1>
+                <button
+                    onClick={() => setIsAdding(!isAdding)}
+                    className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-bold transition-colors"
+                >
+                    {isAdding ? 'Cancelar' : <><Plus size={20} /> Nueva Clase</>}
+                </button>
+            </div>
+
+            {isAdding && (
+                <div className="bg-zinc-900 p-6 rounded-xl border border-white/10 mb-8 animate-fade-in-up">
+                    <h2 className="text-xl font-bold text-white mb-4">Agregar Nueva Clase</h2>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm text-gray-400 mb-1">Nombre de la Clase</label>
+                                <input type="text" required value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} className="w-full bg-black border border-white/20 rounded-lg px-3 py-2 text-white" placeholder="Ej: Salsa Casino" />
+                            </div>
+                            <div>
+                                <label className="block text-sm text-gray-400 mb-1">Instructor</label>
+                                <input type="text" required value={formData.instructor} onChange={e => setFormData({ ...formData, instructor: e.target.value })} className="w-full bg-black border border-white/20 rounded-lg px-3 py-2 text-white" placeholder="Ej: Juan Pérez" />
+                            </div>
+                            <div>
+                                <label className="block text-sm text-gray-400 mb-1">Horario</label>
+                                <input type="text" required value={formData.schedule} onChange={e => setFormData({ ...formData, schedule: e.target.value })} className="w-full bg-black border border-white/20 rounded-lg px-3 py-2 text-white" placeholder="Ej: Lunes y Miércoles 7pm" />
+                            </div>
+                            <div>
+                                <label className="block text-sm text-gray-400 mb-1">Capacidad Máxima</label>
+                                <input type="number" required value={formData.capacity} onChange={e => setFormData({ ...formData, capacity: parseInt(e.target.value) })} className="w-full bg-black border border-white/20 rounded-lg px-3 py-2 text-white" />
+                            </div>
+                        </div>
+                        <button type="submit" className="bg-white text-black font-bold px-6 py-2 rounded-lg hover:bg-gray-200">Guardar Clase</button>
+                    </form>
+                </div>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {classes.map((cls) => (
+                    <div key={cls.id} className="bg-zinc-900 p-6 rounded-xl border border-white/10 hover:border-pink-500/30 transition-all">
+                        <div className="flex justify-between items-start mb-4">
+                            <h3 className="text-xl font-bold text-white">{cls.name}</h3>
+                            <button onClick={() => handleDelete(cls.id)} className="text-red-500 hover:text-red-400"><Trash2 size={18} /></button>
+                        </div>
+
+                        <div className="space-y-2 text-gray-300 text-sm">
+                            <div className="flex items-center gap-2"><User size={16} className="text-pink-500" /> <span>{cls.instructor}</span></div>
+                            <div className="flex items-center gap-2"><Calendar size={16} className="text-pink-500" /> <span>{cls.schedule}</span></div>
+                            <div className="flex items-center gap-2"><Users size={16} className="text-pink-500" /> <span>Cupo: {cls.capacity}</span></div>
+                        </div>
+                    </div>
+                ))}
+                {classes.length === 0 && !isAdding && (
+                    <p className="text-gray-500 col-span-full text-center py-10">No hay clases registradas.</p>
+                )}
+            </div>
+        </div>
+    );
+}

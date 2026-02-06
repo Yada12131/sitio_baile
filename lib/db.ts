@@ -1,0 +1,118 @@
+import Database from 'better-sqlite3';
+import path from 'path';
+
+const dbPath = path.join(process.cwd(), 'dance_club.db');
+const db = new Database(dbPath);
+
+// Enable WAL mode for better concurrency
+db.pragma('journal_mode = WAL');
+
+// Initialize database tables
+const initDb = () => {
+  // Events Table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS events (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      description TEXT NOT NULL,
+      date TEXT NOT NULL,
+      image TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+  // Contact Messages Table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS messages (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      email TEXT NOT NULL,
+      subject TEXT NOT NULL,
+      message TEXT NOT NULL,
+      read INTEGER DEFAULT 0,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+  // Satisfaction Feedback Table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS feedback (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      rating INTEGER NOT NULL,
+      comments TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+  // Classes Table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS classes (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      instructor TEXT NOT NULL,
+      schedule TEXT NOT NULL,
+      capacity INTEGER DEFAULT 20,
+      image TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+  // Registrations Table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS registrations (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      class_id INTEGER NOT NULL,
+      student_name TEXT NOT NULL,
+      student_email TEXT NOT NULL,
+      student_phone TEXT,
+      status TEXT DEFAULT 'pending',
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+  // Settings Table for Brand & Content
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS settings (
+      key TEXT PRIMARY KEY,
+      value TEXT
+    )
+  `);
+
+  seedData();
+};
+
+const seedData = () => {
+  const eventCount = (db.prepare('SELECT COUNT(*) as count FROM events').get() as any).count;
+  if (eventCount === 0) {
+    console.log('Seeding data...');
+    const insertEvent = db.prepare('INSERT INTO events (title, description, date, image) VALUES (?, ?, ?, ?)');
+    insertEvent.run('Noche de Salsa', 'Ven a disfrutar de la mejor salsa de la ciudad con DJ Invitado.', '2023-11-25', '/hero-bg.jpg');
+    insertEvent.run('Bachata Sensual', 'Clase abierta y baile social toda la noche.', '2023-11-30', '/hero-bg.jpg');
+    insertEvent.run('Fiesta de Neon', 'Vístete de colores brillantes y brilla en la pista.', '2023-12-05', '/hero-bg.jpg');
+
+    const insertClass = db.prepare('INSERT INTO classes (name, instructor, schedule, capacity) VALUES (?, ?, ?, ?)');
+    insertClass.run('Salsa Principiantes', 'Mateo H.', 'Lunes y Miércoles 7:00 PM', 20);
+    insertClass.run('Bachata Intermedio', 'Elena R.', 'Martes y Jueves 8:00 PM', 15);
+    insertClass.run('Kizomba Basics', 'Carlos D.', 'Viernes 6:00 PM', 10);
+
+    const insertMsg = db.prepare('INSERT INTO messages (name, email, subject, message) VALUES (?, ?, ?, ?)');
+    insertMsg.run('Ana García', 'ana@test.com', 'Información de precios', 'Hola, me gustaría saber los precios del VIP.');
+    insertMsg.run('Luis Diaz', 'luis@test.com', 'Clases privadas', '¿Ofrecen clases particulares para parejas?');
+
+    const insertFeedback = db.prepare('INSERT INTO feedback (rating, comments) VALUES (?, ?)');
+    insertFeedback.run(5, '¡El mejor ambiente de la ciudad!');
+    insertFeedback.run(4, 'Buena música, pero un poco lleno.');
+
+    // Default Settings
+    const insertSetting = db.prepare('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)');
+    insertSetting.run('siteName', 'Elite Dance Club');
+    insertSetting.run('heroTitle', 'Siente el Ritmo');
+    insertSetting.run('heroSubtitle', 'El club de baile más exclusivo de la ciudad. Momentos inolvidables te esperan.');
+    insertSetting.run('primaryColor', '#ec4899'); // pink-500
+    insertSetting.run('accentColor', '#a855f7');  // purple-500
+  }
+};
+
+initDb();
+
+export default db;
