@@ -1,4 +1,5 @@
 import { getDb } from '@/lib/db';
+import AdminDeleteButton from '@/components/AdminDeleteButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,6 +35,7 @@ export default function RegistrationsPage() {
                                 <th className="p-4">Estudiante</th>
                                 <th className="p-4">Correo</th>
                                 <th className="p-4">Teléfono</th>
+                                <th className="p-4">Acciones</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/10 text-gray-300">
@@ -46,11 +48,14 @@ export default function RegistrationsPage() {
                                     <td className="p-4 font-medium text-white">{reg.student_name}</td>
                                     <td className="p-4">{reg.student_email}</td>
                                     <td className="p-4">{reg.student_phone || '-'}</td>
+                                    <td className="p-4">
+                                        <AdminDeleteButton id={reg.id} endpoint="registrations" />
+                                    </td>
                                 </tr>
                             ))}
                             {registrations.length === 0 && (
                                 <tr>
-                                    <td colSpan={5} className="p-8 text-center text-gray-500">
+                                    <td colSpan={6} className="p-8 text-center text-gray-500">
                                         No hay inscripciones aún.
                                     </td>
                                 </tr>

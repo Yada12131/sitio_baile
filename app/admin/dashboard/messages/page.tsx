@@ -1,4 +1,5 @@
 import { getDb } from '@/lib/db';
+import AdminDeleteButton from '@/components/AdminDeleteButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,6 +32,7 @@ export default function MessagesPage() {
                                 <th className="p-4">Teléfono</th>
                                 <th className="p-4">Asunto</th>
                                 <th className="p-4">Mensaje</th>
+                                <th className="p-4">Acciones</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/10 text-gray-300">
@@ -44,11 +46,14 @@ export default function MessagesPage() {
                                     <td className="p-4">{/* @ts-ignore */ msg.phone || '-'}</td>
                                     <td className="p-4">{msg.subject}</td>
                                     <td className="p-4 max-w-xs truncate" title={msg.message}>{msg.message}</td>
+                                    <td className="p-4">
+                                        <AdminDeleteButton id={msg.id} endpoint="messages" />
+                                    </td>
                                 </tr>
                             ))}
                             {messages.length === 0 && (
                                 <tr>
-                                    <td colSpan={5} className="p-8 text-center text-gray-500">
+                                    <td colSpan={7} className="p-8 text-center text-gray-500">
                                         No hay mensajes mensajes aún.
                                     </td>
                                 </tr>

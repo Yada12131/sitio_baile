@@ -15,6 +15,8 @@ export default function AdminDashboard() {
     };
 
     const cards = [
+        { title: 'Mensajes Nuevos', value: stats.messages, icon: MessageSquare, color: 'text-blue-500' },
+        { title: 'Inscripciones', value: stats.registrations, icon: Users, color: 'text-green-500' },
         { title: 'Calificación Prom.', value: stats.feedbackAvg ? stats.feedbackAvg.toFixed(1) : 'N/A', icon: Star, color: 'text-yellow-500' },
     ];
 
