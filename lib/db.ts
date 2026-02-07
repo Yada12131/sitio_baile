@@ -126,6 +126,8 @@ const seedData = (db: any) => {
       insertClass.run('Bachata Intermedio', 'Elena R.', 'Martes y Jueves 8:00 PM', 15);
       insertClass.run('Kizomba Basics', 'Carlos D.', 'Viernes 6:00 PM', 10);
 
+      /* 
+      // Test Data Removed for Production
       const insertMsg = db.prepare('INSERT INTO messages (name, email, subject, message) VALUES (?, ?, ?, ?)');
       insertMsg.run('Ana García', 'ana@test.com', 'Información de precios', 'Hola, me gustaría saber los precios del VIP.');
       insertMsg.run('Luis Diaz', 'luis@test.com', 'Clases privadas', '¿Ofrecen clases particulares para parejas?');
@@ -133,6 +135,7 @@ const seedData = (db: any) => {
       const insertFeedback = db.prepare('INSERT INTO feedback (rating, comments) VALUES (?, ?)');
       insertFeedback.run(5, '¡El mejor ambiente de la ciudad!');
       insertFeedback.run(4, 'Buena música, pero un poco lleno.');
+      */
 
       // Default Settings
       const insertSetting = db.prepare('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)');
