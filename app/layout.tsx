@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "El mejor club de baile de la ciudad.",
 };
 
-import db from "@/lib/db";
+import { getDb } from "@/lib/db";
 
 // ... imports
 
@@ -18,6 +18,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const db = getDb();
   const settings = db.prepare('SELECT * FROM settings').all();
   const settingsObj = settings.reduce((acc: Record<string, string>, curr: any) => {
     acc[curr.key] = curr.value;

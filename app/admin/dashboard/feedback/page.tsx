@@ -1,4 +1,4 @@
-import db from '@/lib/db';
+import { getDb } from '@/lib/db';
 import { Star } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
@@ -11,6 +11,7 @@ interface Feedback {
 }
 
 export default function FeedbackPage() {
+    const db = getDb();
     const feedbacks = db.prepare('SELECT * FROM feedback ORDER BY created_at DESC').all() as Feedback[];
 
     return (

@@ -1,21 +1,23 @@
 import { NextResponse } from 'next/server';
-import db from '@/lib/db';
+import { getDb } from '@/lib/db';
 
 export async function POST(request: Request) {
     try {
+        const db = getDb();
         const body = await request.json();
         const { name, email, subject, message } = body;
 
+        // Simple validation
         if (!name || !email || !subject || !message) {
-            return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
+            return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
         const stmt = db.prepare('INSERT INTO messages (name, email, subject, message) VALUES (?, ?, ?, ?)');
-        stmt.run(name, email, subject, message);
+        const result = stmt.run(name, email, subject, message);
 
-        return NextResponse.json({ success: true });
+        return NextResponse.json({ success: true, id: result.lastInsertRowid });
     } catch (error) {
-        console.error('Database error:', error);
+        console.error('Contact error:', error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }

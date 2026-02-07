@@ -1,14 +1,31 @@
 import Database from 'better-sqlite3';
 import path from 'path';
+import os from 'os';
 
-const dbPath = path.join(process.cwd(), 'dance_club.db');
-const db = new Database(dbPath);
+let dbInstance: any = null;
 
-// Enable WAL mode for better concurrency
-db.pragma('journal_mode = WAL');
+export const getDb = () => {
+  if (dbInstance) return dbInstance;
+
+  try {
+    const dbPath = process.env.NODE_ENV === 'production'
+      ? path.join(os.tmpdir(), 'dance_club.db')
+      : path.join(process.cwd(), 'dance_club.db');
+
+    console.log(`Initializing DB at ${dbPath}`);
+    dbInstance = new Database(dbPath);
+    dbInstance.pragma('journal_mode = WAL');
+
+    initDb(dbInstance);
+    return dbInstance;
+  } catch (error) {
+    console.error("FAILED TO INITIALIZE DATABASE:", error);
+    throw error;
+  }
+};
 
 // Initialize database tables
-const initDb = () => {
+const initDb = (db: any) => {
   // Events Table
   db.exec(`
     CREATE TABLE IF NOT EXISTS events (
@@ -78,41 +95,44 @@ const initDb = () => {
     )
   `);
 
-  seedData();
+  seedData(db);
 };
 
-const seedData = () => {
-  const eventCount = (db.prepare('SELECT COUNT(*) as count FROM events').get() as any).count;
-  if (eventCount === 0) {
-    console.log('Seeding data...');
-    const insertEvent = db.prepare('INSERT INTO events (title, description, date, image) VALUES (?, ?, ?, ?)');
-    insertEvent.run('Noche de Salsa', 'Ven a disfrutar de la mejor salsa de la ciudad con DJ Invitado.', '2023-11-25', '/hero-bg.jpg');
-    insertEvent.run('Bachata Sensual', 'Clase abierta y baile social toda la noche.', '2023-11-30', '/hero-bg.jpg');
-    insertEvent.run('Fiesta de Neon', 'Vístete de colores brillantes y brilla en la pista.', '2023-12-05', '/hero-bg.jpg');
+const seedData = (db: any) => {
+  try {
+    const eventCount = (db.prepare('SELECT COUNT(*) as count FROM events').get() as any).count;
+    if (eventCount === 0) {
+      console.log('Seeding data...');
+      const insertEvent = db.prepare('INSERT INTO events (title, description, date, image) VALUES (?, ?, ?, ?)');
+      insertEvent.run('Noche de Salsa', 'Ven a disfrutar de la mejor salsa de la ciudad con DJ Invitado.', '2023-11-25', '/hero-bg.jpg');
+      insertEvent.run('Bachata Sensual', 'Clase abierta y baile social toda la noche.', '2023-11-30', '/hero-bg.jpg');
+      insertEvent.run('Fiesta de Neon', 'Vístete de colores brillantes y brilla en la pista.', '2023-12-05', '/hero-bg.jpg');
 
-    const insertClass = db.prepare('INSERT INTO classes (name, instructor, schedule, capacity) VALUES (?, ?, ?, ?)');
-    insertClass.run('Salsa Principiantes', 'Mateo H.', 'Lunes y Miércoles 7:00 PM', 20);
-    insertClass.run('Bachata Intermedio', 'Elena R.', 'Martes y Jueves 8:00 PM', 15);
-    insertClass.run('Kizomba Basics', 'Carlos D.', 'Viernes 6:00 PM', 10);
+      const insertClass = db.prepare('INSERT INTO classes (name, instructor, schedule, capacity) VALUES (?, ?, ?, ?)');
+      insertClass.run('Salsa Principiantes', 'Mateo H.', 'Lunes y Miércoles 7:00 PM', 20);
+      insertClass.run('Bachata Intermedio', 'Elena R.', 'Martes y Jueves 8:00 PM', 15);
+      insertClass.run('Kizomba Basics', 'Carlos D.', 'Viernes 6:00 PM', 10);
 
-    const insertMsg = db.prepare('INSERT INTO messages (name, email, subject, message) VALUES (?, ?, ?, ?)');
-    insertMsg.run('Ana García', 'ana@test.com', 'Información de precios', 'Hola, me gustaría saber los precios del VIP.');
-    insertMsg.run('Luis Diaz', 'luis@test.com', 'Clases privadas', '¿Ofrecen clases particulares para parejas?');
+      const insertMsg = db.prepare('INSERT INTO messages (name, email, subject, message) VALUES (?, ?, ?, ?)');
+      insertMsg.run('Ana García', 'ana@test.com', 'Información de precios', 'Hola, me gustaría saber los precios del VIP.');
+      insertMsg.run('Luis Diaz', 'luis@test.com', 'Clases privadas', '¿Ofrecen clases particulares para parejas?');
 
-    const insertFeedback = db.prepare('INSERT INTO feedback (rating, comments) VALUES (?, ?)');
-    insertFeedback.run(5, '¡El mejor ambiente de la ciudad!');
-    insertFeedback.run(4, 'Buena música, pero un poco lleno.');
+      const insertFeedback = db.prepare('INSERT INTO feedback (rating, comments) VALUES (?, ?)');
+      insertFeedback.run(5, '¡El mejor ambiente de la ciudad!');
+      insertFeedback.run(4, 'Buena música, pero un poco lleno.');
 
-    // Default Settings
-    const insertSetting = db.prepare('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)');
-    insertSetting.run('siteName', 'Elite Dance Club');
-    insertSetting.run('heroTitle', 'Siente el Ritmo');
-    insertSetting.run('heroSubtitle', 'El club de baile más exclusivo de la ciudad. Momentos inolvidables te esperan.');
-    insertSetting.run('primaryColor', '#ec4899'); // pink-500
-    insertSetting.run('accentColor', '#a855f7');  // purple-500
+      // Default Settings
+      const insertSetting = db.prepare('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)');
+      insertSetting.run('siteName', 'Elite Dance Club');
+      insertSetting.run('heroTitle', 'Siente el Ritmo');
+      insertSetting.run('heroSubtitle', 'El club de baile más exclusivo de la ciudad. Momentos inolvidables te esperan.');
+      insertSetting.run('primaryColor', '#ec4899'); // pink-500
+      insertSetting.run('accentColor', '#a855f7');  // purple-500
+    }
+  } catch (err) {
+    console.warn("Seeding failed (might be read-only DB in some contexts):", err);
   }
 };
 
-initDb();
 
-export default db;
+

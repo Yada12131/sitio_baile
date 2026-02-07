@@ -1,4 +1,4 @@
-import db from '@/lib/db';
+import { getDb } from '@/lib/db';
 import EventCard from '@/components/EventCard';
 import { CalendarX } from 'lucide-react';
 
@@ -13,7 +13,8 @@ interface Event {
 
 export const dynamic = 'force-dynamic';
 
-export default function Events() {
+export default function EventsPage() {
+    const db = getDb();
     const events = db.prepare('SELECT * FROM events ORDER BY date ASC').all() as Event[];
 
     return (

@@ -1,12 +1,13 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import db from "@/lib/db";
+import { getDb } from "@/lib/db";
 
 export default function PublicLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const db = getDb();
     const settings = db.prepare('SELECT * FROM settings WHERE key IN (?, ?)').all('siteName', 'logoUrl');
     const settingsObj = settings.reduce((acc: Record<string, string>, curr: any) => {
         acc[curr.key] = curr.value;

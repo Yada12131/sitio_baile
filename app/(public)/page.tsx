@@ -2,11 +2,12 @@ import Hero from '@/components/Hero';
 import EventSlider from '@/components/EventSlider';
 import { Music, Users, Star, Calendar } from 'lucide-react';
 import Link from 'next/link';
-import db from '@/lib/db';
+import { getDb } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
 export default function Home() {
+  const db = getDb();
   const events = db.prepare('SELECT * FROM events ORDER BY date ASC LIMIT 3').all();
 
   // Fetch Hero Settings

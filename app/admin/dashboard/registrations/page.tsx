@@ -1,4 +1,4 @@
-import db from '@/lib/db';
+import { getDb } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,10 +12,11 @@ interface Registration {
 }
 
 export default function RegistrationsPage() {
+    const db = getDb();
     const registrations = db.prepare(`
     SELECT r.*, c.name as class_name 
     FROM registrations r 
-    LEFT JOIN classes c ON r.class_id = c.id 
+    JOIN classes c ON r.class_id = c.id 
     ORDER BY r.created_at DESC
   `).all() as Registration[];
 

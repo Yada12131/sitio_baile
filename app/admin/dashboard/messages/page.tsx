@@ -1,4 +1,4 @@
-import db from '@/lib/db';
+import { getDb } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,6 +12,7 @@ interface Message {
 }
 
 export default function MessagesPage() {
+    const db = getDb();
     const messages = db.prepare('SELECT * FROM messages ORDER BY created_at DESC').all() as Message[];
 
     return (

@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
-import db from '@/lib/db';
+import { getDb } from '@/lib/db';
 
 export async function GET() {
+    const db = getDb();
     const settings = db.prepare('SELECT * FROM settings').all();
     // Convert array of {key, value} to object {key: value}
     const settingsObj = settings.reduce((acc: any, curr: any) => {
@@ -13,6 +14,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
     try {
+        const db = getDb();
         const body = await request.json();
         const stmt = db.prepare('INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value');
 

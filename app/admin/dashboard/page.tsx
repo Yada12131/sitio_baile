@@ -1,21 +1,21 @@
-import db from '@/lib/db';
-import { MessageSquare, Calendar, Star } from 'lucide-react';
+import { getDb } from '@/lib/db';
+import Link from 'next/link';
+import { Calendar, Users, MessageSquare, Star } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
 export default function AdminDashboard() {
-    const msgCount = (db.prepare('SELECT COUNT(*) as count FROM messages').get() as any).count;
-    const eventCount = (db.prepare('SELECT COUNT(*) as count FROM events').get() as any).count;
-    const classCount = (db.prepare('SELECT COUNT(*) as count FROM classes').get() as any).count;
-    const registrationCount = (db.prepare('SELECT COUNT(*) as count FROM registrations').get() as any).count;
-    const avgRating = (db.prepare('SELECT AVG(rating) as avg FROM feedback').get() as any).avg;
+    const db = getDb();
+    const stats = {
+        events: (db.prepare('SELECT COUNT(*) as count FROM events').get() as any).count,
+        classes: (db.prepare('SELECT COUNT(*) as count FROM classes').get() as any).count,
+        messages: (db.prepare('SELECT COUNT(*) as count FROM messages').get() as any).count,
+        registrations: (db.prepare('SELECT COUNT(*) as count FROM registrations').get() as any).count,
+        feedbackAvg: (db.prepare('SELECT AVG(rating) as avg FROM feedback').get() as any).avg,
+    };
 
     const cards = [
-        { title: 'Inscripciones', value: registrationCount, icon: Calendar, color: 'text-green-500' },
-        { title: 'Clases', value: classCount, icon: Star, color: 'text-pink-500' },
-        { title: 'Mensajes Totales', value: msgCount, icon: MessageSquare, color: 'text-blue-500' },
-        { title: 'Eventos Activos', value: eventCount, icon: Calendar, color: 'text-purple-500' },
-        { title: 'Calificación Prom.', value: avgRating ? avgRating.toFixed(1) : 'N/A', icon: Star, color: 'text-yellow-500' },
+        { title: 'Calificación Prom.', value: stats.feedbackAvg ? stats.feedbackAvg.toFixed(1) : 'N/A', icon: Star, color: 'text-yellow-500' },
     ];
 
     return (
