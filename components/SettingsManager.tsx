@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Save, RefreshCw } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import TeamManager from './TeamManager';
+
 
 export default function SettingsManager({ initialSettings }: { initialSettings: any }) {
     const [settings, setSettings] = useState(initialSettings);
@@ -157,9 +157,7 @@ export default function SettingsManager({ initialSettings }: { initialSettings: 
                         </div>
                     </div>
 
-                    <div className="mt-8 border-t border-white/10 pt-6">
-                        <TeamManager />
-                    </div>
+
                 </section>
 
                 {/* Información de Contacto */}

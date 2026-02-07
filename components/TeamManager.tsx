@@ -46,10 +46,10 @@ export default function TeamManager() {
     };
 
     return (
-        <div className="space-y-6">
-            <h3 className="text-lg font-bold text-white mb-4">Gestión del Equipo</h3>
+        <div className="space-y-6 max-w-4xl">
+            <h2 className="text-2xl font-bold text-white mb-6">Gestión del Equipo</h2>
 
-            <form onSubmit={handleAdd} className="bg-zinc-800 p-4 rounded-lg space-y-4 border border-white/5">
+            <form onSubmit={handleAdd} className="bg-zinc-900/50 p-6 rounded-xl border border-white/10 space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <input
                         type="text" placeholder="Nombre" required
