@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Star, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -8,6 +8,14 @@ export default function Feedback() {
     const [rating, setRating] = useState(0);
     const [hover, setHover] = useState(0);
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+    const [settings, setSettings] = useState<any>({});
+
+    useEffect(() => {
+        fetch('/api/settings')
+            .then(res => res.json())
+            .then(data => setSettings(data))
+            .catch(err => console.error(err));
+    }, []);
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -15,13 +23,14 @@ export default function Feedback() {
 
         setStatus('loading');
         const formData = new FormData(e.currentTarget);
-        const comments = formData.get('comments');
+        const name = formData.get('name') as string;
+        const comments = formData.get('comments') as string;
 
         try {
             const res = await fetch('/api/feedback', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ rating, comments }),
+                body: JSON.stringify({ rating, comments, name }),
             });
             if (res.ok) {
                 setStatus('success');
@@ -38,8 +47,8 @@ export default function Feedback() {
             <div className="max-w-lg w-full bg-zinc-900 p-8 rounded-2xl border border-white/10 shadow-2xl glass-panel relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-pink-500 to-purple-500" />
 
-                <h1 className="text-3xl font-bold text-center mb-2">Tu Opinión Importa</h1>
-                <p className="text-gray-400 text-center mb-8">Ayúdanos a mejorar tu experiencia en Elite Club.</p>
+                <h1 className="text-3xl font-bold text-center mb-2">{settings.feedbackTitle || "Tu Opinión Importa"}</h1>
+                <p className="text-gray-400 text-center mb-8">{settings.feedbackSubtitle || "Ayúdanos a mejorar tu experiencia en Elite Club."}</p>
 
                 {status === 'success' ? (
                     <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-10">

@@ -12,17 +12,17 @@ interface ClassData {
     capacity: number;
 }
 
-export default function ClassesPage({ classes }: { classes: ClassData[] }) {
+export default function ClassesPage({ classes, settings }: { classes: ClassData[], settings?: any }) {
     const [selectedClass, setSelectedClass] = useState<ClassData | null>(null);
 
     return (
         <div className="bg-black min-h-screen text-white pt-10 pb-20 px-4">
             <div className="max-w-7xl mx-auto">
                 <h1 className="text-4xl md:text-6xl font-bold mb-8 text-center bg-gradient-to-r from-pink-500 to-green-500 bg-clip-text text-transparent">
-                    Clases de Baile
+                    {settings?.classesTitle || "Clases de Baile"}
                 </h1>
                 <p className="text-gray-400 text-center max-w-2xl mx-auto mb-16 text-lg">
-                    Aprende a bailar con los mejores instructores. Ofrecemos clases para todos los niveles, desde principiantes hasta avanzados.
+                    {settings?.classesSubtitle || "Aprende a bailar con los mejores instructores. Ofrecemos clases para todos los niveles, desde principiantes hasta avanzados."}
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

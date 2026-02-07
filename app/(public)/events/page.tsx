@@ -15,6 +15,12 @@ export const dynamic = 'force-dynamic';
 
 export default function EventsPage() {
     const db = getDb();
+    const headers = db.prepare('SELECT * FROM settings WHERE key IN (?, ?)').all('eventsTitle', 'eventsSubtitle');
+    const headersObj = headers.reduce((acc: Record<string, string>, curr: any) => {
+        acc[curr.key] = curr.value;
+        return acc;
+    }, {});
+
     const events = db.prepare('SELECT * FROM events ORDER BY date ASC').all() as Event[];
 
     return (
@@ -22,10 +28,10 @@ export default function EventsPage() {
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-16">
                     <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
-                        Próximos Eventos
+                        {headersObj.eventsTitle || "Próximos Eventos"}
                     </h1>
                     <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-                        Descubre las fiestas más exclusivas de la ciudad. Reserva tu lugar antes de que se agoten.
+                        {headersObj.eventsSubtitle || "Descubre las fiestas más exclusivas de la ciudad. Reserva tu lugar antes de que se agoten."}
                     </p>
                 </div>
 

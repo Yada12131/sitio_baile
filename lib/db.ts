@@ -177,6 +177,30 @@ const seedData = (db: any) => {
     insertSetting.run('facebookUrl', 'https://facebook.com');
     insertSetting.run('instagramUrl', 'https://instagram.com');
     insertSetting.run('tiktokUrl', 'https://tiktok.com');
+
+    // Services Page
+    insertSetting.run('servicesTitle', 'Nuestros Servicios');
+    insertSetting.run('services1Title', 'Reserva de Mesas VIP');
+    insertSetting.run('services1Desc', 'La mejor ubicación de la casa. Incluye servicio de botella premium, mesero dedicado y acceso prioritario.');
+    insertSetting.run('services1Price', 'Desde $200');
+    insertSetting.run('services2Title', 'Eventos Privados');
+    insertSetting.run('services2Desc', 'Celebra tu cumpleaños o evento corporativo con nosotros. Alquila una zona o el club completo.');
+    insertSetting.run('services2Price', 'Personalizado');
+    insertSetting.run('services3Title', 'Coctelería de Autor');
+    insertSetting.run('services3Desc', 'Disfruta de nuestra carta exclusiva de cócteles diseñados por mixólogos expertos.');
+    insertSetting.run('services3Price', 'A la carta');
+
+    // Events Page
+    insertSetting.run('eventsTitle', 'Próximos Eventos');
+    insertSetting.run('eventsSubtitle', 'Descubre las fiestas más exclusivas de la ciudad. Reserva tu lugar antes de que se agoten.');
+
+    // Classes Page
+    insertSetting.run('classesTitle', 'Clases de Baile');
+    insertSetting.run('classesSubtitle', 'Aprende a bailar con los mejores instructores. Ofrecemos clases para todos los niveles, desde principiantes hasta avanzados.');
+
+    // Feedback Page
+    insertSetting.run('feedbackTitle', 'Tu Opinión Importa');
+    insertSetting.run('feedbackSubtitle', 'Ayúdanos a mejorar tu experiencia en Elite Club.');
   } catch (err) {
     console.warn("Seeding failed (might be read-only DB in some contexts):", err);
   }
