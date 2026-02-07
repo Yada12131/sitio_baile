@@ -96,6 +96,19 @@ const initDb = (db: any) => {
   `);
 
   seedData(db);
+
+  // Migrations for new fields (safely ignore if they exist)
+  try {
+    db.prepare("ALTER TABLE messages ADD COLUMN phone TEXT").run();
+  } catch (error) {
+    // Column already exists or other safe error
+  }
+
+  try {
+    db.prepare("ALTER TABLE feedback ADD COLUMN name TEXT").run();
+  } catch (error) {
+    // Column already exists
+  }
 };
 
 const seedData = (db: any) => {

@@ -70,6 +70,10 @@ export default function Contact() {
                             <input type="email" name="email" required className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-pink-500 transition-colors" placeholder="tu@email.com" />
                         </div>
                         <div>
+                            <label htmlFor="phone" className="block text-sm font-medium text-gray-400 mb-2">Teléfono / WhatsApp</label>
+                            <input type="tel" name="phone" className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-pink-500 transition-colors" placeholder="+57 300 123 4567" />
+                        </div>
+                        <div>
                             <label htmlFor="subject" className="block text-sm font-medium text-gray-400 mb-2">Asunto</label>
                             <input type="text" name="subject" required className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-pink-500 transition-colors" placeholder="Reserva / Información / Otro" />
                         </div>

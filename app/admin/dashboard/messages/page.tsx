@@ -8,6 +8,7 @@ interface Message {
     email: string;
     subject: string;
     message: string;
+    phone?: string;
     created_at: string;
 }
 
@@ -27,6 +28,7 @@ export default function MessagesPage() {
                                 <th className="p-4">Fecha</th>
                                 <th className="p-4">Nombre</th>
                                 <th className="p-4">Correo</th>
+                                <th className="p-4">Teléfono</th>
                                 <th className="p-4">Asunto</th>
                                 <th className="p-4">Mensaje</th>
                             </tr>
@@ -39,6 +41,7 @@ export default function MessagesPage() {
                                     </td>
                                     <td className="p-4 font-medium text-white">{msg.name}</td>
                                     <td className="p-4">{msg.email}</td>
+                                    <td className="p-4">{/* @ts-ignore */ msg.phone || '-'}</td>
                                     <td className="p-4">{msg.subject}</td>
                                     <td className="p-4 max-w-xs truncate" title={msg.message}>{msg.message}</td>
                                 </tr>

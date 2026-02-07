@@ -6,18 +6,19 @@ export async function POST(request: Request) {
     try {
         const db = getDb();
         const body = await request.json();
-        const { rating, comments } = body;
+        const { rating, comments, name } = body;
 
         if (!rating) {
             return NextResponse.json({ error: 'Rating is required' }, { status: 400 });
         }
 
-        const stmt = db.prepare('INSERT INTO feedback (rating, comments) VALUES (?, ?)');
-        stmt.run(rating, comments || '');
+        const stmt = db.prepare('INSERT INTO feedback (rating, comments, name) VALUES (?, ?, ?)');
+        stmt.run(rating, comments || '', name || 'Anónimo');
 
         // Send Telegram Notification
         await sendTelegramNotification(
             `⭐ <b>Nueva Calificación Recibida</b>\n\n` +
+            `<b>De:</b> ${name || 'Anónimo'}\n` +
             `<b>Puntuación:</b> ${rating}/5\n` +
             `<b>Comentario:</b> ${comments || 'Sin comentario'}`
         );

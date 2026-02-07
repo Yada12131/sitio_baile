@@ -77,6 +77,16 @@ export default function Feedback() {
                         </div>
 
                         <div>
+                            <label htmlFor="name" className="block text-sm font-medium text-gray-400 mb-2">Tu Nombre (Opcional)</label>
+                            <input
+                                type="text"
+                                name="name"
+                                className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition-colors"
+                                placeholder="Nombre"
+                            />
+                        </div>
+
+                        <div>
                             <label htmlFor="comments" className="block text-sm font-medium text-gray-400 mb-2">Comentarios (Opcional)</label>
                             <textarea
                                 name="comments"

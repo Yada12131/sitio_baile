@@ -6,20 +6,21 @@ export async function POST(request: Request) {
     try {
         const db = getDb();
         const body = await request.json();
-        const { name, email, subject, message } = body;
+        const { name, email, phone, subject, message } = body;
 
         // Simple validation
         if (!name || !email || !subject || !message) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
-        const stmt = db.prepare('INSERT INTO messages (name, email, subject, message) VALUES (?, ?, ?, ?)');
-        const result = stmt.run(name, email, subject, message);
+        const stmt = db.prepare('INSERT INTO messages (name, email, phone, subject, message) VALUES (?, ?, ?, ?, ?)');
+        const result = stmt.run(name, email, phone || '', subject, message);
 
         // Send Telegram Notification
         await sendTelegramNotification(
             `📩 <b>Nuevo Mensaje de Contacto</b>\n\n` +
             `<b>De:</b> ${name} (${email})\n` +
+            `<b>Teléfono:</b> ${phone || 'N/A'}\n` +
             `<b>Asunto:</b> ${subject}\n\n` +
             `${message}`
         );
