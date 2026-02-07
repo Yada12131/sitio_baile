@@ -95,7 +95,7 @@ const initDb = (db: any) => {
     )
   `);
 
-  seedData(db);
+
 
   // Migrations for new fields (safely ignore if they exist)
   try {
@@ -109,6 +109,19 @@ const initDb = (db: any) => {
   } catch (error) {
     // Column already exists
   }
+  // Team Members Table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS team_members (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      role TEXT NOT NULL,
+      description TEXT,
+      image TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+  seedData(db);
 };
 
 const seedData = (db: any) => {
@@ -201,6 +214,13 @@ const seedData = (db: any) => {
     // Feedback Page
     insertSetting.run('feedbackTitle', 'Tu Opinión Importa');
     insertSetting.run('feedbackSubtitle', 'Ayúdanos a mejorar tu experiencia en Elite Club.');
+    // Team Members
+    const teamCount = (db.prepare('SELECT COUNT(*) as count FROM team_members').get() as any).count;
+    if (teamCount === 0) {
+      const insertTeam = db.prepare('INSERT INTO team_members (name, role, description) VALUES (?, ?, ?)');
+      insertTeam.run('Carlos M.', 'Fundador', 'Visionario de la vida nocturna con 15 años de experiencia.');
+      insertTeam.run('Ana R.', 'Jefe de Barra', 'Mixóloga premiada, creadora de nuestros cócteles insignia.');
+    }
   } catch (err) {
     console.warn("Seeding failed (might be read-only DB in some contexts):", err);
   }

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Save, RefreshCw } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import TeamManager from './TeamManager';
 
 export default function SettingsManager({ initialSettings }: { initialSettings: any }) {
     const [settings, setSettings] = useState(initialSettings);
@@ -155,6 +156,10 @@ export default function SettingsManager({ initialSettings }: { initialSettings: 
                             />
                         </div>
                     </div>
+
+                    <div className="mt-8 border-t border-white/10 pt-6">
+                        <TeamManager />
+                    </div>
                 </section>
 
                 {/* Información de Contacto */}
@@ -239,26 +244,7 @@ export default function SettingsManager({ initialSettings }: { initialSettings: 
                     </div>
                 </section>
 
-                {/* Contenido Sobre Nosotros */}
-                <section className="bg-zinc-900 p-6 rounded-xl border border-white/10">
-                    <h2 className="text-xl font-bold text-pink-500 mb-4 border-b border-white/10 pb-2">Sobre Nosotros</h2>
-                    <div className="space-y-4">
-                        <div>
-                            <label className="block text-gray-400 mb-2">Título</label>
-                            <input
-                                type="text" value={settings.aboutTitle || ''} onChange={(e) => handleChange('aboutTitle', e.target.value)}
-                                className="w-full bg-black border border-white/20 rounded-lg p-3 text-white"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-gray-400 mb-2">Descripción Principal</label>
-                            <textarea
-                                value={settings.aboutDescription || ''} onChange={(e) => handleChange('aboutDescription', e.target.value)}
-                                className="w-full bg-black border border-white/20 rounded-lg p-3 text-white h-32"
-                            />
-                        </div>
-                    </div>
-                </section>
+
 
                 {/* Información de Contacto */}
                 <section className="bg-zinc-900 p-6 rounded-xl border border-white/10">
@@ -316,7 +302,7 @@ export default function SettingsManager({ initialSettings }: { initialSettings: 
                     </div>
                 </section>
 
-            </div>
-        </div>
+            </div >
+        </div >
     );
 }

@@ -11,6 +11,8 @@ export default function About() {
         return acc;
     }, {});
 
+    const teamMembers = db.prepare('SELECT * FROM team_members').all();
+
     const title = settingsObj.aboutTitle || "Sobre Nosotros";
     const description = settingsObj.aboutDescription || "Elite Club nació en 2024 con una misión simple: redefinir la vida nocturna en la ciudad. No somos solo una discoteca, somos un destino para aquellos que buscan excelencia en música, servicio y ambiente.";
 
@@ -29,17 +31,14 @@ export default function About() {
 
                 <h2 className="text-3xl font-bold mb-8 text-center">Nuestro Equipo</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                    {[
-                        { role: "Fundador", name: "Carlos M.", desc: "Visionario de la vida nocturna con 15 años de experiencia." },
-                        { role: "Jefe de Barra", name: "Ana R.", desc: "Mixóloga premiada, creadora de nuestros cócteles insignia." },
-                    ].map((member, i) => (
-                        <div key={i} className="bg-zinc-900 rounded-xl p-6 border border-white/5 hover:border-pink-500/30 transition-colors">
+                    {teamMembers.map((member: any) => (
+                        <div key={member.id} className="bg-zinc-900 rounded-xl p-6 border border-white/5 hover:border-pink-500/30 transition-colors">
                             <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center mb-4 mx-auto">
                                 <Users className="text-white" />
                             </div>
                             <h3 className="text-xl font-bold text-center">{member.name}</h3>
                             <p className="text-pink-500 text-center text-sm uppercase tracking-wide mb-2">{member.role}</p>
-                            <p className="text-gray-400 text-center text-sm">{member.desc}</p>
+                            <p className="text-gray-400 text-center text-sm">{member.description}</p>
                         </div>
                     ))}
                 </div>
