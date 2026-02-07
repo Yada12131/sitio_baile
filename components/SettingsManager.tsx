@@ -110,6 +110,212 @@ export default function SettingsManager({ initialSettings }: { initialSettings: 
                     </div>
                 </section>
 
+                {/* Contenido Home (Destacados) */}
+                <section className="bg-zinc-900 p-6 rounded-xl border border-white/10">
+                    <h2 className="text-xl font-bold text-pink-500 mb-4 border-b border-white/10 pb-2">Página de Inicio (Destacados)</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {[1, 2, 3].map((num) => (
+                            <div key={num} className="space-y-4">
+                                <h3 className="font-bold text-white">Destacado {num}</h3>
+                                <div>
+                                    <label className="block text-gray-400 mb-2">Título</label>
+                                    <input
+                                        type="text" value={settings[`highlight${num}Title`] || ''} onChange={(e) => handleChange(`highlight${num}Title`, e.target.value)}
+                                        className="w-full bg-black border border-white/20 rounded-lg p-3 text-white"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-gray-400 mb-2">Descripción</label>
+                                    <textarea
+                                        value={settings[`highlight${num}Desc`] || ''} onChange={(e) => handleChange(`highlight${num}Desc`, e.target.value)}
+                                        className="w-full bg-black border border-white/20 rounded-lg p-3 text-white h-24"
+                                    />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                {/* Contenido Sobre Nosotros */}
+                <section className="bg-zinc-900 p-6 rounded-xl border border-white/10">
+                    <h2 className="text-xl font-bold text-pink-500 mb-4 border-b border-white/10 pb-2">Sobre Nosotros</h2>
+                    <div className="space-y-4">
+                        <div>
+                            <label className="block text-gray-400 mb-2">Título</label>
+                            <input
+                                type="text" value={settings.aboutTitle || ''} onChange={(e) => handleChange('aboutTitle', e.target.value)}
+                                className="w-full bg-black border border-white/20 rounded-lg p-3 text-white"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-gray-400 mb-2">Descripción Principal</label>
+                            <textarea
+                                value={settings.aboutDescription || ''} onChange={(e) => handleChange('aboutDescription', e.target.value)}
+                                className="w-full bg-black border border-white/20 rounded-lg p-3 text-white h-32"
+                            />
+                        </div>
+                    </div>
+                </section>
+
+                {/* Información de Contacto */}
+                <section className="bg-zinc-900 p-6 rounded-xl border border-white/10">
+                    <h2 className="text-xl font-bold text-pink-500 mb-4 border-b border-white/10 pb-2">Contacto</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label className="block text-gray-400 mb-2">Dirección</label>
+                            <input
+                                type="text" value={settings.contactAddress || ''} onChange={(e) => handleChange('contactAddress', e.target.value)}
+                                className="w-full bg-black border border-white/20 rounded-lg p-3 text-white"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-gray-400 mb-2">Teléfono</label>
+                            <input
+                                type="text" value={settings.contactPhone || ''} onChange={(e) => handleChange('contactPhone', e.target.value)}
+                                className="w-full bg-black border border-white/20 rounded-lg p-3 text-white"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-gray-400 mb-2">Email</label>
+                            <input
+                                type="text" value={settings.contactEmail || ''} onChange={(e) => handleChange('contactEmail', e.target.value)}
+                                className="w-full bg-black border border-white/20 rounded-lg p-3 text-white"
+                            />
+                        </div>
+                    </div>
+                </section>
+
+                {/* Redes Sociales */}
+                <section className="bg-zinc-900 p-6 rounded-xl border border-white/10">
+                    <h2 className="text-xl font-bold text-pink-500 mb-4 border-b border-white/10 pb-2">Redes Sociales (URLs)</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label className="block text-gray-400 mb-2">Facebook</label>
+                            <input
+                                type="text" value={settings.facebookUrl || ''} onChange={(e) => handleChange('facebookUrl', e.target.value)}
+                                className="w-full bg-black border border-white/20 rounded-lg p-3 text-white"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-gray-400 mb-2">Instagram</label>
+                            <input
+                                type="text" value={settings.instagramUrl || ''} onChange={(e) => handleChange('instagramUrl', e.target.value)}
+                                className="w-full bg-black border border-white/20 rounded-lg p-3 text-white"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-gray-400 mb-2">TikTok</label>
+                            <input
+                                type="text" value={settings.tiktokUrl || ''} onChange={(e) => handleChange('tiktokUrl', e.target.value)}
+                                className="w-full bg-black border border-white/20 rounded-lg p-3 text-white"
+                            />
+                        </div>
+                    </div>
+                </section>
+
+                {/* Contenido Home (Highlights) */}
+                <section className="bg-zinc-900 p-6 rounded-xl border border-white/10">
+                    <h2 className="text-xl font-bold text-pink-500 mb-4 border-b border-white/10 pb-2">Página de Inicio (Destacados)</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {[1, 2, 3].map((num) => (
+                            <div key={num} className="space-y-4">
+                                <h3 className="font-bold text-white">Destacado {num}</h3>
+                                <div>
+                                    <label className="block text-gray-400 mb-2">Título</label>
+                                    <input
+                                        type="text" value={settings[`highlight${num}Title`] || ''} onChange={(e) => handleChange(`highlight${num}Title`, e.target.value)}
+                                        className="w-full bg-black border border-white/20 rounded-lg p-3 text-white"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-gray-400 mb-2">Descripción</label>
+                                    <textarea
+                                        value={settings[`highlight${num}Desc`] || ''} onChange={(e) => handleChange(`highlight${num}Desc`, e.target.value)}
+                                        className="w-full bg-black border border-white/20 rounded-lg p-3 text-white h-24"
+                                    />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                {/* Contenido Sobre Nosotros */}
+                <section className="bg-zinc-900 p-6 rounded-xl border border-white/10">
+                    <h2 className="text-xl font-bold text-pink-500 mb-4 border-b border-white/10 pb-2">Sobre Nosotros</h2>
+                    <div className="space-y-4">
+                        <div>
+                            <label className="block text-gray-400 mb-2">Título</label>
+                            <input
+                                type="text" value={settings.aboutTitle || ''} onChange={(e) => handleChange('aboutTitle', e.target.value)}
+                                className="w-full bg-black border border-white/20 rounded-lg p-3 text-white"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-gray-400 mb-2">Descripción Principal</label>
+                            <textarea
+                                value={settings.aboutDescription || ''} onChange={(e) => handleChange('aboutDescription', e.target.value)}
+                                className="w-full bg-black border border-white/20 rounded-lg p-3 text-white h-32"
+                            />
+                        </div>
+                    </div>
+                </section>
+
+                {/* Información de Contacto */}
+                <section className="bg-zinc-900 p-6 rounded-xl border border-white/10">
+                    <h2 className="text-xl font-bold text-pink-500 mb-4 border-b border-white/10 pb-2">Contacto</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label className="block text-gray-400 mb-2">Dirección</label>
+                            <input
+                                type="text" value={settings.contactAddress || ''} onChange={(e) => handleChange('contactAddress', e.target.value)}
+                                className="w-full bg-black border border-white/20 rounded-lg p-3 text-white"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-gray-400 mb-2">Teléfono</label>
+                            <input
+                                type="text" value={settings.contactPhone || ''} onChange={(e) => handleChange('contactPhone', e.target.value)}
+                                className="w-full bg-black border border-white/20 rounded-lg p-3 text-white"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-gray-400 mb-2">Email</label>
+                            <input
+                                type="text" value={settings.contactEmail || ''} onChange={(e) => handleChange('contactEmail', e.target.value)}
+                                className="w-full bg-black border border-white/20 rounded-lg p-3 text-white"
+                            />
+                        </div>
+                    </div>
+                </section>
+
+                {/* Redes Sociales */}
+                <section className="bg-zinc-900 p-6 rounded-xl border border-white/10">
+                    <h2 className="text-xl font-bold text-pink-500 mb-4 border-b border-white/10 pb-2">Redes Sociales (URLs)</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label className="block text-gray-400 mb-2">Facebook</label>
+                            <input
+                                type="text" value={settings.facebookUrl || ''} onChange={(e) => handleChange('facebookUrl', e.target.value)}
+                                className="w-full bg-black border border-white/20 rounded-lg p-3 text-white"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-gray-400 mb-2">Instagram</label>
+                            <input
+                                type="text" value={settings.instagramUrl || ''} onChange={(e) => handleChange('instagramUrl', e.target.value)}
+                                className="w-full bg-black border border-white/20 rounded-lg p-3 text-white"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-gray-400 mb-2">TikTok</label>
+                            <input
+                                type="text" value={settings.tiktokUrl || ''} onChange={(e) => handleChange('tiktokUrl', e.target.value)}
+                                className="w-full bg-black border border-white/20 rounded-lg p-3 text-white"
+                            />
+                        </div>
+                    </div>
+                </section>
+
             </div>
         </div>
     );

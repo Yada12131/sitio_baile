@@ -1,22 +1,29 @@
 import { Users } from 'lucide-react';
+import { getDb } from '@/lib/db';
+
+export const dynamic = 'force-dynamic';
 
 export default function About() {
+    const db = getDb();
+    const settings = db.prepare('SELECT * FROM settings').all();
+    const settingsObj = settings.reduce((acc: Record<string, string>, curr: any) => {
+        acc[curr.key] = curr.value;
+        return acc;
+    }, {});
+
+    const title = settingsObj.aboutTitle || "Sobre Nosotros";
+    const description = settingsObj.aboutDescription || "Elite Club nació en 2024 con una misión simple: redefinir la vida nocturna en la ciudad. No somos solo una discoteca, somos un destino para aquellos que buscan excelencia en música, servicio y ambiente.";
+
     return (
         <div className="bg-black min-h-screen text-white pt-10 pb-20 px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
                 <h1 className="text-4xl md:text-6xl font-bold mb-8 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
-                    Sobre Nosotros
+                    {title}
                 </h1>
 
                 <div className="glass-panel p-8 rounded-2xl mb-12">
-                    <p className="text-xl text-gray-300 leading-relaxed mb-6">
-                        Elite Club nació en 2024 con una misión simple: redefinir la vida nocturna en la ciudad.
-                        No somos solo una discoteca, somos un destino para aquellos que buscan excelencia en música,
-                        servicio y ambiente.
-                    </p>
-                    <p className="text-lg text-gray-400">
-                        Nuestras instalaciones cuentan con tecnología de sonido de última generación,
-                        diseño acústico impecable y un sistema de iluminación que te transportará a otra dimensión.
+                    <p className="text-xl text-gray-300 leading-relaxed mb-6 whitespace-pre-wrap">
+                        {description}
                     </p>
                 </div>
 

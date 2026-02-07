@@ -1,11 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function Contact() {
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+    const [settings, setSettings] = useState<any>({});
+
+    useEffect(() => {
+        fetch('/api/settings')
+            .then(res => res.json())
+            .then(data => setSettings(data))
+            .catch(err => console.error(err));
+    }, []);
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -45,15 +53,15 @@ export default function Contact() {
                     <div className="space-y-6">
                         <div className="flex items-center space-x-4 text-gray-300">
                             <MapPin className="text-pink-500 w-6 h-6" />
-                            <span>Calle 123 #45-67, Zona Rosa, Ciudad</span>
+                            <span>{settings.contactAddress || 'Calle 123 #45-67, Zona Rosa, Ciudad'}</span>
                         </div>
                         <div className="flex items-center space-x-4 text-gray-300">
                             <Phone className="text-pink-500 w-6 h-6" />
-                            <span>+57 300 123 4567</span>
+                            <span>{settings.contactPhone || '+57 300 123 4567'}</span>
                         </div>
                         <div className="flex items-center space-x-4 text-gray-300">
                             <Mail className="text-pink-500 w-6 h-6" />
-                            <span>info@eliteclub.com</span>
+                            <span>{settings.contactEmail || 'info@eliteclub.com'}</span>
                         </div>
                     </div>
                 </div>

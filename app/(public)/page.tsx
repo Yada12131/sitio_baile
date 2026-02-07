@@ -14,14 +14,33 @@ export default function Home() {
   // Fetch Top 3 Classes
   const classes = db.prepare('SELECT * FROM classes ORDER BY name ASC LIMIT 3').all() as any[];
 
-  // Fetch Hero Settings
-  const settings = db.prepare('SELECT * FROM settings WHERE key IN (?, ?)').all('heroTitle', 'heroSubtitle');
+  // Fetch Hero & Content Settings
+  const settings = db.prepare('SELECT * FROM settings').all();
   const settingsObj = settings.reduce((acc: Record<string, string>, curr: any) => {
     acc[curr.key] = curr.value;
     return acc;
   }, {});
+
   const heroTitle = settingsObj.heroTitle || 'Bienvenido a Elite Club';
   const heroSubtitle = settingsObj.heroSubtitle || 'La mejor experiencia de baile, música y diversión en la ciudad.';
+
+  const highlights = [
+    {
+      icon: Music,
+      title: settingsObj.highlight1Title || "Sonido Envolvente",
+      desc: settingsObj.highlight1Desc || "Sistema de audio de alta fidelidad que te hará sentir cada beat."
+    },
+    {
+      icon: Star,
+      title: settingsObj.highlight2Title || "Experiencia VIP",
+      desc: settingsObj.highlight2Desc || "Zonas exclusivas, servicio a la mesa y atención personalizada."
+    },
+    {
+      icon: Users,
+      title: settingsObj.highlight3Title || "Ambiente Único",
+      desc: settingsObj.highlight3Desc || "La mejor gente, la mejor energía y noches que no terminan."
+    },
+  ];
 
   return (
     <div className="flex flex-col gap-16 pb-20">
@@ -40,11 +59,7 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            {[
-              { icon: Music, title: "Sonido Envolvente", desc: "Sistema de audio de alta fidelidad que te hará sentir cada beat." },
-              { icon: Star, title: "Experiencia VIP", desc: "Zonas exclusivas, servicio a la mesa y atención personalizada." },
-              { icon: Users, title: "Ambiente Único", desc: "La mejor gente, la mejor energía y noches que no terminan." },
-            ].map((feature, idx) => (
+            {highlights.map((feature, idx) => (
               <div key={idx} className="p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-pink-500/50 transition-all hover:-translate-y-2 glass-panel">
                 <feature.icon className="w-12 h-12 text-pink-500 mb-6" />
                 <h3 className="text-2xl font-bold mb-3">{feature.title}</h3>
