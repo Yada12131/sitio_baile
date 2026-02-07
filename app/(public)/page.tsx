@@ -3,12 +3,16 @@ import EventSlider from '@/components/EventSlider';
 import { Music, Users, Star, Calendar } from 'lucide-react';
 import Link from 'next/link';
 import { getDb } from '@/lib/db';
+import ClassesSection from '@/components/ClassesSection';
 
 export const dynamic = 'force-dynamic';
 
 export default function Home() {
   const db = getDb();
   const events = db.prepare('SELECT * FROM events ORDER BY date ASC LIMIT 3').all();
+
+  // Fetch Top 3 Classes
+  const classes = db.prepare('SELECT * FROM classes ORDER BY name ASC LIMIT 3').all() as any[];
 
   // Fetch Hero Settings
   const settings = db.prepare('SELECT * FROM settings WHERE key IN (?, ?)').all('heroTitle', 'heroSubtitle');
@@ -47,6 +51,24 @@ export default function Home() {
                 <p className="text-gray-400 leading-relaxed">{feature.desc}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Classes Preview Section */}
+      <section className="py-20 bg-zinc-900/50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-4 text-white">Nuestras Clases</h2>
+            <p className="text-xl text-gray-300">Aprende a bailar con los mejores instructores de la ciudad.</p>
+          </div>
+
+          <ClassesSection classes={classes} />
+
+          <div className="text-center mt-12">
+            <Link href="/classes" className="inline-flex items-center gap-2 px-8 py-3 border border-white/20 text-white rounded-full font-bold hover:bg-white hover:text-black transition-colors">
+              Ver Todas las Clases
+            </Link>
           </div>
         </div>
       </section>
