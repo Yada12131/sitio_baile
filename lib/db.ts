@@ -145,6 +145,38 @@ const seedData = (db: any) => {
       insertSetting.run('primaryColor', '#ec4899'); // pink-500
       insertSetting.run('accentColor', '#a855f7');  // purple-500
     }
+
+    // Ensure all settings exist (even if events already exist)
+    const insertSetting = db.prepare('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)');
+
+    // Brand
+    insertSetting.run('siteName', 'Elite Dance Club');
+    insertSetting.run('heroTitle', 'Siente el Ritmo');
+    insertSetting.run('heroSubtitle', 'El club de baile más exclusivo de la ciudad. Momentos inolvidables te esperan.');
+    insertSetting.run('primaryColor', '#ec4899');
+    insertSetting.run('accentColor', '#a855f7');
+
+    // Highlights
+    insertSetting.run('highlight1Title', 'Sonido Envolvente');
+    insertSetting.run('highlight1Desc', 'Sistema de audio de alta fidelidad que te hará sentir cada beat.');
+    insertSetting.run('highlight2Title', 'Experiencia VIP');
+    insertSetting.run('highlight2Desc', 'Zonas exclusivas, servicio a la mesa y atención personalizada.');
+    insertSetting.run('highlight3Title', 'Ambiente Único');
+    insertSetting.run('highlight3Desc', 'La mejor gente, la mejor energía y noches que no terminan.');
+
+    // About
+    insertSetting.run('aboutTitle', 'Sobre Nosotros');
+    insertSetting.run('aboutDescription', 'Elite Club nació en 2024 con una misión simple: redefinir la vida nocturna en la ciudad. No somos solo una discoteca, somos un destino para aquellos que buscan excelencia en música, servicio y ambiente.');
+
+    // Contact
+    insertSetting.run('contactAddress', 'Calle 123 #45-67, Zona Rosa, Ciudad');
+    insertSetting.run('contactPhone', '+57 300 123 4567');
+    insertSetting.run('contactEmail', 'info@eliteclub.com');
+
+    // Socials
+    insertSetting.run('facebookUrl', 'https://facebook.com');
+    insertSetting.run('instagramUrl', 'https://instagram.com');
+    insertSetting.run('tiktokUrl', 'https://tiktok.com');
   } catch (err) {
     console.warn("Seeding failed (might be read-only DB in some contexts):", err);
   }
