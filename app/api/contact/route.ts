@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
+import { sendTelegramNotification } from '@/lib/telegram';
 
 export async function POST(request: Request) {
     try {
@@ -14,6 +15,14 @@ export async function POST(request: Request) {
 
         const stmt = db.prepare('INSERT INTO messages (name, email, subject, message) VALUES (?, ?, ?, ?)');
         const result = stmt.run(name, email, subject, message);
+
+        // Send Telegram Notification
+        await sendTelegramNotification(
+            `📩 <b>Nuevo Mensaje de Contacto</b>\n\n` +
+            `<b>De:</b> ${name} (${email})\n` +
+            `<b>Asunto:</b> ${subject}\n\n` +
+            `${message}`
+        );
 
         return NextResponse.json({ success: true, id: result.lastInsertRowid });
     } catch (error) {

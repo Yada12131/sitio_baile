@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
+import { sendTelegramNotification } from '@/lib/telegram';
 
 export async function POST(request: Request) {
     try {
@@ -13,6 +14,13 @@ export async function POST(request: Request) {
 
         const stmt = db.prepare('INSERT INTO feedback (rating, comments) VALUES (?, ?)');
         stmt.run(rating, comments || '');
+
+        // Send Telegram Notification
+        await sendTelegramNotification(
+            `⭐ <b>Nueva Calificación Recibida</b>\n\n` +
+            `<b>Puntuación:</b> ${rating}/5\n` +
+            `<b>Comentario:</b> ${comments || 'Sin comentario'}`
+        );
 
         return NextResponse.json({ success: true });
     } catch (error) {
