@@ -109,6 +109,19 @@ const initDb = (db: any) => {
   } catch (error) {
     // Column already exists
   }
+  // Services Table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS services (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      description TEXT NOT NULL,
+      price TEXT,
+      category TEXT,
+      image TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
   // Team Members Table
   db.exec(`
     CREATE TABLE IF NOT EXISTS team_members (
@@ -126,101 +139,65 @@ const initDb = (db: any) => {
 
 const seedData = (db: any) => {
   try {
+    // Check if services table is empty
+    const serviceCount = (db.prepare('SELECT COUNT(*) as count FROM services').get() as any).count;
+
+    if (serviceCount === 0) {
+      console.log('Seeding Services...');
+      const insertService = db.prepare('INSERT INTO services (title, description, price, category, image) VALUES (?, ?, ?, ?, ?)');
+
+      // Montajes
+      insertService.run('Montajes Coreográficos (15 Años y Bodas)', 'Creamos montajes personalizados para celebraciones especiales. Acompañamos a los protagonistas en todo el proceso coreográfico.', '$500.000 COP', 'Eventos', '/hero-bg.jpg');
+      insertService.run('Montaje de Cumpleaños con Bailarines', 'Show estilo carnaval (12 min) con festejado y 2 bailarines profesionales. Animación conjunta e integración con invitados.', '$1.000.000 COP', 'Eventos', '/hero-bg.jpg');
+
+      // Shows
+      insertService.run('Show de Baile Deportivo (Clásico)', 'Presentaciones de alto impacto: rumba, bolero, chachachá, samba y jive. Ideal para eventos culturales y empresariales.', '$350.000 COP', 'Shows', '/hero-bg.jpg');
+      insertService.run('Show de Baile Deportivo (Homenaje)', 'Incluye cierre especial dedicado al cumpleañer@ con interpretación escénica.', '$450.000 COP', 'Shows', '/hero-bg.jpg');
+      insertService.run('Show de Bailes Tradicionales', 'Recorrido por porro, bachata, salsa, tango y folclor colombiano. Resalta la diversidad cultural.', '$350.000 COP', 'Shows', '/hero-bg.jpg');
+      insertService.run('Homenaje Especial con Baruc', 'Presentación dancística protagonizada por Baruc, nuestro perro de terapia. Mensaje simbólico de amor y gratitud.', '$650.000 COP', 'Shows', '/media__1770472368633.png'); // Using uploaded image for Baruc if possible
+
+      // Multimedia
+      insertService.run('Fotografía Básico', 'Cubrimiento de 2-3 horas. Entrega de ~50 fotos digitales. Ideal para ceremonias o brindis.', '$350.000 COP', 'Multimedia', '/hero-bg.jpg');
+      insertService.run('Fotografía Estándar', 'Cubrimiento de 4-5 horas. Entrega de ~100 fotos digitales. Desde la llegada hasta la celebración.', '$500.000 COP', 'Multimedia', '/hero-bg.jpg');
+      insertService.run('Fotografía Completo', 'Cubrimiento de 6-8 horas. Entrega de ~150 fotos digitales. Evento de principio a fin.', '$750.000 COP', 'Multimedia', '/hero-bg.jpg');
+      insertService.run('Video Documental', 'Pieza audiovisual íntima con entrevistas y voz en off. Cuenta la historia emocional del evento.', '$250.000 COP', 'Multimedia', '/hero-bg.jpg');
+    }
+
+    // Check if team is empty (or force update/check logic? better to check empty for safe seed)
+    const teamCount = (db.prepare('SELECT COUNT(*) as count FROM team_members').get() as any).count;
+    if (teamCount === 0) {
+      console.log('Seeding Team...');
+      const insertTeam = db.prepare('INSERT INTO team_members (name, role, description, image) VALUES (?, ?, ?, ?)');
+
+      insertTeam.run('Elizabeth Laverde Ospina', 'Presidenta • Psicóloga • Entrenadora', 'Acompaño procesos psicológicos y entreno. Ganadora de bronce en primera competencia federada. Entrenadora canina.', null);
+      insertTeam.run('David Stiven Rúa', 'Coordinador Deportivo', 'Licenciado en Ed. Física, profesor de natación y bailes tropicales. Apasionado por transformar vidas a través del baile.', null);
+      insertTeam.run('Estefania Giraldo Velez', 'Deportista • Artista', 'Deportista, artista plástica, fotógrafa y tatuadora. Medalla de plata en competencia nacional en Bogotá.', null);
+      insertTeam.run('Andrés Narváez Gómez', 'Entrenador • Coach PNL', 'Coach en PNL. Enfocado en el equilibrio espiritual, mental y físico. Acompañamiento social y desarrollo integral.', null);
+      insertTeam.run('Baruc', 'Perro de Terapia', 'Labrador Chocolate de 3 años. Ayuda a reducir el estrés y mejora el ánimo. Experto en dar amor y compañía.', '/media__1770472368633.png');
+    }
+
+    // Initial check for settings/events to ensure base items exist
     const eventCount = (db.prepare('SELECT COUNT(*) as count FROM events').get() as any).count;
     if (eventCount === 0) {
-      console.log('Seeding data...');
+      // ... existing event seeding ...
       const insertEvent = db.prepare('INSERT INTO events (title, description, date, image) VALUES (?, ?, ?, ?)');
       insertEvent.run('Noche de Salsa', 'Ven a disfrutar de la mejor salsa de la ciudad con DJ Invitado.', '2023-11-25', '/hero-bg.jpg');
-      insertEvent.run('Bachata Sensual', 'Clase abierta y baile social toda la noche.', '2023-11-30', '/hero-bg.jpg');
-      insertEvent.run('Fiesta de Neon', 'Vístete de colores brillantes y brilla en la pista.', '2023-12-05', '/hero-bg.jpg');
 
       const insertClass = db.prepare('INSERT INTO classes (name, instructor, schedule, capacity) VALUES (?, ?, ?, ?)');
       insertClass.run('Salsa Principiantes', 'Mateo H.', 'Lunes y Miércoles 7:00 PM', 20);
-      insertClass.run('Bachata Intermedio', 'Elena R.', 'Martes y Jueves 8:00 PM', 15);
-      insertClass.run('Kizomba Basics', 'Carlos D.', 'Viernes 6:00 PM', 10);
 
-      /* 
-      // Test Data Removed for Production
-      const insertMsg = db.prepare('INSERT INTO messages (name, email, subject, message) VALUES (?, ?, ?, ?)');
-      insertMsg.run('Ana García', 'ana@test.com', 'Información de precios', 'Hola, me gustaría saber los precios del VIP.');
-      insertMsg.run('Luis Diaz', 'luis@test.com', 'Clases privadas', '¿Ofrecen clases particulares para parejas?');
-
-      const insertFeedback = db.prepare('INSERT INTO feedback (rating, comments) VALUES (?, ?)');
-      insertFeedback.run(5, '¡El mejor ambiente de la ciudad!');
-      insertFeedback.run(4, 'Buena música, pero un poco lleno.');
-      */
-
-      // Default Settings
       const insertSetting = db.prepare('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)');
-      insertSetting.run('siteName', 'Elite Dance Club');
-      insertSetting.run('heroTitle', 'Siente el Ritmo');
-      insertSetting.run('heroSubtitle', 'El club de baile más exclusivo de la ciudad. Momentos inolvidables te esperan.');
-      insertSetting.run('primaryColor', '#ec4899'); // pink-500
-      insertSetting.run('accentColor', '#a855f7');  // purple-500
+      insertSetting.run('siteName', 'Club Deportivo Ritmos');
+      insertSetting.run('heroTitle', 'Somos Dancesport');
+      insertSetting.run('heroSubtitle', 'Transformación social y personal a través del baile deportivo.');
+      insertSetting.run('aboutTitle', '¿Quiénes Somos?');
+      insertSetting.run('aboutDescription', 'El Club Deportivo Ritmos nace el 14 de enero de 2019 con el respaldo del INDER de Medellín. Promovemos el baile deportivo como un deporte olímpico y una herramienta de transformación social.');
     }
 
-    // Ensure all settings exist (even if events already exist)
-    const insertSetting = db.prepare('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)');
+    // Always ensure "About" text is up to date with new PDF content if it was the default
+    db.prepare("INSERT OR REPLACE INTO settings (key, value) VALUES ('aboutTitle', '¿Quiénes Somos?')").run();
+    db.prepare("INSERT OR REPLACE INTO settings (key, value) VALUES ('aboutDescription', 'El Club Deportivo Ritmos nace el 14 de enero de 2019 con el respaldo del INDER de Medellín. Promovemos el baile deportivo como un deporte olímpico y una herramienta de transformación social. Nos mueven valores como la disciplina, la resiliencia y el sentido de pertenencia.')").run();
 
-    // Brand
-    insertSetting.run('siteName', 'Elite Dance Club');
-    insertSetting.run('heroTitle', 'Siente el Ritmo');
-    insertSetting.run('heroSubtitle', 'El club de baile más exclusivo de la ciudad. Momentos inolvidables te esperan.');
-    insertSetting.run('primaryColor', '#ec4899');
-    insertSetting.run('accentColor', '#a855f7');
-
-    // Highlights
-    insertSetting.run('highlight1Title', 'Sonido Envolvente');
-    insertSetting.run('highlight1Desc', 'Sistema de audio de alta fidelidad que te hará sentir cada beat.');
-    insertSetting.run('highlight2Title', 'Experiencia VIP');
-    insertSetting.run('highlight2Desc', 'Zonas exclusivas, servicio a la mesa y atención personalizada.');
-    insertSetting.run('highlight3Title', 'Ambiente Único');
-    insertSetting.run('highlight3Desc', 'La mejor gente, la mejor energía y noches que no terminan.');
-
-    // About
-    insertSetting.run('aboutTitle', 'Sobre Nosotros');
-    insertSetting.run('aboutDescription', 'Elite Club nació en 2024 con una misión simple: redefinir la vida nocturna en la ciudad. No somos solo una discoteca, somos un destino para aquellos que buscan excelencia en música, servicio y ambiente.');
-
-    // Contact
-    insertSetting.run('contactAddress', 'Calle 123 #45-67, Zona Rosa, Ciudad');
-    insertSetting.run('contactPhone', '+57 300 123 4567');
-    insertSetting.run('contactEmail', 'info@eliteclub.com');
-
-    // Socials
-    insertSetting.run('facebookUrl', 'https://facebook.com');
-    insertSetting.run('instagramUrl', 'https://instagram.com');
-    insertSetting.run('tiktokUrl', 'https://tiktok.com');
-
-    // Services Page
-    insertSetting.run('servicesTitle', 'Nuestros Servicios');
-    insertSetting.run('services1Title', 'Reserva de Mesas VIP');
-    insertSetting.run('services1Desc', 'La mejor ubicación de la casa. Incluye servicio de botella premium, mesero dedicado y acceso prioritario.');
-    insertSetting.run('services1Price', 'Desde $200');
-    insertSetting.run('services2Title', 'Eventos Privados');
-    insertSetting.run('services2Desc', 'Celebra tu cumpleaños o evento corporativo con nosotros. Alquila una zona o el club completo.');
-    insertSetting.run('services2Price', 'Personalizado');
-    insertSetting.run('services3Title', 'Coctelería de Autor');
-    insertSetting.run('services3Desc', 'Disfruta de nuestra carta exclusiva de cócteles diseñados por mixólogos expertos.');
-    insertSetting.run('services3Price', 'A la carta');
-
-    // Events Page
-    insertSetting.run('eventsTitle', 'Próximos Eventos');
-    insertSetting.run('eventsSubtitle', 'Descubre las fiestas más exclusivas de la ciudad. Reserva tu lugar antes de que se agoten.');
-
-    // Classes Page
-    insertSetting.run('classesTitle', 'Clases de Baile');
-    insertSetting.run('classesSubtitle', 'Aprende a bailar con los mejores instructores. Ofrecemos clases para todos los niveles, desde principiantes hasta avanzados.');
-
-    // Feedback Page
-    insertSetting.run('feedbackTitle', 'Tu Opinión Importa');
-    insertSetting.run('feedbackSubtitle', 'Ayúdanos a mejorar tu experiencia en Elite Club.');
-    // Team Members
-    const teamCount = (db.prepare('SELECT COUNT(*) as count FROM team_members').get() as any).count;
-    if (teamCount === 0) {
-      const insertTeam = db.prepare('INSERT INTO team_members (name, role, description) VALUES (?, ?, ?)');
-      insertTeam.run('Carlos M.', 'Fundador', 'Visionario de la vida nocturna con 15 años de experiencia.');
-      insertTeam.run('Ana R.', 'Jefe de Barra', 'Mixóloga premiada, creadora de nuestros cócteles insignia.');
-    }
   } catch (err) {
     console.warn("Seeding failed (might be read-only DB in some contexts):", err);
   }

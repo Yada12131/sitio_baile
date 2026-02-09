@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { LayoutDashboard, Calendar, MessageSquare, Star, LogOut, Settings, Users } from 'lucide-react';
+import { LayoutDashboard, Calendar, MessageSquare, Star, LogOut, Settings, Users, Briefcase } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function AdminLayout({
@@ -24,6 +24,7 @@ export default function AdminLayout({
         { name: 'Mensajes', href: '/admin/dashboard/messages', icon: MessageSquare },
         { name: 'Feedback', href: '/admin/dashboard/feedback', icon: Star },
         { name: 'Equipo', href: '/admin/dashboard/team', icon: Users },
+        { name: 'Servicios', href: '/admin/dashboard/services', icon: Briefcase },
         { name: 'Configuración', href: '/admin/dashboard/settings', icon: Settings },
     ];
 
