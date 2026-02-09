@@ -177,6 +177,53 @@ const seedData = async () => {
         console.error('Seeding error:', e);
     }
 
+    // Seed Team Members
+    try {
+        const teamCount = await query('SELECT COUNT(*) FROM team_members');
+        if (parseInt(teamCount.rows[0].count) === 0) {
+            console.log('Seeding Team...');
+            const team = [
+                {
+                    name: 'David Ospina',
+                    role: 'Director General e Instructor',
+                    description: 'Especialista en Salsa Casino y Bailes Populares. Con más de 10 años de experiencia formando bailarines.',
+                    image: '/images/team/david.jpg'
+                },
+                {
+                    name: 'Laura Martínez',
+                    role: 'Instructora de Bachata',
+                    description: 'Apasionada por la Bachata Sensual y la expresión corporal. Enfocada en la técnica y la conexión.',
+                    image: '/images/team/laura.jpg'
+                },
+                {
+                    name: 'Carlos Ruiz',
+                    role: 'Instructor de Porro',
+                    description: 'Experto en folclore colombiano y ritmos tropicales. Transmite la alegría del baile tradicional.',
+                    image: '/images/team/carlos.jpg'
+                },
+                {
+                    name: 'Ana María',
+                    role: 'Instructora de Técnica',
+                    description: 'Formación en ballet y danza contemporánea. Ayuda a los alumnos a mejorar su postura y elegancia.',
+                    image: '/images/team/ana.jpg'
+                },
+                {
+                    name: 'Roberto',
+                    role: 'Maestro de Tango',
+                    description: 'Elegancia y pasión en cada paso. Experto en Tango Argentino y Milonga.',
+                    image: '/images/team/roberto.jpg'
+                }
+            ];
+
+            for (const t of team) {
+                await query('INSERT INTO team_members (name, role, description, image) VALUES ($1, $2, $3, $4)',
+                    [t.name, t.role, t.description, t.image]);
+            }
+        }
+    } catch (e) {
+        console.error('Seeding team error:', e);
+    }
+
     // Seed Settings if empty
     try {
         const settingsCount = await query('SELECT COUNT(*) FROM settings');
