@@ -70,6 +70,12 @@ export const initDb = async () => {
             read BOOLEAN DEFAULT FALSE,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )`);
+        // Migration: Ensure phone column exists for existing tables
+        try {
+            await query(`ALTER TABLE messages ADD COLUMN IF NOT EXISTS phone TEXT`);
+        } catch (e) {
+            console.log('Migration note: phone column might already exist or could not be added', e);
+        }
 
         // Feedback
         await query(`CREATE TABLE IF NOT EXISTS feedback (

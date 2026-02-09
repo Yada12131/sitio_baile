@@ -17,18 +17,28 @@ export async function POST(request: Request) {
             [name, email, phone || '', subject, message]
         );
 
+        if (!result.rows || result.rows.length === 0) {
+            console.error('Database insertion failed (No rows returned). Likely DB connection issue.');
+            throw new Error('Database insertion failed');
+        }
+
         // Send Telegram Notification
-        await sendTelegramNotification(
-            `📩 <b>Nuevo Mensaje de Contacto</b>\n\n` +
-            `<b>De:</b> ${name} (${email})\n` +
-            `<b>Teléfono:</b> ${phone || 'N/A'}\n` +
-            `<b>Asunto:</b> ${subject}\n\n` +
-            `${message}`
-        );
+        try {
+            await sendTelegramNotification(
+                `📩 <b>Nuevo Mensaje de Contacto</b>\n\n` +
+                `<b>De:</b> ${name} (${email})\n` +
+                `<b>Teléfono:</b> ${phone || 'N/A'}\n` +
+                `<b>Asunto:</b> ${subject}\n\n` +
+                `${message}`
+            );
+        } catch (tgError) {
+            console.error('Telegram notification failed:', tgError);
+            // Continue execution, do not fail the request just because notification failed
+        }
 
         return NextResponse.json({ success: true, id: result.rows[0].id });
     } catch (error) {
         console.error('Contact error:', error);
-        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to send message. Please try again later.' }, { status: 500 });
     }
 }
