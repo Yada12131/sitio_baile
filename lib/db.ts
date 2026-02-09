@@ -8,7 +8,7 @@ import os from 'os';
 let dbInstance: any = null;
 
 // Mock Data for Fallback (Serverless/Build environments where sqlite fails)
-const MOCK_DATA = {
+const MOCK_DATA: any = {
     services: [
         { id: 1, title: 'Montajes Coreográficos (15 Años y Bodas)', description: 'Creamos montajes personalizados para celebraciones especiales. Acompañamos a los protagonistas en todo el proceso coreográfico.', price: '$500.000 COP', category: 'Eventos', image: '/images/extracted/550422d082b7427f47bc866b65fe09d2_p8_i0.png', created_at: new Date().toISOString() },
         { id: 2, title: 'Montaje de Cumpleaños con Bailarines', description: 'Show estilo carnaval (12 min) con festejado y 2 bailarines profesionales. Animación conjunta e integración con invitados.', price: '$1.000.000 COP', category: 'Eventos', image: '/images/extracted/550422d082b7427f47bc866b65fe09d2_p9_i0.png', created_at: new Date().toISOString() },
@@ -33,7 +33,12 @@ const MOCK_DATA = {
         { key: 'servicesTitle', value: 'Nuestros Servicios' },
         { key: 'aboutTitle', value: '¿Quiénes Somos?' },
         { key: 'aboutDescription', value: 'El Club Deportivo Ritmos nace el 14 de enero de 2019 con el respaldo del INDER de Medellín. Promovemos el baile deportivo como un deporte olímpico y una herramienta de transformación social. Nos mueven valores como la disciplina, la resiliencia y el sentido de pertenencia.' }
-    ]
+    ],
+    events: [],
+    classes: [],
+    messages: [],
+    feedback: [],
+    registrations: []
 };
 
 class MockDB {
@@ -45,29 +50,89 @@ class MockDB {
                 if (q.includes('from services')) return MOCK_DATA.services;
                 if (q.includes('from team_members')) return MOCK_DATA.team_members;
                 if (q.includes('from settings')) return MOCK_DATA.settings;
+                if (q.includes('from events')) return MOCK_DATA.events;
+                if (q.includes('from classes')) return MOCK_DATA.classes;
+                if (q.includes('from messages')) return MOCK_DATA.messages;
+                if (q.includes('from feedback')) return MOCK_DATA.feedback;
+                if (q.includes('from registrations')) return MOCK_DATA.registrations;
                 return [];
             },
             get: () => {
                 if (q.includes('count(*) as count from team_members')) return { count: MOCK_DATA.team_members.length };
                 if (q.includes('count(*) as count from services')) return { count: MOCK_DATA.services.length };
+                if (q.includes('count(*) as count from events')) return { count: MOCK_DATA.events.length };
+                if (q.includes('count(*) as count from classes')) return { count: MOCK_DATA.classes.length };
+                if (q.includes('count(*) as count from messages')) return { count: MOCK_DATA.messages.length };
+                if (q.includes('count(*) as count from registrations')) return { count: MOCK_DATA.registrations.length };
+                if (q.includes('avg(rating) as avg from feedback')) {
+                    const total = MOCK_DATA.feedback.reduce((sum: number, f: any) => sum + f.rating, 0);
+                    return { avg: MOCK_DATA.feedback.length ? total / MOCK_DATA.feedback.length : 0 };
+                }
                 return null;
             },
             run: (...args: any[]) => {
                 console.log('Mock DB run:', query, args);
-                // For updates, we can try to update MOCK_DATA in memory if we want persistence during session
+
+                // HELPERS
+                const getNewId = (arr: any[]) => (arr.length > 0 ? Math.max(...arr.map(m => m.id)) + 1 : 1);
+                const updateItem = (arr: any[], id: number, newData: any) => {
+                    const idx = arr.findIndex(i => i.id === id);
+                    if (idx !== -1) arr[idx] = { ...arr[idx], ...newData };
+                };
+                const deleteItem = (arr: any[], id: number) => {
+                    const idx = arr.findIndex(i => i.id === id);
+                    if (idx !== -1) arr.splice(idx, 1);
+                };
+
+                // TEAM MEMBERS
                 if (q.startsWith('update team_members')) {
-                    const id = args[args.length - 1]; // standard last arg is ID
-                    const index = MOCK_DATA.team_members.findIndex(m => m.id === id);
-                    if (index !== -1) {
-                        // simple mapping for the update query: name, role, description, image
-                        MOCK_DATA.team_members[index] = { ...MOCK_DATA.team_members[index], name: args[0], role: args[1], description: args[2], image: args[3] };
-                    }
+                    updateItem(MOCK_DATA.team_members, args[args.length - 1], { name: args[0], role: args[1], description: args[2], image: args[3] });
                 }
                 if (q.startsWith('insert into team_members')) {
-                    const newId = Math.max(...MOCK_DATA.team_members.map(m => m.id)) + 1;
-                    MOCK_DATA.team_members.push({ id: newId, name: args[0], role: args[1], description: args[2], image: args[3], created_at: new Date().toISOString() });
-                    return { changes: 1, lastInsertRowid: newId };
+                    const id = getNewId(MOCK_DATA.team_members);
+                    MOCK_DATA.team_members.push({ id, name: args[0], role: args[1], description: args[2], image: args[3], created_at: new Date().toISOString() });
+                    return { changes: 1, lastInsertRowid: id };
                 }
+
+                // SERVICES
+                if (q.startsWith('update services')) {
+                    updateItem(MOCK_DATA.services, args[args.length - 1], { title: args[0], description: args[1], price: args[2], category: args[3], image: args[4] });
+                }
+                if (q.startsWith('insert into services')) {
+                    const id = getNewId(MOCK_DATA.services);
+                    MOCK_DATA.services.push({ id, title: args[0], description: args[1], price: args[2], category: args[3], image: args[4], created_at: new Date().toISOString() });
+                    return { changes: 1, lastInsertRowid: id };
+                }
+                if (q.startsWith('delete from services')) {
+                    deleteItem(MOCK_DATA.services, args[0]);
+                }
+
+                // EVENTS
+                if (q.startsWith('update events')) {
+                    updateItem(MOCK_DATA.events, args[args.length - 1], { title: args[0], description: args[1], date: args[2], image: args[3] });
+                }
+                if (q.startsWith('insert into events')) {
+                    const id = getNewId(MOCK_DATA.events);
+                    MOCK_DATA.events.push({ id, title: args[0], description: args[1], date: args[2], image: args[3], created_at: new Date().toISOString() });
+                    return { changes: 1, lastInsertRowid: id };
+                }
+                if (q.startsWith('delete from events')) {
+                    deleteItem(MOCK_DATA.events, args[0]);
+                }
+
+                // CLASSES
+                if (q.startsWith('update classes')) {
+                    updateItem(MOCK_DATA.classes, args[args.length - 1], { name: args[0], instructor: args[1], schedule: args[2], capacity: args[3] });
+                }
+                if (q.startsWith('insert into classes')) {
+                    const id = getNewId(MOCK_DATA.classes);
+                    MOCK_DATA.classes.push({ id, name: args[0], instructor: args[1], schedule: args[2], capacity: args[3], created_at: new Date().toISOString() });
+                    return { changes: 1, lastInsertRowid: id };
+                }
+                if (q.startsWith('delete from classes')) {
+                    deleteItem(MOCK_DATA.classes, args[0]);
+                }
+
                 return { changes: 1, lastInsertRowid: 1 };
             }
         };
