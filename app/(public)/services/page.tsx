@@ -44,17 +44,29 @@ export default function ServicesPage() {
                             </h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                                 {items.map((service, index) => (
-                                    <div key={service.id} className="bg-zinc-900/40 border border-white/10 rounded-2xl p-8 hover:border-pink-500/50 transition-all duration-300 hover:bg-zinc-900/80 group">
-                                        <div className="flex justify-between items-start mb-6">
-                                            <div className="h-12 w-12 bg-zinc-800 rounded-xl flex items-center justify-center group-hover:bg-pink-500/20 transition-colors">
-                                                <Check className="text-pink-500" size={24} />
+                                    <div key={service.id} className="bg-zinc-900/40 border border-white/10 rounded-2xl overflow-hidden hover:border-pink-500/50 transition-all duration-300 hover:bg-zinc-900/80 group flex flex-col">
+                                        <div className="h-48 w-full bg-zinc-800 relative overflow-hidden">
+                                            {service.image ? (
+                                                <img
+                                                    src={service.image}
+                                                    alt={service.title}
+                                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                                />
+                                            ) : (
+                                                <div className="w-full h-full flex items-center justify-center">
+                                                    <Check className="text-pink-500" size={48} />
+                                                </div>
+                                            )}
+                                            <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
+                                                <span className="text-sm font-bold text-white">
+                                                    {service.price}
+                                                </span>
                                             </div>
-                                            <span className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400">
-                                                {service.price}
-                                            </span>
                                         </div>
-                                        <h3 className="text-xl font-bold text-white mb-4">{service.title}</h3>
-                                        <p className="text-gray-400 leading-relaxed text-sm">{service.description}</p>
+                                        <div className="p-6 flex-grow flex flex-col">
+                                            <h3 className="text-xl font-bold text-white mb-4">{service.title}</h3>
+                                            <p className="text-gray-400 leading-relaxed text-sm flex-grow">{service.description}</p>
+                                        </div>
                                     </div>
                                 ))}
                             </div>

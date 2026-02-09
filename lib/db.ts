@@ -8,19 +8,34 @@ export const getDb = () => {
   if (dbInstance) return dbInstance;
 
   try {
-    const dbPath = process.env.NODE_ENV === 'production'
-      ? path.join(os.tmpdir(), 'dance_club.db')
-      : path.join(process.cwd(), 'dance_club.db');
+    let dbPath;
+    let options = {};
 
-    console.log(`Initializing DB at ${dbPath}`);
-    dbInstance = new Database(dbPath);
-    dbInstance.pragma('journal_mode = WAL');
+    if (process.env.NODE_ENV === 'production') {
+      // In Netlify/Lambda, /tmp is the only writable path
+      dbPath = path.join(os.tmpdir(), 'dance_club.db');
+      console.log(`Initializing Production DB at ${dbPath}`);
+    } else {
+      dbPath = path.join(process.cwd(), 'dance_club.db');
+      console.log(`Initializing Local DB at ${dbPath}`);
+    }
+
+    try {
+      dbInstance = new Database(dbPath);
+      dbInstance.pragma('journal_mode = WAL');
+    } catch (fsError) {
+      console.warn("Failed to create file-based DB, falling back to IN-MEMORY database. Data will not persist.", fsError);
+      dbInstance = new Database(':memory:');
+    }
 
     initDb(dbInstance);
     return dbInstance;
   } catch (error) {
-    console.error("FAILED TO INITIALIZE DATABASE:", error);
-    throw error;
+    console.error("CRITICAL DATABASE ERROR:", error);
+    // Ultimate fallback to prevent crash
+    dbInstance = new Database(':memory:');
+    initDb(dbInstance);
+    return dbInstance;
   }
 };
 
@@ -147,20 +162,20 @@ const seedData = (db: any) => {
       const insertService = db.prepare('INSERT INTO services (title, description, price, category, image) VALUES (?, ?, ?, ?, ?)');
 
       // Montajes
-      insertService.run('Montajes Coreográficos (15 Años y Bodas)', 'Creamos montajes personalizados para celebraciones especiales. Acompañamos a los protagonistas en todo el proceso coreográfico.', '$500.000 COP', 'Eventos', '/hero-bg.jpg');
-      insertService.run('Montaje de Cumpleaños con Bailarines', 'Show estilo carnaval (12 min) con festejado y 2 bailarines profesionales. Animación conjunta e integración con invitados.', '$1.000.000 COP', 'Eventos', '/hero-bg.jpg');
+      insertService.run('Montajes Coreográficos (15 Años y Bodas)', 'Creamos montajes personalizados para celebraciones especiales. Acompañamos a los protagonistas en todo el proceso coreográfico.', '$500.000 COP', 'Eventos', '/images/extracted/550422d082b7427f47bc866b65fe09d2_p8_i0.png');
+      insertService.run('Montaje de Cumpleaños con Bailarines', 'Show estilo carnaval (12 min) con festejado y 2 bailarines profesionales. Animación conjunta e integración con invitados.', '$1.000.000 COP', 'Eventos', '/images/extracted/550422d082b7427f47bc866b65fe09d2_p9_i0.png');
 
       // Shows
-      insertService.run('Show de Baile Deportivo (Clásico)', 'Presentaciones de alto impacto: rumba, bolero, chachachá, samba y jive. Ideal para eventos culturales y empresariales.', '$350.000 COP', 'Shows', '/hero-bg.jpg');
-      insertService.run('Show de Baile Deportivo (Homenaje)', 'Incluye cierre especial dedicado al cumpleañer@ con interpretación escénica.', '$450.000 COP', 'Shows', '/hero-bg.jpg');
-      insertService.run('Show de Bailes Tradicionales', 'Recorrido por porro, bachata, salsa, tango y folclor colombiano. Resalta la diversidad cultural.', '$350.000 COP', 'Shows', '/hero-bg.jpg');
-      insertService.run('Homenaje Especial con Baruc', 'Presentación dancística protagonizada por Baruc, nuestro perro de terapia. Mensaje simbólico de amor y gratitud.', '$650.000 COP', 'Shows', '/media__1770472368633.png'); // Using uploaded image for Baruc if possible
+      insertService.run('Show de Baile Deportivo (Clásico)', 'Presentaciones de alto impacto: rumba, bolero, chachachá, samba y jive. Ideal para eventos culturales y empresariales.', '$350.000 COP', 'Shows', '/images/extracted/550422d082b7427f47bc866b65fe09d2_p10_i0.png');
+      insertService.run('Show de Baile Deportivo (Homenaje)', 'Incluye cierre especial dedicado al cumpleañer@ con interpretación escénica.', '$450.000 COP', 'Shows', '/images/extracted/550422d082b7427f47bc866b65fe09d2_p10_i0.png'); // Reusing image if specific not found
+      insertService.run('Show de Bailes Tradicionales', 'Recorrido por porro, bachata, salsa, tango y folclor colombiano. Resalta la diversidad cultural.', '$350.000 COP', 'Shows', '/images/extracted/550422d082b7427f47bc866b65fe09d2_p11_i0.png');
+      insertService.run('Homenaje Especial con Baruc', 'Presentación dancística protagonizada por Baruc, nuestro perro de terapia. Mensaje simbólico de amor y gratitud.', '$650.000 COP', 'Shows', '/images/extracted/550422d082b7427f47bc866b65fe09d2_p12_i0.png');
 
       // Multimedia
-      insertService.run('Fotografía Básico', 'Cubrimiento de 2-3 horas. Entrega de ~50 fotos digitales. Ideal para ceremonias o brindis.', '$350.000 COP', 'Multimedia', '/hero-bg.jpg');
-      insertService.run('Fotografía Estándar', 'Cubrimiento de 4-5 horas. Entrega de ~100 fotos digitales. Desde la llegada hasta la celebración.', '$500.000 COP', 'Multimedia', '/hero-bg.jpg');
-      insertService.run('Fotografía Completo', 'Cubrimiento de 6-8 horas. Entrega de ~150 fotos digitales. Evento de principio a fin.', '$750.000 COP', 'Multimedia', '/hero-bg.jpg');
-      insertService.run('Video Documental', 'Pieza audiovisual íntima con entrevistas y voz en off. Cuenta la historia emocional del evento.', '$250.000 COP', 'Multimedia', '/hero-bg.jpg');
+      insertService.run('Fotografía Básico', 'Cubrimiento de 2-3 horas. Entrega de ~50 fotos digitales. Ideal para ceremonias o brindis.', '$350.000 COP', 'Multimedia', '/images/extracted/550422d082b7427f47bc866b65fe09d2_p14_i0.png');
+      insertService.run('Fotografía Estándar', 'Cubrimiento de 4-5 horas. Entrega de ~100 fotos digitales. Desde la llegada hasta la celebración.', '$500.000 COP', 'Multimedia', '/images/extracted/550422d082b7427f47bc866b65fe09d2_p14_i0.png');
+      insertService.run('Fotografía Completo', 'Cubrimiento de 6-8 horas. Entrega de ~150 fotos digitales. Evento de principio a fin.', '$750.000 COP', 'Multimedia', '/images/extracted/550422d082b7427f47bc866b65fe09d2_p14_i0.png');
+      insertService.run('Video Documental', 'Pieza audiovisual íntima con entrevistas y voz en off. Cuenta la historia emocional del evento.', '$250.000 COP', 'Multimedia', '/images/extracted/550422d082b7427f47bc866b65fe09d2_p15_i0.png');
     }
 
     // Check if team is empty (or force update/check logic? better to check empty for safe seed)
@@ -169,11 +184,11 @@ const seedData = (db: any) => {
       console.log('Seeding Team...');
       const insertTeam = db.prepare('INSERT INTO team_members (name, role, description, image) VALUES (?, ?, ?, ?)');
 
-      insertTeam.run('Elizabeth Laverde Ospina', 'Presidenta • Psicóloga • Entrenadora', 'Acompaño procesos psicológicos y entreno. Ganadora de bronce en primera competencia federada. Entrenadora canina.', null);
-      insertTeam.run('David Stiven Rúa', 'Coordinador Deportivo', 'Licenciado en Ed. Física, profesor de natación y bailes tropicales. Apasionado por transformar vidas a través del baile.', null);
-      insertTeam.run('Estefania Giraldo Velez', 'Deportista • Artista', 'Deportista, artista plástica, fotógrafa y tatuadora. Medalla de plata en competencia nacional en Bogotá.', null);
-      insertTeam.run('Andrés Narváez Gómez', 'Entrenador • Coach PNL', 'Coach en PNL. Enfocado en el equilibrio espiritual, mental y físico. Acompañamiento social y desarrollo integral.', null);
-      insertTeam.run('Baruc', 'Perro de Terapia', 'Labrador Chocolate de 3 años. Ayuda a reducir el estrés y mejora el ánimo. Experto en dar amor y compañía.', '/media__1770472368633.png');
+      insertTeam.run('Elizabeth Laverde Ospina', 'Presidenta • Psicóloga • Entrenadora', 'Acompaño procesos psicológicos y entreno. Ganadora de bronce en primera competencia federada. Entrenadora canina.', '/images/extracted/a6482e6edc5f43c965b01c8c14f1dfae_p3_i0.png');
+      insertTeam.run('David Stiven Rúa', 'Coordinador Deportivo', 'Licenciado en Ed. Física, profesor de natación y bailes tropicales. Apasionado por transformar vidas a través del baile.', '/images/extracted/a6482e6edc5f43c965b01c8c14f1dfae_p4_i0.png');
+      insertTeam.run('Estefania Giraldo Velez', 'Deportista • Artista', 'Deportista, artista plástica, fotógrafa y tatuadora. Medalla de plata en competencia nacional en Bogotá.', '/images/extracted/a6482e6edc5f43c965b01c8c14f1dfae_p5_i0.png');
+      insertTeam.run('Andrés Narváez Gómez', 'Entrenador • Coach PNL', 'Coach en PNL. Enfocado en el equilibrio espiritual, mental y físico. Acompañamiento social y desarrollo integral.', '/images/extracted/a6482e6edc5f43c965b01c8c14f1dfae_p6_i0.png');
+      insertTeam.run('Baruc', 'Perro de Terapia', 'Labrador Chocolate de 3 años. Ayuda a reducir el estrés y mejora el ánimo. Experto en dar amor y compañía.', '/images/extracted/a6482e6edc5f43c965b01c8c14f1dfae_p7_i0.png');
     }
 
     // Initial check for settings/events to ensure base items exist
