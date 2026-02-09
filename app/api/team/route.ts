@@ -22,6 +22,23 @@ export async function POST(request: Request) {
     }
 }
 
+export async function PUT(request: Request) {
+    try {
+        const db = getDb();
+        const body = await request.json();
+        const { id, name, role, description, image } = body;
+
+        if (!id) return NextResponse.json({ error: 'ID required' }, { status: 400 });
+
+        const stmt = db.prepare('UPDATE team_members SET name = ?, role = ?, description = ?, image = ? WHERE id = ?');
+        stmt.run(name, role, description, image || '', id);
+
+        return NextResponse.json({ success: true });
+    } catch (error) {
+        return NextResponse.json({ error: 'Failed to update member' }, { status: 500 });
+    }
+}
+
 export async function DELETE(request: Request) {
     try {
         const { searchParams } = new URL(request.url);
