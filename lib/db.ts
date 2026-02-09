@@ -171,6 +171,34 @@ const seedData = (db: any) => {
             MOCK_DATA.team_members.forEach(t => insertTeam.run(t.name, t.role, t.description, t.image));
         }
 
+        // SEED TEST CLASSES
+        const classCount = (db.prepare('SELECT COUNT(*) as count FROM classes').get() as any).count;
+        if (classCount === 0) {
+            console.log('Seeding Test Classes...');
+            const insertClass = db.prepare('INSERT INTO classes (name, instructor, schedule, capacity) VALUES (?, ?, ?, ?)');
+            insertClass.run('Salsa Casino (Basico)', 'David Stiven Rúa', 'Martes y Jueves 7:00 PM', 20);
+            insertClass.run('Bachata Sensual', 'Estefania Giraldo', 'Sábados 4:00 PM', 15);
+        }
+
+        // SEED TEST EVENTS
+        const eventCount = (db.prepare('SELECT COUNT(*) as count FROM events').get() as any).count;
+        if (eventCount === 0) {
+            console.log('Seeding Test Events...');
+            const insertEvent = db.prepare('INSERT INTO events (title, description, date, image) VALUES (?, ?, ?, ?)');
+            // Next Saturday
+            const nextSat = new Date();
+            nextSat.setDate(nextSat.getDate() + (6 - nextSat.getDay() + 7) % 7);
+            nextSat.setHours(20, 0, 0, 0);
+
+            // Next Sunday
+            const nextSun = new Date();
+            nextSun.setDate(nextSun.getDate() + (7 - nextSun.getDay() + 7) % 7);
+            nextSun.setHours(10, 0, 0, 0);
+
+            insertEvent.run('Gran Baile Social', 'Noche de práctica y baile social para todos los niveles. Entrada libre para alumnos.', nextSat.toISOString(), '/hero-bg.jpg');
+            insertEvent.run('Taller Intensivo de Rumba', 'Aprende los fundamentos de la Rumba Bolero en este taller de 3 horas.', nextSun.toISOString(), '/hero-bg.jpg');
+        }
+
         const insertSetting = db.prepare('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)');
         MOCK_DATA.settings.forEach(k => insertSetting.run(k.key, k.value));
 

@@ -25,6 +25,22 @@ export async function POST(request: Request) {
     }
 }
 
+export async function PUT(request: Request) {
+    try {
+        const db = getDb();
+        const body = await request.json();
+        const { id, title, description, date, image } = body;
+
+        if (!id) return NextResponse.json({ error: 'ID required' }, { status: 400 });
+
+        const stmt = db.prepare('UPDATE events SET title = ?, description = ?, date = ?, image = ? WHERE id = ?');
+        stmt.run(title, description, date, image, id);
+        return NextResponse.json({ success: true });
+    } catch (error) {
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    }
+}
+
 export async function DELETE(request: Request) {
     try {
         const db = getDb();

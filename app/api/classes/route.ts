@@ -25,6 +25,22 @@ export async function POST(request: Request) {
     }
 }
 
+export async function PUT(request: Request) {
+    try {
+        const db = getDb();
+        const body = await request.json();
+        const { id, name, instructor, schedule, capacity } = body;
+
+        if (!id) return NextResponse.json({ error: 'ID required' }, { status: 400 });
+
+        const stmt = db.prepare('UPDATE classes SET name = ?, instructor = ?, schedule = ?, capacity = ? WHERE id = ?');
+        stmt.run(name, instructor, schedule, capacity, id);
+        return NextResponse.json({ success: true });
+    } catch (error) {
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    }
+}
+
 export async function DELETE(request: Request) {
     try {
         const db = getDb();
