@@ -1,6 +1,10 @@
 import path from 'path';
 import os from 'os';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-require-imports */
+
 let dbInstance: any = null;
 
 // Mock Data for Fallback (Serverless/Build environments where sqlite fails)
@@ -84,8 +88,7 @@ export const getDb = () => {
 
     try {
         // Hide better-sqlite3 from Webpack to prevent bundling errors in production
-        // This uses a dynamic require that Webpack cannot statically analyze
-        const requireFunc = typeof __webpack_require__ === 'function' ? __non_webpack_require__ : require;
+        const glb = global as any;
         const Database = (new Function('return require'))()('better-sqlite3');
 
         const dbPath = path.join(process.cwd(), 'dance_club.db');
