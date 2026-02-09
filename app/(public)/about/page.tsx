@@ -5,12 +5,23 @@ export const dynamic = 'force-dynamic';
 
 export default async function About() {
     let teamMembers: any[] = [];
+    let settingsObj: any = {};
+
     try {
-        const res = await query('SELECT * FROM team_members');
-        teamMembers = res.rows;
+        const teamRes = await query('SELECT * FROM team_members');
+        teamMembers = teamRes.rows;
+
+        const settingsRes = await query('SELECT * FROM settings WHERE key IN ($1, $2)', ['aboutTitle', 'aboutDescription']);
+        settingsObj = settingsRes.rows.reduce((acc: any, curr: any) => {
+            acc[curr.key] = curr.value;
+            return acc;
+        }, {});
     } catch (e) {
-        console.error("Failed to load team members:", e);
+        console.error("Failed to load about data:", e);
     }
+
+    const title = settingsObj.aboutTitle || '¿Quiénes Somos?';
+    const description = settingsObj.aboutDescription || 'El Club Deportivo Ritmos nace el 14 de enero de 2019 con el respaldo del INDER de Medellín, afiliado a la Liga de Baile Deportivo de Antioquia. Somos una organización comprometida con fomentar la práctica del deporte y el arte como herramientas de transformación social.';
 
     return (
         <div className="bg-black min-h-screen text-white pt-24 pb-20 px-4 sm:px-6 lg:px-8">
@@ -19,12 +30,10 @@ export default async function About() {
                 {/* Hero Section */}
                 <div className="text-center space-y-6">
                     <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
-                        ¿Quiénes Somos?
+                        {title}
                     </h1>
                     <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-                        El Club Deportivo Ritmos nace el 14 de enero de 2019 con el respaldo del INDER de Medellín,
-                        afiliado a la Liga de Baile Deportivo de Antioquia. Somos una organización comprometida con
-                        fomentar la práctica del deporte y el arte como herramientas de transformación social.
+                        {description}
                     </p>
                 </div>
 

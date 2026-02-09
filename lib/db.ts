@@ -33,8 +33,12 @@ export const query = async (text: string, params?: any[]) => {
 
 // Helper for "run" style commands (INSERT/UPDATE/DELETE) which in PG return a Result object
 // In SQLite we returned { lastInsertRowid }, in PG we should use RETURNING id or just check rowCount
+// Helper for "run" style commands (INSERT/UPDATE/DELETE)
 export const run = async (text: string, params?: any[]) => {
-    if (!pool) return { rowCount: 0, rows: [] };
+    if (!pool) {
+        console.error('Attempted DB write without connection:', text);
+        throw new Error('Database connection not established. Check DATABASE_URL.');
+    }
     return await pool.query(text, params);
 };
 
@@ -165,5 +169,36 @@ const seedData = async () => {
 
     } catch (e) {
         console.error('Seeding error:', e);
+    }
+
+    // Seed Settings if empty
+    try {
+        const settingsCount = await query('SELECT COUNT(*) FROM settings');
+        if (parseInt(settingsCount.rows[0].count) === 0) {
+            console.log('Seeding Settings...');
+            const defaultSettings = [
+                { key: 'siteName', value: 'Club Deportivo Ritmos' },
+                { key: 'heroTitle', value: 'Club Deportivo Ritmos' },
+                { key: 'heroSubtitle', value: 'Fomentamos la práctica del deporte y el arte como herramientas de transformación social.' },
+                { key: 'aboutTitle', value: '¿Quiénes Somos?' },
+                { key: 'aboutDescription', value: 'El Club Deportivo Ritmos nace el 14 de enero de 2019 con el respaldo del INDER de Medellín, afiliado a la Liga de Baile Deportivo de Antioquia. Somos una organización comprometida con fomentar la práctica del deporte y el arte como herramientas de transformación social.' },
+                { key: 'primaryColor', value: '#ec4899' },
+                { key: 'accentColor', value: '#a855f7' },
+                { key: 'highlight1Title', value: 'Misión' },
+                { key: 'highlight1Desc', value: 'Promovemos el baile deportivo como un deporte artístico y competitivo.' },
+                { key: 'highlight2Title', value: 'Visión' },
+                { key: 'highlight2Desc', value: 'Ser referentes en la formación integral a través de la danza.' },
+                { key: 'highlight3Title', value: 'Valores' },
+                { key: 'highlight3Desc', value: 'Disciplina, Resiliencia y Sentido de Pertenencia.' },
+                { key: 'servicesTitle', value: 'Nuestros Servicios' },
+                { key: 'contactEmail', value: 'contacto@clubritmos.com' }
+            ];
+
+            for (const s of defaultSettings) {
+                await query('INSERT INTO settings (key, value) VALUES ($1, $2) ON CONFLICT (key) DO NOTHING', [s.key, s.value]);
+            }
+        }
+    } catch (e) {
+        console.error('Seeding settings error:', e);
     }
 };
