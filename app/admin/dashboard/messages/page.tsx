@@ -14,8 +14,13 @@ interface Message {
 }
 
 export default function MessagesPage() {
-    const db = getDb();
-    const messages = db.prepare('SELECT * FROM messages ORDER BY created_at DESC').all() as Message[];
+    let messages: Message[] = [];
+    try {
+        const db = getDb();
+        messages = db.prepare('SELECT * FROM messages ORDER BY created_at DESC').all() as Message[];
+    } catch (e) {
+        console.error("Failed to load messages:", e);
+    }
 
     return (
         <div>

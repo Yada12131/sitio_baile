@@ -83,8 +83,10 @@ export const getDb = () => {
     }
 
     try {
-        // Dynamically require better-sqlite3 to avoid top-level load errors on incompatible envs
-        const Database = require('better-sqlite3');
+        // Hide better-sqlite3 from Webpack to prevent bundling errors in production
+        // This uses a dynamic require that Webpack cannot statically analyze
+        const requireFunc = typeof __webpack_require__ === 'function' ? __non_webpack_require__ : require;
+        const Database = (new Function('return require'))()('better-sqlite3');
 
         const dbPath = path.join(process.cwd(), 'dance_club.db');
 
@@ -97,6 +99,7 @@ export const getDb = () => {
         } catch (e) {
             console.warn('File-based DB failed, trying memory...', e);
             try {
+                // fallback to memory if file creation fails (e.g. permission issues)
                 dbInstance = new Database(':memory:');
                 initDb(dbInstance);
             } catch (memErr) {
@@ -120,95 +123,28 @@ const initDb = (db: any) => {
         console.log('Creating tables...');
 
         // Events Table
-        db.exec(`
-      CREATE TABLE IF NOT EXISTS events (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT NOT NULL,
-        description TEXT NOT NULL,
-        date TEXT NOT NULL,
-        image TEXT,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
+        db.exec(`CREATE TABLE IF NOT EXISTS events (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, description TEXT NOT NULL, date TEXT NOT NULL, image TEXT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP)`);
 
         // Contact Messages Table
-        db.exec(`
-      CREATE TABLE IF NOT EXISTS messages (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        email TEXT NOT NULL,
-        subject TEXT NOT NULL,
-        message TEXT NOT NULL,
-        phone TEXT,
-        read INTEGER DEFAULT 0,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
+        db.exec(`CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL, subject TEXT NOT NULL, message TEXT NOT NULL, phone TEXT, read INTEGER DEFAULT 0, created_at DATETIME DEFAULT CURRENT_TIMESTAMP)`);
 
         // Satisfaction Feedback Table
-        db.exec(`
-      CREATE TABLE IF NOT EXISTS feedback (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        rating INTEGER NOT NULL,
-        comments TEXT,
-        name TEXT,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
+        db.exec(`CREATE TABLE IF NOT EXISTS feedback (id INTEGER PRIMARY KEY AUTOINCREMENT, rating INTEGER NOT NULL, comments TEXT, name TEXT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP)`);
 
         // Classes Table
-        db.exec(`
-      CREATE TABLE IF NOT EXISTS classes (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        instructor TEXT NOT NULL,
-        schedule TEXT NOT NULL,
-        capacity INTEGER DEFAULT 20,
-        image TEXT,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
+        db.exec(`CREATE TABLE IF NOT EXISTS classes (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, instructor TEXT NOT NULL, schedule TEXT NOT NULL, capacity INTEGER DEFAULT 20, image TEXT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP)`);
 
         // Registrations Table
-        db.exec(`
-      CREATE TABLE IF NOT EXISTS registrations (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        class_id INTEGER NOT NULL,
-        student_name TEXT NOT NULL,
-        student_email TEXT NOT NULL,
-        student_phone TEXT,
-        status TEXT DEFAULT 'pending',
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
+        db.exec(`CREATE TABLE IF NOT EXISTS registrations (id INTEGER PRIMARY KEY AUTOINCREMENT, class_id INTEGER NOT NULL, student_name TEXT NOT NULL, student_email TEXT NOT NULL, student_phone TEXT, status TEXT DEFAULT 'pending', created_at DATETIME DEFAULT CURRENT_TIMESTAMP)`);
 
         // Settings
         db.exec(`CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT)`);
 
         // Services
-        db.exec(`
-      CREATE TABLE IF NOT EXISTS services (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT NOT NULL,
-        description TEXT NOT NULL,
-        price TEXT,
-        category TEXT,
-        image TEXT,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
+        db.exec(`CREATE TABLE IF NOT EXISTS services (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, description TEXT NOT NULL, price TEXT, category TEXT, image TEXT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP)`);
 
         // Team Members
-        db.exec(`
-      CREATE TABLE IF NOT EXISTS team_members (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        role TEXT NOT NULL,
-        description TEXT,
-        image TEXT,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
+        db.exec(`CREATE TABLE IF NOT EXISTS team_members (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, role TEXT NOT NULL, description TEXT, image TEXT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP)`);
 
         seedData(db);
     } catch (err: any) {
@@ -218,9 +154,7 @@ const initDb = (db: any) => {
 
 const seedData = (db: any) => {
     try {
-        // Determine if we need to seed
         const serviceCount = (db.prepare('SELECT COUNT(*) as count FROM services').get() as any).count;
-
         if (serviceCount === 0) {
             console.log('Seeding Services...');
             const insertService = db.prepare('INSERT INTO services (title, description, price, category, image) VALUES (?, ?, ?, ?, ?)');

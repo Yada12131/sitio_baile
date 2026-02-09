@@ -6,13 +6,19 @@ export const dynamic = 'force-dynamic';
 
 export default function AdminDashboard() {
     const db = getDb();
-    const stats = {
-        events: (db.prepare('SELECT COUNT(*) as count FROM events').get() as any).count,
-        classes: (db.prepare('SELECT COUNT(*) as count FROM classes').get() as any).count,
-        messages: (db.prepare('SELECT COUNT(*) as count FROM messages').get() as any).count,
-        registrations: (db.prepare('SELECT COUNT(*) as count FROM registrations').get() as any).count,
-        feedbackAvg: (db.prepare('SELECT AVG(rating) as avg FROM feedback').get() as any).avg,
-    };
+    let stats = { events: 0, classes: 0, messages: 0, registrations: 0, feedbackAvg: 0 };
+
+    try {
+        stats = {
+            events: (db.prepare('SELECT COUNT(*) as count FROM events').get() as any).count,
+            classes: (db.prepare('SELECT COUNT(*) as count FROM classes').get() as any).count,
+            messages: (db.prepare('SELECT COUNT(*) as count FROM messages').get() as any).count,
+            registrations: (db.prepare('SELECT COUNT(*) as count FROM registrations').get() as any).count,
+            feedbackAvg: (db.prepare('SELECT AVG(rating) as avg FROM feedback').get() as any).avg,
+        };
+    } catch (e) {
+        console.error("Failed to load admin stats:", e);
+    }
 
     const cards = [
         { title: 'Mensajes Nuevos', value: stats.messages, icon: MessageSquare, color: 'text-blue-500' },
