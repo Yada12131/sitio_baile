@@ -20,6 +20,7 @@ export async function GET() {
         // Let's also verify what's in there
         let servicesCount = 0;
         let settingsCount = 0;
+        let teamCount = 0;
 
         try {
             const services = await query('SELECT count(*) FROM services');
