@@ -147,7 +147,10 @@ export const getDb = () => {
     // FORCE MOCK DB IN PRODUCTION (NETLIFY) TO AVOID SQLITE BINARY ISSUES
     if (process.env.NODE_ENV === 'production') {
         console.log('Running in PRODUCTION mode. Forcing Mock DB Adapter.');
-        dbInstance = new MockDB();
+        if (!dbInstance) {
+            dbInstance = new MockDB();
+            seedData(dbInstance);
+        }
         return dbInstance;
     }
 
