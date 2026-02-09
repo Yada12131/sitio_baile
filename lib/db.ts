@@ -226,14 +226,14 @@ const seedData = (db: any) => {
         if (serviceCount === 0) {
             console.log('Seeding Services...');
             const insertService = db.prepare('INSERT INTO services (title, description, price, category, image) VALUES (?, ?, ?, ?, ?)');
-            MOCK_DATA.services.forEach(s => insertService.run(s.title, s.description, s.price, s.category, s.image));
+            MOCK_DATA.services.forEach((s: any) => insertService.run(s.title, s.description, s.price, s.category, s.image));
         }
 
         const teamCount = (db.prepare('SELECT COUNT(*) as count FROM team_members').get() as any).count;
         if (teamCount === 0) {
             console.log('Seeding Team...');
             const insertTeam = db.prepare('INSERT INTO team_members (name, role, description, image) VALUES (?, ?, ?, ?)');
-            MOCK_DATA.team_members.forEach(t => insertTeam.run(t.name, t.role, t.description, t.image));
+            MOCK_DATA.team_members.forEach((t: any) => insertTeam.run(t.name, t.role, t.description, t.image));
         }
 
         // SEED TEST CLASSES
@@ -265,7 +265,7 @@ const seedData = (db: any) => {
         }
 
         const insertSetting = db.prepare('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)');
-        MOCK_DATA.settings.forEach(k => insertSetting.run(k.key, k.value));
+        MOCK_DATA.settings.forEach((k: any) => insertSetting.run(k.key, k.value));
 
     } catch (err) {
         console.error("Seeding failed:", err);
