@@ -1,13 +1,13 @@
-import { getDb } from '@/lib/db';
+import { query } from '@/lib/db';
 import ClassesManager from '@/components/ClassesManager';
 
 export const dynamic = 'force-dynamic';
 
-export default function AdminClassesPage() {
+export default async function AdminClassesPage() {
     let classes = [];
     try {
-        const db = getDb();
-        classes = db.prepare('SELECT * FROM classes ORDER BY name ASC').all();
+        const res = await query('SELECT * FROM classes ORDER BY name ASC');
+        classes = res.rows;
     } catch (e) {
         console.error("Failed to load classes:", e);
     }

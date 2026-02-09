@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
-import { getDb } from '@/lib/db';
+import { query } from '@/lib/db';
 import { sendTelegramNotification } from '@/lib/telegram';
 
 export async function POST(request: Request) {
     try {
-        const db = getDb();
+
         const body = await request.json();
         const { classId, name, email, phone } = body;
 
@@ -12,11 +12,14 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
-        const stmt = db.prepare('INSERT INTO registrations (class_id, student_name, student_email, student_phone) VALUES (?, ?, ?, ?)');
-        stmt.run(classId, name, email, phone || '');
+        await query(
+            'INSERT INTO registrations (class_id, student_name, student_email, student_phone) VALUES ($1, $2, $3, $4)',
+            [classId, name, email, phone || '']
+        );
 
         // Get Class Name for notification
-        const className = (db.prepare('SELECT name FROM classes WHERE id = ?').get(classId) as any)?.name || 'Clase Desconocida';
+        const res = await query('SELECT name FROM classes WHERE id = $1', [classId]);
+        const className = res.rows[0]?.name || 'Clase Desconocida';
 
         // Send Telegram Notification
         await sendTelegramNotification(

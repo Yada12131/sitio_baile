@@ -1,20 +1,26 @@
-import { getDb } from '@/lib/db';
-import Link from 'next/link';
-import { Calendar, Users, MessageSquare, Star } from 'lucide-react';
+import { query } from '@/lib/db';
+import { Users, MessageSquare, Star } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
-export default function AdminDashboard() {
-    const db = getDb();
+export default async function AdminDashboard() {
     let stats = { events: 0, classes: 0, messages: 0, registrations: 0, feedbackAvg: 0 };
 
     try {
+        const [eventsRes, classesRes, messagesRes, registrationsRes, feedbackRes] = await Promise.all([
+            query('SELECT COUNT(*) as count FROM events'),
+            query('SELECT COUNT(*) as count FROM classes'),
+            query('SELECT COUNT(*) as count FROM messages'),
+            query('SELECT COUNT(*) as count FROM registrations'),
+            query('SELECT AVG(rating) as avg FROM feedback')
+        ]);
+
         stats = {
-            events: (db.prepare('SELECT COUNT(*) as count FROM events').get() as any).count,
-            classes: (db.prepare('SELECT COUNT(*) as count FROM classes').get() as any).count,
-            messages: (db.prepare('SELECT COUNT(*) as count FROM messages').get() as any).count,
-            registrations: (db.prepare('SELECT COUNT(*) as count FROM registrations').get() as any).count,
-            feedbackAvg: (db.prepare('SELECT AVG(rating) as avg FROM feedback').get() as any).avg,
+            events: parseInt(eventsRes.rows[0]?.count || 0),
+            classes: parseInt(classesRes.rows[0]?.count || 0),
+            messages: parseInt(messagesRes.rows[0]?.count || 0),
+            registrations: parseInt(registrationsRes.rows[0]?.count || 0),
+            feedbackAvg: parseFloat(feedbackRes.rows[0]?.avg || 0),
         };
     } catch (e) {
         console.error("Failed to load admin stats:", e);
@@ -38,7 +44,7 @@ export default function AdminDashboard() {
                         </div>
                         <div>
                             <p className="text-gray-400 text-sm">{card.title}</p>
-                            <p className="text-2xl font-bold text-white">{card.value}</p>
+                            <p className="text-3xl font-bold text-white">{card.value}</p>
                         </div>
                     </div>
                 ))}

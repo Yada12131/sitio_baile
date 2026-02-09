@@ -1,13 +1,13 @@
 import { Users, Target, Heart, Award } from 'lucide-react';
-import { getDb } from '@/lib/db';
+import { query } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
-export default function About() {
+export default async function About() {
     let teamMembers: any[] = [];
     try {
-        const db = getDb();
-        teamMembers = db.prepare('SELECT * FROM team_members').all() as any[];
+        const res = await query('SELECT * FROM team_members');
+        teamMembers = res.rows;
     } catch (e) {
         console.error("Failed to load team members:", e);
     }

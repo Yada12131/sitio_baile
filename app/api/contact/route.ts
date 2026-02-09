@@ -1,10 +1,9 @@
 import { NextResponse } from 'next/server';
-import { getDb } from '@/lib/db';
+import { query } from '@/lib/db';
 import { sendTelegramNotification } from '@/lib/telegram';
 
 export async function POST(request: Request) {
     try {
-        const db = getDb();
         const body = await request.json();
         const { name, email, phone, subject, message } = body;
 
@@ -13,8 +12,10 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
-        const stmt = db.prepare('INSERT INTO messages (name, email, phone, subject, message) VALUES (?, ?, ?, ?, ?)');
-        const result = stmt.run(name, email, phone || '', subject, message);
+        const result = await query(
+            'INSERT INTO messages (name, email, phone, subject, message) VALUES ($1, $2, $3, $4, $5) RETURNING id',
+            [name, email, phone || '', subject, message]
+        );
 
         // Send Telegram Notification
         await sendTelegramNotification(
@@ -25,7 +26,7 @@ export async function POST(request: Request) {
             `${message}`
         );
 
-        return NextResponse.json({ success: true, id: result.lastInsertRowid });
+        return NextResponse.json({ success: true, id: result.rows[0].id });
     } catch (error) {
         console.error('Contact error:', error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

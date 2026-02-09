@@ -1,4 +1,4 @@
-import { getDb } from '@/lib/db';
+import { query } from '@/lib/db';
 import AdminDeleteButton from '@/components/AdminDeleteButton';
 
 export const dynamic = 'force-dynamic';
@@ -12,16 +12,16 @@ interface Registration {
     created_at: string;
 }
 
-export default function RegistrationsPage() {
+export default async function RegistrationsPage() {
     let registrations: Registration[] = [];
     try {
-        const db = getDb();
-        registrations = db.prepare(`
+        const res = await query(`
         SELECT r.*, c.name as class_name 
         FROM registrations r 
         JOIN classes c ON r.class_id = c.id 
         ORDER BY r.created_at DESC
-      `).all() as Registration[];
+      `);
+        registrations = res.rows as Registration[];
     } catch (e) {
         console.error("Failed to load registrations:", e);
     }

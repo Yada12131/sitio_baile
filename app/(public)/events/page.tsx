@@ -1,4 +1,4 @@
-import { getDb } from '@/lib/db';
+import { query } from '@/lib/db';
 import EventCard from '@/components/EventCard';
 import { CalendarX } from 'lucide-react';
 
@@ -13,18 +13,19 @@ interface Event {
 
 export const dynamic = 'force-dynamic';
 
-export default function EventsPage() {
+export default async function EventsPage() {
     let events: Event[] = [];
     let headersObj: any = {};
 
     try {
-        const db = getDb();
-        const headers = db.prepare('SELECT * FROM settings WHERE key IN (?, ?)').all('eventsTitle', 'eventsSubtitle');
-        headersObj = headers.reduce((acc: Record<string, string>, curr: any) => {
+        const headersRes = await query('SELECT * FROM settings WHERE key IN ($1, $2)', ['eventsTitle', 'eventsSubtitle']);
+        headersObj = headersRes.rows.reduce((acc: Record<string, string>, curr: any) => {
             acc[curr.key] = curr.value;
             return acc;
         }, {});
-        events = db.prepare('SELECT * FROM events ORDER BY date ASC').all() as Event[];
+
+        const eventsRes = await query('SELECT * FROM events ORDER BY date ASC');
+        events = eventsRes.rows as Event[];
     } catch (e) {
         console.error("Failed to load events page data:", e);
     }

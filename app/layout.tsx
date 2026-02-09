@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { getDb } from "@/lib/db";
+
 
 export const metadata: Metadata = {
   title: "Elite Dance Club",
@@ -12,21 +12,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const db = getDb();
-  let primaryColor = '#ec4899';
-  let accentColor = '#a855f7';
-
-  try {
-    const settings = db.prepare('SELECT * FROM settings').all();
-    const settingsObj = settings.reduce((acc: Record<string, string>, curr: any) => {
-      acc[curr.key] = curr.value;
-      return acc;
-    }, {});
-    primaryColor = settingsObj.primaryColor || '#ec4899';
-    accentColor = settingsObj.accentColor || '#a855f7';
-  } catch (e) {
-    console.error("Failed to load settings in layout:", e);
-  }
+  // Use default colors immediately to prevent blocking
+  // Dynamic fetching in RootLayout is complex with Async Server Components + Client Context
+  // For now, simpler is better for migration stability.
+  const primaryColor = '#ec4899';
+  const accentColor = '#a855f7';
 
   return (
     <html lang="es" suppressHydrationWarning>

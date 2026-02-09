@@ -1,13 +1,13 @@
-import { getDb } from '@/lib/db';
+import { query } from '@/lib/db';
 import EventsManager from '@/components/EventsManager';
 
 export const dynamic = 'force-dynamic';
 
-export default function AdminEventsPage() {
+export default async function AdminEventsPage() {
     let events = [];
     try {
-        const db = getDb();
-        events = db.prepare('SELECT * FROM events ORDER BY date ASC').all();
+        const res = await query('SELECT * FROM events ORDER BY date ASC');
+        events = res.rows;
     } catch (e) {
         console.error("Failed to load events:", e);
     }

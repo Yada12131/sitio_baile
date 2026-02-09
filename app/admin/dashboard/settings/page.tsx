@@ -1,16 +1,21 @@
 import SettingsManager from '@/components/SettingsManager';
-import { getDb } from '@/lib/db';
+import { query } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
-export default function SettingsPage() {
-    const db = getDb();
-    const settings = db.prepare('SELECT * FROM settings').all();
-    // Convert array of {key, value} to object {key: value}
-    const settingsObj = settings.reduce((acc: any, curr: any) => {
-        acc[curr.key] = curr.value;
-        return acc;
-    }, {});
+export default async function SettingsPage() {
+    let settingsObj: any = {};
+    try {
+        const res = await query('SELECT * FROM settings');
+        const settings = res.rows;
+        // Convert array of {key, value} to object {key: value}
+        settingsObj = settings.reduce((acc: any, curr: any) => {
+            acc[curr.key] = curr.value;
+            return acc;
+        }, {});
+    } catch (e) {
+        console.error('Failed to load settings', e);
+    }
 
     return <SettingsManager initialSettings={settingsObj} />;
 }

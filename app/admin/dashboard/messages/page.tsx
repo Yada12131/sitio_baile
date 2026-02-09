@@ -1,4 +1,4 @@
-import { getDb } from '@/lib/db';
+import { query } from '@/lib/db';
 import AdminDeleteButton from '@/components/AdminDeleteButton';
 
 export const dynamic = 'force-dynamic';
@@ -13,11 +13,11 @@ interface Message {
     created_at: string;
 }
 
-export default function MessagesPage() {
+export default async function MessagesPage() {
     let messages: Message[] = [];
     try {
-        const db = getDb();
-        messages = db.prepare('SELECT * FROM messages ORDER BY created_at DESC').all() as Message[];
+        const res = await query('SELECT * FROM messages ORDER BY created_at DESC');
+        messages = res.rows as Message[];
     } catch (e) {
         console.error("Failed to load messages:", e);
     }

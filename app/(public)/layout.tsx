@@ -1,20 +1,26 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { getDb } from "@/lib/db";
+import { query } from "@/lib/db";
 
-export default function PublicLayout({
+export default async function PublicLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const db = getDb();
-    const settings = db.prepare('SELECT * FROM settings WHERE key IN (?, ?)').all('siteName', 'logoUrl');
-    const settingsObj = settings.reduce((acc: Record<string, string>, curr: any) => {
-        acc[curr.key] = curr.value;
-        return acc;
-    }, {});
-    const siteName = settingsObj.siteName || 'ELITE CLUB';
-    const logoUrl = settingsObj.logoUrl || null;
+    let siteName = 'ELITE CLUB';
+    let logoUrl = null;
+
+    try {
+        const res = await query('SELECT * FROM settings WHERE key IN ($1, $2)', ['siteName', 'logoUrl']);
+        const settingsObj = res.rows.reduce((acc: Record<string, string>, curr: any) => {
+            acc[curr.key] = curr.value;
+            return acc;
+        }, {});
+        siteName = settingsObj.siteName || 'ELITE CLUB';
+        logoUrl = settingsObj.logoUrl || null;
+    } catch (e) {
+        console.error("Failed to load public layout settings:", e);
+    }
 
     return (
         <div className="flex flex-col min-h-screen">

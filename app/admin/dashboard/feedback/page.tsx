@@ -1,4 +1,4 @@
-import { getDb } from '@/lib/db';
+import { query } from '@/lib/db';
 import { Star } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
@@ -11,11 +11,11 @@ interface Feedback {
     created_at: string;
 }
 
-export default function FeedbackPage() {
+export default async function FeedbackPage() {
     let feedbacks: Feedback[] = [];
     try {
-        const db = getDb();
-        feedbacks = db.prepare('SELECT * FROM feedback ORDER BY created_at DESC').all() as Feedback[];
+        const res = await query('SELECT * FROM feedback ORDER BY created_at DESC');
+        feedbacks = res.rows as Feedback[];
     } catch (e) {
         console.error("Failed to load feedback:", e);
     }

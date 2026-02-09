@@ -1,4 +1,4 @@
-import { getDb } from '@/lib/db';
+import { run } from '@/lib/db';
 import { NextResponse } from 'next/server';
 
 export async function DELETE(
@@ -7,12 +7,10 @@ export async function DELETE(
 ) {
     try {
         const { id } = await params;
-        const db = getDb();
 
-        const stmt = db.prepare('DELETE FROM registrations WHERE id = ?');
-        const info = stmt.run(id);
+        const result = await run('DELETE FROM registrations WHERE id = $1', [id]);
 
-        if (info.changes > 0) {
+        if (result.rowCount && result.rowCount > 0) {
             return NextResponse.json({ success: true });
         } else {
             return NextResponse.json({ error: 'Registration not found' }, { status: 404 });

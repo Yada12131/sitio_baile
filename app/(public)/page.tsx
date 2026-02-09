@@ -2,24 +2,31 @@ import Hero from '@/components/Hero';
 import EventSlider from '@/components/EventSlider';
 import { Music, Users, Star, Calendar } from 'lucide-react';
 import Link from 'next/link';
-import { getDb } from '@/lib/db';
+import { query } from '@/lib/db';
 import ClassesSection from '@/components/ClassesSection';
 
 export const dynamic = 'force-dynamic';
 
-export default function Home() {
-  const db = getDb();
-  const events = db.prepare('SELECT * FROM events ORDER BY date ASC LIMIT 3').all();
+export default async function Home() {
+  let events = [];
+  let classes = [];
+  let settingsObj: Record<string, string> = {};
 
-  // Fetch Top 3 Classes
-  const classes = db.prepare('SELECT * FROM classes ORDER BY name ASC LIMIT 3').all() as any[];
+  try {
+    const eventsRes = await query('SELECT * FROM events ORDER BY date ASC LIMIT 3');
+    events = eventsRes.rows;
 
-  // Fetch Hero & Content Settings
-  const settings = db.prepare('SELECT * FROM settings').all();
-  const settingsObj = settings.reduce((acc: Record<string, string>, curr: any) => {
-    acc[curr.key] = curr.value;
-    return acc;
-  }, {});
+    const classesRes = await query('SELECT * FROM classes ORDER BY name ASC LIMIT 3');
+    classes = classesRes.rows;
+
+    const settingsRes = await query('SELECT * FROM settings');
+    settingsObj = settingsRes.rows.reduce((acc: any, curr: any) => {
+      acc[curr.key] = curr.value;
+      return acc;
+    }, {});
+  } catch (e) {
+    console.error("Failed to load home data", e);
+  }
 
   const heroTitle = settingsObj.heroTitle || 'Bienvenido a Elite Club';
   const heroSubtitle = settingsObj.heroSubtitle || 'La mejor experiencia de baile, música y diversión en la ciudad.';

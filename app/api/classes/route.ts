@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server';
-import { getDb } from '@/lib/db';
+import { query, run } from '@/lib/db';
 
 export async function GET() {
     try {
-        const db = getDb();
-        const classes = db.prepare('SELECT * FROM classes ORDER BY name ASC').all();
-        return NextResponse.json(classes);
+        const result = await query('SELECT * FROM classes ORDER BY name ASC');
+        return NextResponse.json(result.rows);
     } catch (error) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
@@ -13,13 +12,14 @@ export async function GET() {
 
 export async function POST(request: Request) {
     try {
-        const db = getDb();
         const body = await request.json();
         const { name, instructor, schedule, capacity } = body;
 
-        const stmt = db.prepare('INSERT INTO classes (name, instructor, schedule, capacity) VALUES (?, ?, ?, ?)');
-        const result = stmt.run(name, instructor, schedule, capacity);
-        return NextResponse.json({ id: result.lastInsertRowid });
+        const result = await query(
+            'INSERT INTO classes (name, instructor, schedule, capacity) VALUES ($1, $2, $3, $4) RETURNING id',
+            [name, instructor, schedule, capacity]
+        );
+        return NextResponse.json({ id: result.rows[0].id });
     } catch (error) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
@@ -27,14 +27,15 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
     try {
-        const db = getDb();
         const body = await request.json();
         const { id, name, instructor, schedule, capacity } = body;
 
         if (!id) return NextResponse.json({ error: 'ID required' }, { status: 400 });
 
-        const stmt = db.prepare('UPDATE classes SET name = ?, instructor = ?, schedule = ?, capacity = ? WHERE id = ?');
-        stmt.run(name, instructor, schedule, capacity, id);
+        await run(
+            'UPDATE classes SET name = $1, instructor = $2, schedule = $3, capacity = $4 WHERE id = $5',
+            [name, instructor, schedule, capacity, id]
+        );
         return NextResponse.json({ success: true });
     } catch (error) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
@@ -43,14 +44,12 @@ export async function PUT(request: Request) {
 
 export async function DELETE(request: Request) {
     try {
-        const db = getDb();
         const { searchParams } = new URL(request.url);
         const id = searchParams.get('id');
 
         if (!id) return NextResponse.json({ error: 'ID required' }, { status: 400 });
 
-        const stmt = db.prepare('DELETE FROM classes WHERE id = ?');
-        stmt.run(id);
+        await run('DELETE FROM classes WHERE id = $1', [id]);
         return NextResponse.json({ success: true });
     } catch (error) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

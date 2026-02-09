@@ -1,14 +1,19 @@
-import { getDb } from '@/lib/db';
-import { Facebook, Instagram, Twitter } from 'lucide-react';
 import Link from 'next/link';
+import { Facebook, Instagram, Twitter } from 'lucide-react';
+import { query } from '@/lib/db';
 
-export default function Footer() {
-    const db = getDb();
-    const settings = db.prepare('SELECT * FROM settings').all();
-    const settingsObj = settings.reduce((acc: Record<string, string>, curr: any) => {
-        acc[curr.key] = curr.value;
-        return acc;
-    }, {});
+export default async function Footer() {
+    let settingsObj: Record<string, string> = {};
+
+    try {
+        const result = await query('SELECT * FROM settings');
+        settingsObj = result.rows.reduce((acc: any, curr: any) => {
+            acc[curr.key] = curr.value;
+            return acc;
+        }, {});
+    } catch (e) {
+        console.error("Failed to load footer settings:", e);
+    }
 
     return (
         <footer className="bg-black py-10 border-t border-white/10 text-center text-gray-400">

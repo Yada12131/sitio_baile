@@ -1,4 +1,4 @@
-import { getDb } from '@/lib/db';
+import { query } from '@/lib/db';
 import { Check } from 'lucide-react';
 
 export const metadata = {
@@ -6,26 +6,25 @@ export const metadata = {
     description: 'Ofrecemos clases de baile, montajes coreográficos para 15 años y bodas, shows profesionales y mucho más en Medellín.'
 };
 
-export default function ServicesPage() {
+export const dynamic = 'force-dynamic';
+
+export default async function ServicesPage() {
     let items = [];
-    let settings = [];
+    let settings: any[] = [];
     let siteName = 'Club Deportivo Ritmos';
     let servicesTitle = 'Nuestros Servicios';
 
     try {
-        const db = getDb();
-        // Safe query execution
-        const settingsResult = db.prepare('SELECT * FROM settings').all();
-        if (settingsResult) settings = settingsResult;
+        const settingsRes = await query('SELECT * FROM settings');
+        settings = settingsRes.rows;
 
         siteName = settings.find((s: any) => s.key === 'siteName')?.value || 'Club Deportivo Ritmos';
         servicesTitle = settings.find((s: any) => s.key === 'servicesTitle')?.value || 'Nuestros Servicios';
 
-        const itemsResult = db.prepare('SELECT * FROM services ORDER BY created_at DESC').all();
-        if (itemsResult) items = itemsResult;
+        const itemsRes = await query('SELECT * FROM services ORDER BY created_at DESC');
+        items = itemsRes.rows;
     } catch (err) {
         console.error("Critical Error loading Services:", err);
-        // Fallback to empty to prevent crash
         items = [];
     }
 

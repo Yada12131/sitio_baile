@@ -1,10 +1,9 @@
 import { NextResponse } from 'next/server';
-import { getDb } from '@/lib/db';
+import { query } from '@/lib/db';
 import { sendTelegramNotification } from '@/lib/telegram';
 
 export async function POST(request: Request) {
     try {
-        const db = getDb();
         const body = await request.json();
         const { rating, comments, name } = body;
 
@@ -12,8 +11,10 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Rating is required' }, { status: 400 });
         }
 
-        const stmt = db.prepare('INSERT INTO feedback (rating, comments, name) VALUES (?, ?, ?)');
-        stmt.run(rating, comments || '', name || 'Anónimo');
+        await query(
+            'INSERT INTO feedback (rating, comments, name) VALUES ($1, $2, $3)',
+            [rating, comments || '', name || 'Anónimo']
+        );
 
         // Send Telegram Notification
         await sendTelegramNotification(
