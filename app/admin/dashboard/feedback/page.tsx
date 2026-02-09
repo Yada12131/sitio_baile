@@ -12,8 +12,13 @@ interface Feedback {
 }
 
 export default function FeedbackPage() {
-    const db = getDb();
-    const feedbacks = db.prepare('SELECT * FROM feedback ORDER BY created_at DESC').all() as Feedback[];
+    let feedbacks: Feedback[] = [];
+    try {
+        const db = getDb();
+        feedbacks = db.prepare('SELECT * FROM feedback ORDER BY created_at DESC').all() as Feedback[];
+    } catch (e) {
+        console.error("Failed to load feedback:", e);
+    }
 
     return (
         <div>

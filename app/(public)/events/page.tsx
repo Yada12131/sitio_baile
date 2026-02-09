@@ -14,14 +14,20 @@ interface Event {
 export const dynamic = 'force-dynamic';
 
 export default function EventsPage() {
-    const db = getDb();
-    const headers = db.prepare('SELECT * FROM settings WHERE key IN (?, ?)').all('eventsTitle', 'eventsSubtitle');
-    const headersObj = headers.reduce((acc: Record<string, string>, curr: any) => {
-        acc[curr.key] = curr.value;
-        return acc;
-    }, {});
+    let events: Event[] = [];
+    let headersObj: any = {};
 
-    const events = db.prepare('SELECT * FROM events ORDER BY date ASC').all() as Event[];
+    try {
+        const db = getDb();
+        const headers = db.prepare('SELECT * FROM settings WHERE key IN (?, ?)').all('eventsTitle', 'eventsSubtitle');
+        headersObj = headers.reduce((acc: Record<string, string>, curr: any) => {
+            acc[curr.key] = curr.value;
+            return acc;
+        }, {});
+        events = db.prepare('SELECT * FROM events ORDER BY date ASC').all() as Event[];
+    } catch (e) {
+        console.error("Failed to load events page data:", e);
+    }
 
     return (
         <div className="bg-black min-h-screen text-white pt-10 pb-20 px-4 sm:px-6 lg:px-8">

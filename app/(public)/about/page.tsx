@@ -4,8 +4,13 @@ import { getDb } from '@/lib/db';
 export const dynamic = 'force-dynamic';
 
 export default function About() {
-    const db = getDb();
-    const teamMembers = db.prepare('SELECT * FROM team_members').all() as any[];
+    let teamMembers: any[] = [];
+    try {
+        const db = getDb();
+        teamMembers = db.prepare('SELECT * FROM team_members').all() as any[];
+    } catch (e) {
+        console.error("Failed to load team members:", e);
+    }
 
     return (
         <div className="bg-black min-h-screen text-white pt-24 pb-20 px-4 sm:px-6 lg:px-8">

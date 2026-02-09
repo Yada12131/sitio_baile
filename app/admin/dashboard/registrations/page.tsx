@@ -13,13 +13,18 @@ interface Registration {
 }
 
 export default function RegistrationsPage() {
-    const db = getDb();
-    const registrations = db.prepare(`
-    SELECT r.*, c.name as class_name 
-    FROM registrations r 
-    JOIN classes c ON r.class_id = c.id 
-    ORDER BY r.created_at DESC
-  `).all() as Registration[];
+    let registrations: Registration[] = [];
+    try {
+        const db = getDb();
+        registrations = db.prepare(`
+        SELECT r.*, c.name as class_name 
+        FROM registrations r 
+        JOIN classes c ON r.class_id = c.id 
+        ORDER BY r.created_at DESC
+      `).all() as Registration[];
+    } catch (e) {
+        console.error("Failed to load registrations:", e);
+    }
 
     return (
         <div>
