@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 export async function GET() {
     try {
         const result = await query('SELECT * FROM services ORDER BY created_at DESC');
-        return NextResponse.json(result.rows);
+        return NextResponse.json(result.rows || []);
     } catch (e) {
         return NextResponse.json({ error: 'Failed to fetch services' }, { status: 500 });
     }
@@ -19,6 +19,10 @@ export async function POST(req: Request) {
             'INSERT INTO services (title, description, price, category, image) VALUES ($1, $2, $3, $4, $5) RETURNING id',
             [title, description, price, category, image || '/hero-bg.jpg']
         );
+
+        if (!result.rows || result.rows.length === 0) {
+            throw new Error('Database insert failed');
+        }
 
         return NextResponse.json({ success: true, id: result.rows[0].id });
     } catch (e) {
