@@ -36,7 +36,8 @@ export async function GET() {
             message: 'Database initialization attempted.',
             stats: {
                 services: servicesCount,
-                settings: settingsCount
+                settings: settingsCount,
+                team: teamCount
             }
         });
     } catch (e: any) {
