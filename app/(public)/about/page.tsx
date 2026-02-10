@@ -71,11 +71,11 @@ export default async function About() {
                             <div key={member.id} className="bg-zinc-900 rounded-2xl overflow-hidden border border-white/5 hover:border-pink-500/50 transition-all duration-300 hover:-translate-y-1 group">
                                 <div className="h-2 bg-gradient-to-r from-pink-500 to-purple-600"></div>
                                 <div className="p-8">
-                                    <div className="w-20 h-20 bg-zinc-800 rounded-full flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform ring-2 ring-white/10 group-hover:ring-pink-500/50">
+                                    <div className="w-full aspect-[3/4] bg-zinc-800 flex items-center justify-center mb-6 mx-auto group-hover:scale-[1.02] transition-transform overflow-hidden relative">
                                         {member.image ? (
-                                            <img src={member.image} alt={member.name} className="w-full h-full object-cover rounded-full" />
+                                            <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
                                         ) : (
-                                            <span className="text-2xl font-bold text-gray-500">{member.name.charAt(0)}</span>
+                                            <span className="text-4xl font-bold text-gray-700">{member.name.charAt(0)}</span>
                                         )}
                                     </div>
                                     <h3 className="text-xl font-bold text-center text-white mb-2">{member.name}</h3>

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { query, run } from '@/lib/db';
 
 export async function GET() {
-    const result = await query('SELECT * FROM team_members ORDER BY created_at DESC');
+    const result = await query('SELECT * FROM team_members ORDER BY id ASC');
     return NextResponse.json(result.rows);
 }
 
