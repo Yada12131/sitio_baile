@@ -1,13 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { Trash2, Plus, Users, Calendar, User, Edit, Save, X } from 'lucide-react';
+import { Trash2, Plus, Users, Calendar, User, Edit, Save, X, Image as ImageIcon } from 'lucide-react';
+import ImageUpload from './ImageUpload';
 import { useRouter } from 'next/navigation';
 
 export default function ClassesManager({ initialClasses }: { initialClasses: any[] }) {
     const [classes, setClasses] = useState(initialClasses);
     const [isAdding, setIsAdding] = useState(false);
-    const [formData, setFormData] = useState({ name: '', instructor: '', schedule: '', capacity: 20 });
+    const [formData, setFormData] = useState({ name: '', instructor: '', schedule: '', capacity: 20, image: '' });
 
     // Edit State
     const [isEditing, setIsEditing] = useState<number | null>(null);
@@ -34,7 +35,7 @@ export default function ClassesManager({ initialClasses }: { initialClasses: any
 
         if (res.ok) {
             setIsAdding(false);
-            setFormData({ name: '', instructor: '', schedule: '', capacity: 20 });
+            setFormData({ name: '', instructor: '', schedule: '', capacity: 20, image: '' });
             router.refresh();
             window.location.reload();
         }
@@ -99,6 +100,13 @@ export default function ClassesManager({ initialClasses }: { initialClasses: any
                                 <label className="block text-sm text-gray-400 mb-1">Capacidad Máxima</label>
                                 <input type="number" required value={formData.capacity} onChange={e => setFormData({ ...formData, capacity: parseInt(e.target.value) })} className="w-full bg-black border border-white/20 rounded-lg px-3 py-2 text-white" />
                             </div>
+                            <div className="md:col-span-2">
+                                <ImageUpload
+                                    label="Imagen de la Clase"
+                                    value={formData.image}
+                                    onChange={(url) => setFormData({ ...formData, image: url })}
+                                />
+                            </div>
                         </div>
                         <button type="submit" className="bg-white text-black font-bold px-6 py-2 rounded-lg hover:bg-gray-200">Guardar Clase</button>
                     </form>
@@ -135,6 +143,11 @@ export default function ClassesManager({ initialClasses }: { initialClasses: any
                                     className="bg-zinc-800 p-2 rounded border border-pink-500/50 outline-none w-full text-white"
                                     placeholder="Capacidad"
                                 />
+                                <ImageUpload
+                                    label="Imagen"
+                                    value={editData?.image || ''}
+                                    onChange={(url) => setEditData({ ...editData, image: url })}
+                                />
                                 <div className="flex gap-2 pt-2">
                                     <button onClick={saveEdit} className="w-full bg-green-600 py-1.5 rounded-lg text-sm hover:bg-green-500 font-medium text-white flex justify-center items-center gap-1">
                                         <Save size={16} /> Guardar
@@ -163,6 +176,12 @@ export default function ClassesManager({ initialClasses }: { initialClasses: any
                                     <div className="flex items-center gap-2"><Calendar size={16} className="text-pink-500" /> <span>{cls.schedule}</span></div>
                                     <div className="flex items-center gap-2"><Users size={16} className="text-pink-500" /> <span>Cupo: {cls.capacity}</span></div>
                                 </div>
+
+                                {cls.image && (
+                                    <div className="mt-4 h-32 w-full rounded-lg overflow-hidden border border-white/10">
+                                        <img src={cls.image} alt={cls.name} className="w-full h-full object-cover" />
+                                    </div>
+                                )}
                             </>
                         )}
                     </div>

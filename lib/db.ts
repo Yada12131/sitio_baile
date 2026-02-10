@@ -97,6 +97,13 @@ export const initDb = async () => {
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )`);
 
+        // Migration: Ensure image column exists for classes
+        try {
+            await query(`ALTER TABLE classes ADD COLUMN IF NOT EXISTS image TEXT`);
+        } catch (e) {
+            console.log('Migration note: classes image column might already exist', e);
+        }
+
         // Registrations
         await query(`CREATE TABLE IF NOT EXISTS registrations (
             id SERIAL PRIMARY KEY,

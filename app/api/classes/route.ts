@@ -13,11 +13,11 @@ export async function GET() {
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const { name, instructor, schedule, capacity } = body;
+        const { name, instructor, schedule, capacity, image } = body;
 
         const result = await query(
-            'INSERT INTO classes (name, instructor, schedule, capacity) VALUES ($1, $2, $3, $4) RETURNING id',
-            [name, instructor, schedule, capacity]
+            'INSERT INTO classes (name, instructor, schedule, capacity, image) VALUES ($1, $2, $3, $4, $5) RETURNING id',
+            [name, instructor, schedule, capacity, image]
         );
         return NextResponse.json({ id: result.rows[0].id });
     } catch (error) {
@@ -28,13 +28,13 @@ export async function POST(request: Request) {
 export async function PUT(request: Request) {
     try {
         const body = await request.json();
-        const { id, name, instructor, schedule, capacity } = body;
+        const { id, name, instructor, schedule, capacity, image } = body;
 
         if (!id) return NextResponse.json({ error: 'ID required' }, { status: 400 });
 
         await run(
-            'UPDATE classes SET name = $1, instructor = $2, schedule = $3, capacity = $4 WHERE id = $5',
-            [name, instructor, schedule, capacity, id]
+            'UPDATE classes SET name = $1, instructor = $2, schedule = $3, capacity = $4, image = $5 WHERE id = $6',
+            [name, instructor, schedule, capacity, image, id]
         );
         return NextResponse.json({ success: true });
     } catch (error) {
