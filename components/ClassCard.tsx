@@ -23,18 +23,19 @@ export default function ClassCard({ classData, onRegister }: ClassCardProps) {
 
             <div className="space-y-3 mb-8 flex-1 text-gray-300">
                 <div className="flex items-center gap-3">
-                    <Calendar className="text-green-500" size={18} />
+                    <Calendar className="text-[var(--primary-color)]" size={18} />
                     <span>{classData.schedule}</span>
                 </div>
                 <div className="flex items-center gap-3">
-                    <Users className="text-green-500" size={18} />
+                    <Users className="text-[var(--primary-color)]" size={18} />
                     <span>Cupo limitado: {classData.capacity} personas</span>
                 </div>
             </div>
 
             <button
                 onClick={() => onRegister(classData)}
-                className="w-full py-3 bg-white text-black font-bold rounded-lg hover:bg-green-400 transition-colors mt-auto"
+                className="w-full py-3 text-white font-bold rounded-lg hover:opacity-90 transition-opacity mt-auto uppercase tracking-wide text-sm"
+                style={{ background: 'linear-gradient(to right, var(--primary-color), var(--accent-color))' }}
             >
                 Inscribirme
             </button>
