@@ -108,7 +108,8 @@ export default function Contact() {
                         <button
                             type="submit"
                             disabled={status === 'loading'}
-                            className="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold py-3 rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+                            className="w-full text-white font-bold py-3 rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+                            style={{ background: 'linear-gradient(to right, var(--primary-color), var(--accent-color))' }}
                         >
                             {status === 'loading' ? 'Enviando...' : <><Send size={18} /> Enviar Mensaje</>}
                         </button>

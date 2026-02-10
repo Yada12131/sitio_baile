@@ -68,7 +68,7 @@ export default function ClassRegistrationModal({ selectedClass, onClose }: Class
                         </button>
 
                         <h2 className="text-2xl font-bold mb-1">Pre-inscripción</h2>
-                        <p className="text-purple-400 font-semibold mb-6">{selectedClass.name}</p>
+                        <p className="font-semibold mb-6" style={{ color: 'var(--primary-color)' }}>{selectedClass.name}</p>
 
                         {status === 'success' ? (
                             <div className="text-center py-8">
@@ -86,7 +86,7 @@ export default function ClassRegistrationModal({ selectedClass, onClose }: Class
                                     <input
                                         type="text" required
                                         value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })}
-                                        className="w-full bg-black border border-white/20 rounded-lg px-3 py-2 text-white"
+                                        className="w-full bg-black border border-white/20 rounded-lg px-3 py-2 text-white focus:border-[var(--primary-color)] outline-none"
                                     />
                                 </div>
                                 <div>
@@ -94,7 +94,7 @@ export default function ClassRegistrationModal({ selectedClass, onClose }: Class
                                     <input
                                         type="email" required
                                         value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })}
-                                        className="w-full bg-black border border-white/20 rounded-lg px-3 py-2 text-white"
+                                        className="w-full bg-black border border-white/20 rounded-lg px-3 py-2 text-white focus:border-[var(--primary-color)] outline-none"
                                     />
                                 </div>
                                 <div>
@@ -102,7 +102,7 @@ export default function ClassRegistrationModal({ selectedClass, onClose }: Class
                                     <input
                                         type="tel"
                                         value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })}
-                                        className="w-full bg-black border border-white/20 rounded-lg px-3 py-2 text-white"
+                                        className="w-full bg-black border border-white/20 rounded-lg px-3 py-2 text-white focus:border-[var(--primary-color)] outline-none"
                                     />
                                 </div>
 
@@ -111,7 +111,8 @@ export default function ClassRegistrationModal({ selectedClass, onClose }: Class
                                 <button
                                     type="submit"
                                     disabled={status === 'loading'}
-                                    className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 font-bold rounded-lg hover:opacity-90 transition-opacity mt-4"
+                                    className="w-full py-3 font-bold rounded-lg hover:opacity-90 transition-opacity mt-4"
+                                    style={{ background: 'linear-gradient(to right, var(--primary-color), var(--accent-color))' }}
                                 >
                                     {status === 'loading' ? 'Procesando...' : 'Confirmar Inscripción'}
                                 </button>

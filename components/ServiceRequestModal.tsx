@@ -73,7 +73,7 @@ export default function ServiceRequestModal({ selectedService, onClose }: Servic
                         </button>
 
                         <h2 className="text-2xl font-bold mb-1 mr-6">Solicitar Servicio</h2>
-                        <p className="text-pink-400 font-semibold mb-6">{selectedService.title}</p>
+                        <p className="font-semibold mb-6" style={{ color: 'var(--primary-color)' }}>{selectedService.title}</p>
 
                         {status === 'success' ? (
                             <div className="text-center py-8">
@@ -91,7 +91,7 @@ export default function ServiceRequestModal({ selectedService, onClose }: Servic
                                     <input
                                         type="text" required
                                         value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })}
-                                        className="w-full bg-black border border-white/20 rounded-lg px-3 py-2 text-white focus:border-pink-500 outline-none"
+                                        className="w-full bg-black border border-white/20 rounded-lg px-3 py-2 text-white focus:border-[var(--primary-color)] outline-none"
                                         placeholder="Tu nombre"
                                     />
                                 </div>
@@ -101,7 +101,7 @@ export default function ServiceRequestModal({ selectedService, onClose }: Servic
                                         <input
                                             type="email" required
                                             value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })}
-                                            className="w-full bg-black border border-white/20 rounded-lg px-3 py-2 text-white focus:border-pink-500 outline-none"
+                                            className="w-full bg-black border border-white/20 rounded-lg px-3 py-2 text-white focus:border-[var(--primary-color)] outline-none"
                                             placeholder="tucorreo@ejemplo.com"
                                         />
                                     </div>
@@ -110,7 +110,7 @@ export default function ServiceRequestModal({ selectedService, onClose }: Servic
                                         <input
                                             type="tel" required
                                             value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })}
-                                            className="w-full bg-black border border-white/20 rounded-lg px-3 py-2 text-white focus:border-pink-500 outline-none"
+                                            className="w-full bg-black border border-white/20 rounded-lg px-3 py-2 text-white focus:border-[var(--primary-color)] outline-none"
                                             placeholder="WhatsApp"
                                         />
                                     </div>
@@ -120,7 +120,7 @@ export default function ServiceRequestModal({ selectedService, onClose }: Servic
                                     <textarea
                                         rows={3}
                                         value={formData.message} onChange={e => setFormData({ ...formData, message: e.target.value })}
-                                        className="w-full bg-black border border-white/20 rounded-lg px-3 py-2 text-white focus:border-pink-500 outline-none"
+                                        className="w-full bg-black border border-white/20 rounded-lg px-3 py-2 text-white focus:border-[var(--primary-color)] outline-none"
                                         placeholder="¿Tienes alguna pregunta específica?"
                                     />
                                 </div>
@@ -130,7 +130,8 @@ export default function ServiceRequestModal({ selectedService, onClose }: Servic
                                 <button
                                     type="submit"
                                     disabled={status === 'loading'}
-                                    className="w-full py-3 bg-gradient-to-r from-pink-600 to-purple-600 font-bold rounded-lg hover:opacity-90 transition-opacity mt-4 flex items-center justify-center gap-2 text-white"
+                                    className="w-full py-3 font-bold rounded-lg hover:opacity-90 transition-opacity mt-4 flex items-center justify-center gap-2 text-white"
+                                    style={{ background: 'linear-gradient(to right, var(--primary-color), var(--accent-color))' }}
                                 >
                                     {status === 'loading' ? 'Enviando...' : <><Send size={18} /> Solicitar Información</>}
                                 </button>

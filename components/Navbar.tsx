@@ -59,8 +59,8 @@ export default function Navbar({ siteName, logoUrl, navbarBgColor = '#000000', n
                             ))}
                             <Link
                                 href="/feedback"
-                                className="px-4 py-2 rounded-full text-sm font-medium text-white transition-opacity hover:opacity-90"
-                                style={{ backgroundColor: 'var(--primary-color)' }}
+                                className="px-4 py-2 rounded-full text-sm font-bold text-white transition-opacity hover:opacity-90"
+                                style={{ background: 'linear-gradient(to right, var(--primary-color), var(--accent-color))' }}
                             >
                                 Danos tu Opinión
                             </Link>

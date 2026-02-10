@@ -75,7 +75,8 @@ export default function ServicesList({ items, servicesTitle }: ServicesListProps
 
                                     <button
                                         onClick={() => setSelectedService(service)}
-                                        className="w-full py-3 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-colors uppercase tracking-wide text-sm"
+                                        className="w-full py-3 text-white font-bold rounded-lg hover:opacity-90 transition-opacity uppercase tracking-wide text-sm"
+                                        style={{ background: 'linear-gradient(to right, var(--primary-color), var(--accent-color))' }}
                                     >
                                         Solicitar Servicio
                                     </button>
