@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Plus, Trash2, Edit, Save, X, Image as ImageIcon } from 'lucide-react';
+import ImageUpload from './ImageUpload';
 
 interface TeamMember {
     id: number;
@@ -92,12 +93,13 @@ export default function TeamManager() {
                         className="bg-zinc-800 border border-white/10 rounded-lg p-3 text-white focus:ring-2 focus:ring-pink-500 outline-none"
                         required
                     />
-                    <input
-                        placeholder="URL de la Foto (Ej: /images/foto.jpg)"
-                        value={newMember.image}
-                        onChange={e => setNewMember({ ...newMember, image: e.target.value })}
-                        className="bg-zinc-800 border border-white/10 rounded-lg p-3 text-white focus:ring-2 focus:ring-pink-500 outline-none md:col-span-2"
-                    />
+                    <div className="md:col-span-2">
+                        <ImageUpload
+                            label="Foto del Miembro"
+                            value={newMember.image}
+                            onChange={(url) => setNewMember({ ...newMember, image: url })}
+                        />
+                    </div>
                     <textarea
                         placeholder="Descripción corta"
                         value={newMember.description}
@@ -142,12 +144,13 @@ export default function TeamManager() {
                                         className="bg-zinc-800 p-2 rounded border border-pink-500/50 outline-none"
                                         placeholder="Rol"
                                     />
-                                    <input
-                                        value={editData?.image}
-                                        onChange={e => setEditData({ ...editData!, image: e.target.value })}
-                                        className="bg-zinc-800 p-2 rounded border border-pink-500/50 outline-none"
-                                        placeholder="URL Imagen"
-                                    />
+                                    <div className="md:col-span-2">
+                                        <ImageUpload
+                                            label="Foto"
+                                            value={editData?.image || ''}
+                                            onChange={(url) => setEditData({ ...editData!, image: url })}
+                                        />
+                                    </div>
                                     <textarea
                                         value={editData?.description}
                                         onChange={e => setEditData({ ...editData!, description: e.target.value })}

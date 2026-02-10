@@ -53,12 +53,15 @@ export default function SettingsManager({ initialSettings }: { initialSettings: 
                                 className="w-full bg-black border border-white/20 rounded-lg p-3 text-white"
                             />
                         </div>
+                        import ImageUpload from './ImageUpload';
+
+                        // ... (inside the component)
+
                         <div>
-                            <label className="block text-gray-400 mb-2">Logo (URL)</label>
-                            <input
-                                type="text" value={settings.logoUrl || ''} onChange={(e) => handleChange('logoUrl', e.target.value)}
-                                className="w-full bg-black border border-white/20 rounded-lg p-3 text-white"
-                                placeholder="/logo.png"
+                            <ImageUpload
+                                label="Logo del Sitio"
+                                value={settings.logoUrl || ''}
+                                onChange={(url) => handleChange('logoUrl', url)}
                             />
                         </div>
                         <div>

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Trash2, Plus, Calendar, Image as ImageIcon, Edit, X, Save } from 'lucide-react';
+import ImageUpload from './ImageUpload';
 import { useRouter } from 'next/navigation';
 
 export default function EventsManager({ initialEvents }: { initialEvents: any[] }) {
@@ -113,13 +114,10 @@ export default function EventsManager({ initialEvents }: { initialEvents: any[] 
                             />
                         </div>
                         <div>
-                            <label className="block text-sm text-gray-400 mb-1">URL de Imagen (Opcional)</label>
-                            <input
-                                type="text"
+                            <ImageUpload
+                                label="Imagen del Evento"
                                 value={formData.image}
-                                onChange={e => setFormData({ ...formData, image: e.target.value })}
-                                className="w-full bg-black border border-white/20 rounded-lg px-3 py-2 text-white"
-                                placeholder="https://ejemplo.com/imagen.jpg"
+                                onChange={(url) => setFormData({ ...formData, image: url })}
                             />
                         </div>
                         <button type="submit" className="bg-white text-black font-bold px-6 py-2 rounded-lg hover:bg-gray-200">
@@ -164,12 +162,10 @@ export default function EventsManager({ initialEvents }: { initialEvents: any[] 
                                         className="bg-zinc-800 p-2 rounded border border-pink-500/50 outline-none w-full text-white"
                                         placeholder="Descripción"
                                     />
-                                    <input
-                                        type="text"
-                                        value={editData?.image}
-                                        onChange={e => setEditData({ ...editData, image: e.target.value })}
-                                        className="bg-zinc-800 p-2 rounded border border-pink-500/50 outline-none w-full text-white"
-                                        placeholder="URL de Imagen"
+                                    <ImageUpload
+                                        label="Imagen"
+                                        value={editData?.image || ''}
+                                        onChange={(url) => setEditData({ ...editData, image: url })}
                                     />
                                     <div className="flex gap-2">
                                         <button onClick={saveEdit} className="flex items-center gap-1 bg-green-600 px-4 py-1.5 rounded-lg text-sm hover:bg-green-500 font-medium text-white">

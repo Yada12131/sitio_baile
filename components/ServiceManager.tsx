@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Plus, Trash2, DollarSign, Tag, Image as ImageIcon, Edit, Save, X } from 'lucide-react';
+import ImageUpload from './ImageUpload';
 
 interface Service {
     id: number;
@@ -131,11 +132,10 @@ export default function ServiceManager() {
                         </select>
                     </div>
                     <div className="relative">
-                        <ImageIcon className="absolute left-3 top-3 text-gray-400" size={18} />
-                        <input
-                            type="text" placeholder="URL de Imagen (Opcional)"
-                            value={newService.image} onChange={e => setNewService({ ...newService, image: e.target.value })}
-                            className="w-full bg-black/50 border border-white/10 rounded-lg p-3 pl-10 text-white focus:ring-2 focus:ring-pink-500 outline-none"
+                        <ImageUpload
+                            label="Imagen del Servicio"
+                            value={newService.image}
+                            onChange={(url) => setNewService({ ...newService, image: url })}
                         />
                     </div>
                 </div>
@@ -192,12 +192,13 @@ export default function ServiceManager() {
                                         >
                                             {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
                                         </select>
-                                        <input
-                                            value={editData?.image}
-                                            onChange={e => setEditData({ ...editData!, image: e.target.value })}
-                                            className="bg-zinc-800 p-2 rounded border border-pink-500/50 outline-none w-full"
-                                            placeholder="URL Imagen"
-                                        />
+                                        <div className="w-full">
+                                            <ImageUpload
+                                                label="Imagen"
+                                                value={editData?.image || ''}
+                                                onChange={(url) => setEditData({ ...editData!, image: url })}
+                                            />
+                                        </div>
                                     </div>
                                     <textarea
                                         value={editData?.description}
