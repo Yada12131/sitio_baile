@@ -21,11 +21,17 @@ export default function Contact() {
         const formData = new FormData(e.currentTarget);
         const data = Object.fromEntries(formData);
 
+        // Add Source Identifier
+        const payload = {
+            ...data,
+            subject: `[Desde Contacto]: ${data.subject}`
+        };
+
         try {
             const res = await fetch('/api/contact', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data),
+                body: JSON.stringify(payload),
             });
             if (res.ok) {
                 setStatus('success');
