@@ -29,7 +29,16 @@ export default async function About() {
 
                 {/* Hero Section */}
                 <div className="text-center space-y-6">
-                    <h1 className="text-4xl md:text-6xl font-bold text-gradient">
+                    <h1
+                        className="text-4xl md:text-6xl font-bold inline-block"
+                        style={{
+                            backgroundImage: 'linear-gradient(to right, var(--primary-color), var(--accent-color))',
+                            WebkitBackgroundClip: 'text',
+                            backgroundClip: 'text',
+                            color: 'transparent',
+                            display: 'inline-block'
+                        }}
+                    >
                         {title}
                     </h1>
                     <p className="text-xl max-w-3xl mx-auto leading-relaxed whitespace-pre-line text-center" style={{ color: 'var(--body-color)' }}>
@@ -43,7 +52,17 @@ export default async function About() {
                         <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-6" style={{ backgroundColor: 'rgba(var(--primary-color), 0.2)' }}>
                             <Target style={{ color: 'var(--primary-color)' }} size={24} />
                         </div>
-                        <h3 className="text-2xl font-bold mb-4 text-gradient">Nuestra Misión</h3>
+                        <h3 className="text-2xl font-bold mb-4"
+                            style={{
+                                backgroundImage: 'linear-gradient(to right, var(--primary-color), var(--accent-color))',
+                                WebkitBackgroundClip: 'text',
+                                backgroundClip: 'text',
+                                color: 'transparent',
+                                display: 'inline-block'
+                            }}
+                        >
+                            Nuestra Misión
+                        </h3>
                         <p className="leading-relaxed" style={{ color: 'var(--body-color)' }}>
                             Promovemos el baile deportivo como un deporte artístico y competitivo, y como un medio de desarrollo integral
                             que combina la disciplina, el bienestar mental y la innovación.
@@ -53,7 +72,17 @@ export default async function About() {
                         <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-6" style={{ backgroundColor: 'rgba(var(--accent-color), 0.2)' }}>
                             <Heart style={{ color: 'var(--accent-color)' }} size={24} />
                         </div>
-                        <h3 className="text-2xl font-bold mb-4 text-gradient">Nuestros Valores</h3>
+                        <h3 className="text-2xl font-bold mb-4"
+                            style={{
+                                backgroundImage: 'linear-gradient(to right, var(--primary-color), var(--accent-color))',
+                                WebkitBackgroundClip: 'text',
+                                backgroundClip: 'text',
+                                color: 'transparent',
+                                display: 'inline-block'
+                            }}
+                        >
+                            Nuestros Valores
+                        </h3>
                         <p className="leading-relaxed" style={{ color: 'var(--body-color)' }}>
                             Nos mueven la disciplina, la resiliencia y el sentido de pertenencia. Llevamos el deporte más allá del escenario,
                             generando experiencias memorables para todos.
@@ -63,8 +92,19 @@ export default async function About() {
 
                 {/* Team Section */}
                 <div>
-                    <h2 className="text-3xl font-bold mb-12 text-center flex items-center justify-center gap-3 text-gradient">
-                        <Users style={{ color: 'var(--primary-color)' }} /> Nuestro Equipo
+                    <h2 className="text-3xl font-bold mb-12 text-center flex items-center justify-center gap-3" style={{ color: 'var(--heading-color)' }}>
+                        <Users style={{ color: 'var(--primary-color)' }} />
+                        <span
+                            style={{
+                                backgroundImage: 'linear-gradient(to right, var(--primary-color), var(--accent-color))',
+                                WebkitBackgroundClip: 'text',
+                                backgroundClip: 'text',
+                                color: 'transparent',
+                                display: 'inline-block'
+                            }}
+                        >
+                            Nuestro Equipo
+                        </span>
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {teamMembers.map((member: any) => (
@@ -78,7 +118,18 @@ export default async function About() {
                                             <span className="text-4xl font-bold text-gray-700">{member.name.charAt(0)}</span>
                                         )}
                                     </div>
-                                    <h3 className="text-xl font-bold text-center mb-2 text-gradient">{member.name}</h3>
+                                    <h3
+                                        className="text-xl font-bold text-center mb-2"
+                                        style={{
+                                            backgroundImage: 'linear-gradient(to right, var(--primary-color), var(--accent-color))',
+                                            WebkitBackgroundClip: 'text',
+                                            backgroundClip: 'text',
+                                            color: 'transparent',
+                                            display: 'block'
+                                        }}
+                                    >
+                                        {member.name}
+                                    </h3>
                                     <p className="text-center text-xs font-bold uppercase tracking-wider mb-4" style={{ color: 'var(--primary-color)' }}>{member.role}</p>
                                     <p className="text-left text-sm leading-relaxed whitespace-pre-line" style={{ color: 'var(--body-color)' }}>{member.description}</p>
                                 </div>
