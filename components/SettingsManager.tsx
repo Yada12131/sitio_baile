@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Save, RefreshCw } from 'lucide-react';
+import ImageUpload from './ImageUpload';
 import { useRouter } from 'next/navigation';
 
 
@@ -53,10 +54,6 @@ export default function SettingsManager({ initialSettings }: { initialSettings: 
                                 className="w-full bg-black border border-white/20 rounded-lg p-3 text-white"
                             />
                         </div>
-                        import ImageUpload from './ImageUpload';
-
-                        // ... (inside the component)
-
                         <div>
                             <ImageUpload
                                 label="Logo del Sitio"
