@@ -18,7 +18,18 @@ interface ClassCardProps {
 export default function ClassCard({ classData, onRegister }: ClassCardProps) {
     return (
         <div className="bg-zinc-900 rounded-2xl overflow-hidden border border-white/10 hover:border-green-500/50 transition-all group p-6 flex flex-col h-full">
-            <h3 className="text-2xl font-bold text-white mb-2">{classData.name}</h3>
+            <h3
+                className="text-2xl font-bold mb-2 inline-block"
+                style={{
+                    backgroundImage: 'linear-gradient(to right, var(--primary-color), var(--accent-color))',
+                    WebkitBackgroundClip: 'text',
+                    backgroundClip: 'text',
+                    color: 'transparent',
+                    display: 'inline-block'
+                }}
+            >
+                {classData.name}
+            </h3>
             <p className="text-pink-500 font-semibold mb-4">{classData.instructor}</p>
 
             <div className="space-y-3 mb-8 flex-1 text-gray-300">

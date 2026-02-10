@@ -40,7 +40,18 @@ export default function EventCard({ event }: EventProps) {
                 </div>
 
                 <div className="p-6 flex flex-col flex-grow">
-                    <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-pink-500 transition-colors">{event.title}</h3>
+                    <h3
+                        className="text-2xl font-bold mb-2 inline-block"
+                        style={{
+                            backgroundImage: 'linear-gradient(to right, var(--primary-color), var(--accent-color))',
+                            WebkitBackgroundClip: 'text',
+                            backgroundClip: 'text',
+                            color: 'transparent',
+                            display: 'inline-block'
+                        }}
+                    >
+                        {event.title}
+                    </h3>
 
                     <div className="space-y-2 mb-4 text-gray-300 text-sm">
                         <div className="flex items-center gap-2">
@@ -100,7 +111,18 @@ export default function EventCard({ event }: EventProps) {
                             </div>
 
                             <div className="p-8">
-                                <h2 className="text-3xl font-bold text-white mb-4">{event.title}</h2>
+                                <h2
+                                    className="text-3xl font-bold mb-4 inline-block"
+                                    style={{
+                                        backgroundImage: 'linear-gradient(to right, var(--primary-color), var(--accent-color))',
+                                        WebkitBackgroundClip: 'text',
+                                        backgroundClip: 'text',
+                                        color: 'transparent',
+                                        display: 'inline-block'
+                                    }}
+                                >
+                                    {event.title}
+                                </h2>
 
                                 <div className="flex flex-wrap gap-6 text-gray-300 mb-6">
                                     <div className="flex items-center gap-2">
