@@ -20,15 +20,20 @@ const navLinks = [
 interface NavbarProps {
     siteName: string;
     logoUrl: string | null;
+    navbarBgColor?: string;
+    navbarTextColor?: string;
 }
 
-export default function Navbar({ siteName, logoUrl }: NavbarProps) {
+export default function Navbar({ siteName, logoUrl, navbarBgColor = '#000000', navbarTextColor = '#ffffff' }: NavbarProps) {
     // Settings passed as props
 
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <nav className="fixed top-0 left-0 w-full z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
+        <nav
+            className="fixed top-0 left-0 w-full z-50 backdrop-blur-md border-b border-white/10 transition-colors duration-300"
+            style={{ backgroundColor: navbarBgColor }}
+        >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-20">
                     <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-[var(--primary-color)] to-[var(--accent-color)] bg-clip-text text-transparent hover:opacity-80 transition-opacity">
@@ -42,7 +47,8 @@ export default function Navbar({ siteName, logoUrl }: NavbarProps) {
                                 <Link
                                     key={link.name}
                                     href={link.href}
-                                    className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all"
+                                    style={{ color: navbarTextColor }}
+                                    className="px-3 py-2 rounded-md text-sm font-medium hover:opacity-80 hover:bg-white/10 transition-all"
                                 >
                                     {link.name}
                                 </Link>

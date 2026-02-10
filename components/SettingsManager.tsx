@@ -75,7 +75,7 @@ export default function SettingsManager({ initialSettings }: { initialSettings: 
                             </div>
                         </div>
                         <div>
-                            <label className="block text-gray-400 mb-2">Color Secundario (Hex)</label>
+                            <label className="block text-gray-400 mb-2">Color Secundaria (Hex)</label>
                             <div className="flex gap-2">
                                 <input
                                     type="color" value={settings.accentColor || '#a855f7'} onChange={(e) => handleChange('accentColor', e.target.value)}
@@ -85,6 +85,39 @@ export default function SettingsManager({ initialSettings }: { initialSettings: 
                                     type="text" value={settings.accentColor || ''} onChange={(e) => handleChange('accentColor', e.target.value)}
                                     className="flex-1 bg-black border border-white/20 rounded-lg p-3 text-white uppercase"
                                 />
+                            </div>
+                        </div>
+
+                        {/* Navbar Settings */}
+                        <div className="md:col-span-2 border-t border-white/10 pt-4 mt-2">
+                            <h3 className="text-lg font-semibold text-white mb-4">Personalización de Barra de Navegación</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label className="block text-gray-400 mb-2">Color de Fondo (Navbar)</label>
+                                    <div className="flex gap-2">
+                                        <input
+                                            type="color" value={settings.navbarBgColor || '#000000'} onChange={(e) => handleChange('navbarBgColor', e.target.value)}
+                                            className="h-12 w-12 rounded bg-transparent cursor-pointer"
+                                        />
+                                        <input
+                                            type="text" value={settings.navbarBgColor || ''} onChange={(e) => handleChange('navbarBgColor', e.target.value)}
+                                            className="flex-1 bg-black border border-white/20 rounded-lg p-3 text-white uppercase"
+                                        />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="block text-gray-400 mb-2">Color del Texto (Navbar)</label>
+                                    <div className="flex gap-2">
+                                        <input
+                                            type="color" value={settings.navbarTextColor || '#ffffff'} onChange={(e) => handleChange('navbarTextColor', e.target.value)}
+                                            className="h-12 w-12 rounded bg-transparent cursor-pointer"
+                                        />
+                                        <input
+                                            type="text" value={settings.navbarTextColor || ''} onChange={(e) => handleChange('navbarTextColor', e.target.value)}
+                                            className="flex-1 bg-black border border-white/20 rounded-lg p-3 text-white uppercase"
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
