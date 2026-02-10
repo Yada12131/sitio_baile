@@ -57,7 +57,16 @@ export default async function Home() {
       <section className="py-20 bg-black text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent mb-4">
+            <h2
+              className="text-3xl md:text-5xl font-bold mb-4 inline-block"
+              style={{
+                backgroundImage: 'linear-gradient(to right, var(--primary-color), var(--accent-color))',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                color: 'transparent',
+                display: 'inline-block'
+              }}
+            >
               ¿Por qué elegirnos?
             </h2>
             <p className="text-gray-400 max-w-2xl mx-auto text-lg">
@@ -81,7 +90,18 @@ export default async function Home() {
       <section className="py-20 bg-zinc-900/50">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4 text-white">Nuestras Clases</h2>
+            <h2
+              className="text-4xl font-bold mb-4 inline-block"
+              style={{
+                backgroundImage: 'linear-gradient(to right, var(--primary-color), var(--accent-color))',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                color: 'transparent',
+                display: 'inline-block'
+              }}
+            >
+              Nuestras Clases
+            </h2>
             <p className="text-xl text-gray-300">Aprende a bailar con los mejores instructores de la ciudad.</p>
           </div>
 
@@ -99,7 +119,18 @@ export default async function Home() {
       <section className="py-20 bg-gradient-to-b from-black to-purple-900/20">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4 text-white">Próximos Eventos</h2>
+            <h2
+              className="text-4xl font-bold mb-4 inline-block"
+              style={{
+                backgroundImage: 'linear-gradient(to right, var(--primary-color), var(--accent-color))',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                color: 'transparent',
+                display: 'inline-block'
+              }}
+            >
+              Próximos Eventos
+            </h2>
             <p className="text-xl text-gray-300">No te pierdas nuestras noches temáticas y fiestas especiales.</p>
           </div>
 

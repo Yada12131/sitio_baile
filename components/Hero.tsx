@@ -21,10 +21,17 @@ export default function Hero({ title, subtitle }: HeroProps) {
 
             <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
                 <motion.h1
-                    className="text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary-color)] via-[var(--accent-color)] to-indigo-500 mb-6 drop-shadow-2xl"
+                    className="text-5xl md:text-7xl font-extrabold mb-6 drop-shadow-2xl inline-block"
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
+                    style={{
+                        backgroundImage: 'linear-gradient(to right, var(--primary-color), var(--accent-color))',
+                        WebkitBackgroundClip: 'text',
+                        backgroundClip: 'text',
+                        color: 'transparent',
+                        display: 'inline-block'
+                    }}
                 >
                     {title}
                 </motion.h1>
