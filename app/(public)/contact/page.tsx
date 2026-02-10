@@ -39,11 +39,20 @@ export default function Contact() {
     }
 
     return (
-        <div className="bg-black min-h-screen text-white pt-10 pb-20 px-4">
+        <div className="bg-black min-h-screen text-white pt-32 pb-20 px-4">
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
                 {/* Contact Info */}
                 <div className="space-y-8">
-                    <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-500 to-orange-500 bg-clip-text text-transparent">
+                    <h1
+                        className="text-4xl font-bold inline-block"
+                        style={{
+                            backgroundImage: 'linear-gradient(to right, var(--primary-color), var(--accent-color))',
+                            WebkitBackgroundClip: 'text',
+                            backgroundClip: 'text',
+                            color: 'transparent',
+                            display: 'inline-block'
+                        }}
+                    >
                         Contáctenos
                     </h1>
                     <p className="text-gray-400 text-lg">

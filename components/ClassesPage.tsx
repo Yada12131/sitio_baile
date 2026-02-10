@@ -16,9 +16,18 @@ export default function ClassesPage({ classes, settings }: { classes: ClassData[
     const [selectedClass, setSelectedClass] = useState<ClassData | null>(null);
 
     return (
-        <div className="bg-black min-h-screen text-white pt-10 pb-20 px-4">
+        <div className="bg-black min-h-screen text-white pt-32 pb-20 px-4">
             <div className="max-w-7xl mx-auto">
-                <h1 className="text-4xl md:text-6xl font-bold mb-8 text-center bg-gradient-to-r from-pink-500 to-green-500 bg-clip-text text-transparent">
+                <h1
+                    className="text-4xl md:text-6xl font-bold mb-8 text-center inline-block w-full"
+                    style={{
+                        backgroundImage: 'linear-gradient(to right, var(--primary-color), var(--accent-color))',
+                        WebkitBackgroundClip: 'text',
+                        backgroundClip: 'text',
+                        color: 'transparent',
+                        display: 'inline-block'
+                    }}
+                >
                     {settings?.classesTitle || "Clases de Baile"}
                 </h1>
                 <p className="text-gray-400 text-center max-w-2xl mx-auto mb-16 text-lg">

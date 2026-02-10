@@ -31,10 +31,19 @@ export default async function EventsPage() {
     }
 
     return (
-        <div className="bg-black min-h-screen text-white pt-10 pb-20 px-4 sm:px-6 lg:px-8">
+        <div className="bg-black min-h-screen text-white pt-32 pb-20 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-16">
-                    <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
+                    <h1
+                        className="text-4xl md:text-6xl font-bold mb-4 inline-block"
+                        style={{
+                            backgroundImage: 'linear-gradient(to right, var(--primary-color), var(--accent-color))',
+                            WebkitBackgroundClip: 'text',
+                            backgroundClip: 'text',
+                            color: 'transparent',
+                            display: 'inline-block'
+                        }}
+                    >
                         {headersObj.eventsTitle || "Próximos Eventos"}
                     </h1>
                     <p className="text-gray-400 max-w-2xl mx-auto text-lg">

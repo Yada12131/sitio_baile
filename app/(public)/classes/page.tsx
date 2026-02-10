@@ -20,5 +20,9 @@ export default async function PublicClassesPage() {
         console.error("Failed to load classes page data:", e);
     }
 
-    return <ClassesPage classes={classes} settings={settingsObj} />;
+    return (
+        <div className="pt-32">
+            <ClassesPage classes={classes} settings={settingsObj} />
+        </div>
+    );
 }
