@@ -70,7 +70,18 @@ export default function ServicesList({ items, servicesTitle }: ServicesListProps
                                     </div>
                                 </div>
                                 <div className="p-6 flex-grow flex flex-col">
-                                    <h3 className="text-xl font-bold text-white mb-4">{service.title}</h3>
+                                    <h3
+                                        className="text-xl font-bold mb-4 inline-block"
+                                        style={{
+                                            backgroundImage: 'linear-gradient(to right, var(--primary-color), var(--accent-color))',
+                                            WebkitBackgroundClip: 'text',
+                                            backgroundClip: 'text',
+                                            color: 'transparent',
+                                            display: 'inline-block'
+                                        }}
+                                    >
+                                        {service.title}
+                                    </h3>
                                     <p className="text-gray-400 leading-relaxed text-sm flex-grow mb-6">{service.description}</p>
 
                                     <button
