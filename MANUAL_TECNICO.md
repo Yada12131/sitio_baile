@@ -1,107 +1,175 @@
-# Manual Técnico - Club Deportivo Ritmos
+# Manual Técnico y de Operaciones
+## Club Deportivo Ritmos - Plataforma Web
 
-Este documento detalla la estructura, instalación, mantenimiento y parametrización del sitio web del Club Deportivo Ritmos.
+---
 
-## 1. Tecnologías Utilizadas
+**Versión del Documento:** 1.0.0
+**Fecha de Actualización:** 10 de Febrero de 2026
+**Confidencialidad:** Uso Interno Exclusivo
 
-El proyecto está construido sobre un stack moderno y eficiente:
+---
 
-*   **Frontend Framework**: [Next.js 14](https://nextjs.org/) (App Router).
-*   **Lenguaje**: TypeScript.
-*   **Estilos**: Tailwind CSS.
-*   **Iconos**: Lucide React.
-*   **Animaciones**: Framer Motion.
-*   **Base de Datos**: PostgreSQL (alojada en Neon).
-*   **Imágenes**: Cloudinary (para subida y optimización de imágenes).
-*   **Despliegue**: Netlify (compatible con Next.js).
+## Tabla de Contenidos
 
-## 2. Instalación y Ejecución Local
+1.  [Introducción](#1-introducción)
+2.  [Arquitectura del Sistema](#2-arquitectura-del-sistema)
+3.  [Requisitos del Entorno](#3-requisitos-del-entorno)
+4.  [Instalación y Despliegue Local](#4-instalación-y-despliegue-local)
+5.  [Estructura del Código](#5-estructura-del-código)
+6.  [Base de Datos y Modelo de Datos](#6-base-de-datos-y-modelo-de-datos)
+7.  [Personalización y CMS](#7-personalización-y-cms)
+8.  [Seguridad](#8-seguridad)
+9.  [Mantenimiento y Solución de Problemas](#9-mantenimiento-y-solución-de-problemas)
 
-Para ejecutar el proyecto en un entorno local de desarrollo:
+---
 
-### Requisitos Previos
-*   [Node.js](https://nodejs.org/) (Versión 18 o superior).
-*   [Git](https://git-scm.com/).
+## 1. Introducción
 
-### Pasos
-1.  **Clonar el repositorio** o descargar el código fuente.
-2.  **Instalar dependencias**:
+Este documento técnico tiene como objetivo proporcionar una guía exhaustiva sobre la infraestructura, el código fuente y los procedimientos operativos de la plataforma web del **Club Deportivo Ritmos**. Está dirigido a desarrolladores, administradores de sistemas y personal encargado del mantenimiento de la plataforma.
+
+## 2. Arquitectura del Sistema
+
+La solución está construida utilizando una arquitectura moderna basada en **Next.js** (React), optimizada para rendimiento, SEO y escalabilidad.
+
+```mermaid
+graph TD
+    User[Usuario Final] -->|HTTPS| CDN[Netlify Edge / Vercel]
+    CDN -->|Renderizado| NextJS[Servidor Next.js (SSR/API)]
+    NextJS -->|Consultas SQL| DB[(PostgreSQL @ Neon)]
+    NextJS -->|Gestión Media| Cloudinary[Cloudinary (Imágenes)]
+    Admin[Administrador] -->|Panel Seguro| NextJS
+```
+
+### Stack Tecnológico
+*   **Frontend & Backend**: [Next.js 14](https://nextjs.org/) (App Router).
+*   **Lenguaje de Programación**: TypeScript (Tipado estático para mayor robustez).
+*   **Estilos**: Tailwind CSS (Diseño responsivo y personalizable).
+*   **Base de Datos**: PostgreSQL (Relacional, alojada en Neon).
+*   **Almacenamiento de Archivos**: Cloudinary (Optimización automática de imágenes).
+*   **UI/UX**: Lucide React (Iconos), Framer Motion (Animaciones).
+
+## 3. Requisitos del Entorno
+
+Para ejecutar el proyecto en un entorno de desarrollo, se requiere:
+
+*   **Node.js**: Versión 18.x (LTS) o superior.
+*   **Gestor de Paquetes**: NPM (v9+) o Yarn.
+*   **Git**: Para control de versiones.
+*   **Conexión a Internet**: Necesaria para conectar con la Base de Datos en la nube y Cloudinary.
+
+## 4. Instalación y Despliegue Local
+
+Siga estos pasos para levantar el entorno de desarrollo:
+
+1.  **Clonar el Repositorio**:
+    ```bash
+    git clone <url-del-repositorio>
+    cd site
+    ```
+
+2.  **Instalar Dependencias**:
     ```bash
     npm install
     ```
-3.  **Configurar Variables de Entorno**:
-    Crear un archivo `.env` en la raíz del proyecto con las siguientes variables (ejemplo):
+
+3.  **Configuración de Variables de Entorno**:
+    Cree un archivo `.env.local` en la raíz del proyecto. Este archivo **NO** debe subirse al repositorio.
+    
     ```env
+    # Conexión a Base de Datos (PostgreSQL)
     DATABASE_URL="postgres://usuario:password@host/neondb?sslmode=require"
-    ADMIN_PASSWORD="admin123"
+
+    # Credenciales de Administrador
+    ADMIN_PASSWORD="TuContraseñaSegura"
+
+    # Configuración de Cloudinary (Imágenes)
+    NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME="dcph4xznt"
+    NEXT_PUBLIC_CLOUDINARY_PRESET="club_baile"
     ```
-4.  **Ejecutar el servidor de desarrollo**:
+
+4.  **Iniciar Servidor de Desarrollo**:
     ```bash
     npm run dev
     ```
-    El sitio estará disponible en `http://localhost:3000`.
+    Acceda a `http://localhost:3000` en su navegador.
 
-## 3. Estructura del Proyecto
+## 5. Estructura del Código
 
-*   **`/app`**: Contiene las rutas y páginas del sitio (App Router).
-    *   `/(public)`: Páginas públicas (Inicio, Nosotros, Servicios, etc.).
-    *   `/admin`: Páginas del panel administrativo (protegidas).
-    *   `/api`: Endpoints de la API (Backend) para manejar datos y autenticación.
-*   **`/components`**: Componentes reutilizables de React (Navbar, Footer, ImageUpload, Formularios).
-*   **`/lib`**: Utilidades y configuración.
-    *   `db.ts`: Configuración de la conexión a Base de Datos y scripts de migración/inicialización.
-*   **`/public`**: Archivos estáticos (imágenes fijas, favicon).
+El proyecto sigue la estructura estándar de **Next.js App Router**:
 
-## 4. Base de Datos
+| Directorio | Descripción |
+| :--- | :--- |
+| `app/` | Núcleo de la aplicación. Contiene rutas, layouts y páginas. |
+| `app/(public)/` | Rutas públicas accesibles por cualquier usuario (Home, About, etc.). |
+| `app/admin/` | Panel de administración protegido. |
+| `app/api/` | Endpoints backend (API REST) para manejo de datos. |
+| `components/` | Componentes de React reutilizables (Botones, Navbar, Grillas, etc.). |
+| `lib/` | Librerías y utilidades. `db.ts` maneja la conexión a BD. |
+| `public/` | Archivos estáticos (imágenes fijas, íconos, fuentes). |
 
-El sistema utiliza PostgreSQL. La estructura se inicializa automáticamente en `lib/db.ts`.
+## 6. Base de Datos y Modelo de Datos
 
-### Tablas Principales
-*   **`settings`**: Almacena configuración global (clave-valor) como títulos, colores, logos, links de redes sociales.
-*   **`team_members`**: Miembros del equipo (nombre, rol, descripción, foto).
-*   **`services`**: Servicios ofrecidos (título, precio, categoría, imagen).
-*   **`events`**: Eventos programados.
-*   **`classes`**: Clases disponibles (horarios, cupos, fotos).
-*   **`messages`**: Mensajes recibidos desde el formulario de contacto.
-*   **`registrations`**: Inscripciones a clases.
+El sistema utiliza un esquema relacional. La inicialización de tablas es automática a través de `lib/db.ts`.
 
-## 5. Panel Administrativo y Parametrización
+### Esquema de Tablas
 
-El sitio cuenta con un CMS (Gestor de Contenido) integrado en la ruta `/admin`.
+1.  **`settings`** (Configuración Global)
+    *   `key` (PK, Texto): Clave de configuración (ej. `primaryColor`, `siteName`).
+    *   `value` (Texto): Valor de la configuración.
 
-### Acceso
-1.  Ir a `tudominio.com/admin/login` (o enlace oculto si existe).
-2.  **Contraseña**: La definida en la variable de entorno `ADMIN_PASSWORD`.
-    *   *Por defecto (si no se configura):* `admin123`.
+2.  **`team_members`** (Equipo)
+    *   `id` (PK), `name`, `role`, `description`, `image`, `created_at`.
 
-### Módulos de Gestión
+3.  **`classes`** (Clases)
+    *   `id` (PK), `name`, `instructor`, `schedule`, `capacity`, `image`.
 
-#### A. Configuración del Sitio (Sitio)
-Aquí se parametrizan los aspectos visuales y de contenido global:
-*   **Identidad**: Nombre del sitio, Logo (subida de imagen).
-*   **Colores**:
-    *   **Primario/Secundario**: Afectan botones, degradados y toques de color.
-    *   **Barra de Navegación**: Personalización de color de fondo y texto del menú superior.
-*   **Textos**: Títulos y descripciones de la página de Inicio (Hero, Destacados), Sobre Nosotros y Contacto.
-*   **Redes Sociales**: URLs de Facebook, Instagram, TikTok.
+4.  **`events`** (Eventos)
+    *   `id` (PK), `title`, `description`, `date`, `image`.
 
-#### B. Gestión de Contenido (Equipo, Servicios, Eventos, Clases)
-Permite Crear, Editar y Eliminar registros.
-*   **Imágenes**: Todos los formularios integran un cargador de imágenes conectado a Cloudinary.
-    *   *Nota*: Para el **Equipo**, se recomienda usar fotos verticales (tipo retrato, ~600x800px).
-    *   *Nota*: Para **Clases/Eventos**, fotos horizontales o cuadradas funcionan bien.
+5.  **`services`** (Servicios)
+    *   `id` (PK), `title`, `description`, `price`, `category`, `image`.
 
-#### C. Mensajes e Inscripciones
-Buzón de entrada para ver qué usuarios han escrito o se han inscrito a clases.
+6.  **`messages`** (Contacto)
+    *   Recibe los datos del formulario de contacto.
 
-## 6. Mantenimiento y Despliegue
+## 7. Personalización y CMS
 
-### Migraciones de Base de Datos
-El archivo `lib/db.ts` contiene una función `initDb` que se ejecuta (o se puede invocar via `/api/test-seed`) para crear tablas si no existen.
-Si se agregan nuevas columnas (como se hizo con `image` en `classes`), se deben agregar sentencias `ALTER TABLE` en este archivo para asegurar que la base de datos se actualice sin perder datos.
+El sistema incluye un **Panel de Administración (CMS)** robusto para gestionar el contenido sin tocar código.
 
-### Despliegue en Producción
-Para desplegar cambios:
-1.  Hacer **Commit** y **Push** al repositorio (GitHub/GitLab).
-2.  La plataforma de despliegue (Netlify/Vercel) detectará el cambio y reconstruirá el sitio.
-3.  **Importante**: Asegurarse de que las Variables de Entorno (`DATABASE_URL`, `ADMIN_PASSWORD`) estén configuradas en el panel de la plataforma de hosting.
+### Acceso al Panel
+*   **URL**: `/admin/login`
+*   **Credenciales**: Controladas por la variable `ADMIN_PASSWORD`.
+
+### Funcionalidades del CMS
+1.  **Gestión de Marca (Branding)**: 
+    *   Cambio de Logo y **control de tamaño** (slider en px).
+    *   Definición de **Paleta de Colores** (Primario, Secundario, Navbar).
+    *   **Tipografía**: Control de colores de texto y escala de fuente global.
+2.  **Gestión de Contenido**:
+    *   Crear/Editar/Eliminar Clases, Eventos, Servicios y Miembros del Equipo.
+    *   Carga de imágenes integrada.
+3.  **Configuración de Textos**:
+    *   Edición de textos del Home, Misión, Visión y Footer.
+
+## 8. Seguridad
+
+*   **Autenticación Admin**: Basada en Cookies seguras (`HttpOnly`). La sesión expira en 24 horas.
+*   **Protección de API**: Las rutas de escritura (`POST`, `PUT`, `DELETE`) en `/api/` (excepto contacto) verifican la presencia de la cookie de administración.
+*   **Inyección SQL**: El uso de consultas parametrizadas (`$1`, `$2`) en `lib/db.ts` previene ataques de inyección SQL.
+
+## 9. Mantenimiento y Solución de Problemas
+
+### Problema: Las imágenes no cargan
+*   **Causa**: Fallo en Cloudinary o URL mal formada.
+*   **Solución**: Verificar `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` en `.env`.
+
+### Problema: Cambios de diseño no se reflejan
+*   **Causa**: Caché del navegador o de Next.js.
+*   **Solución**: Forzar recarga (`Ctrl + F5`) o reiniciar el servidor de desarrollo.
+
+### Problema: Error de conexión a Base de Datos
+*   **Causa**: URL de conexión incorrecta o base de datos dormida (Neon free tier).
+*   **Solución**: Verificar `DATABASE_URL`. Si usa Neon Free Tier, espere 10 segundos y recargue para que la BD despierte.
+
+---
+*Este documento es propiedad del Club Deportivo Ritmos. Prohibida su distribución no autorizada.*

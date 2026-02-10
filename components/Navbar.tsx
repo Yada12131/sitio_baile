@@ -30,15 +30,18 @@ export default function Navbar({ siteName, logoUrl, navbarBgColor = '#000000', n
 
     const [isOpen, setIsOpen] = useState(false);
 
+    const height = typeof logoHeight === 'string' ? parseInt(logoHeight) : logoHeight;
+    const safeHeight = isNaN(height) ? 40 : height;
+
     return (
         <nav
             className="fixed top-0 left-0 w-full z-50 backdrop-blur-md border-b border-white/10 transition-colors duration-300"
             style={{ backgroundColor: navbarBgColor }}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between" style={{ height: Math.max(80, logoHeight + 40) + 'px' }}> {/* Adjust navbar height based on logo */}
-                    <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-[var(--primary-color)] to-[var(--accent-color)] bg-clip-text text-transparent hover:opacity-80 transition-opacity">
-                        {logoUrl ? <img src={logoUrl} alt={siteName} style={{ height: `${logoHeight}px` }} className="w-auto object-contain" /> : siteName}
+                <div className="flex items-center justify-between" style={{ height: Math.max(80, safeHeight + 40) + 'px' }}> {/* Adjust navbar height based on logo */}
+                    <Link href="/" className="flex items-center gap-2 text-2xl font-bold bg-gradient-to-r from-[var(--primary-color)] to-[var(--accent-color)] bg-clip-text text-transparent hover:opacity-80 transition-opacity">
+                        {logoUrl ? <img src={logoUrl} alt={siteName} style={{ height: `${safeHeight}px` }} className="w-auto object-contain" /> : siteName}
                     </Link>
 
                     {/* Desktop Menu */}
