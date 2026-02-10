@@ -61,6 +61,61 @@ export default function SettingsManager({ initialSettings }: { initialSettings: 
                                 onChange={(url) => handleChange('logoUrl', url)}
                             />
                         </div>
+                        <div className="col-span-1 md:col-span-2">
+                            <label className="block text-gray-400 mb-2">Tamaño del Logo (px): {settings.logoHeight || 40}px</label>
+                            <input
+                                type="range"
+                                min="30"
+                                max="200"
+                                value={settings.logoHeight || 40}
+                                onChange={(e) => handleChange('logoHeight', e.target.value)}
+                                className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                            />
+                        </div>
+
+                        <div className="col-span-1 md:col-span-2 border-t border-white/10 pt-4 mt-2">
+                            <h3 className="text-lg font-semibold text-white mb-4">Tipografía General</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div>
+                                    <label className="block text-gray-400 mb-2">Color de Títulos</label>
+                                    <div className="flex gap-2">
+                                        <input
+                                            type="color" value={settings.headingColor || '#ffffff'} onChange={(e) => handleChange('headingColor', e.target.value)}
+                                            className="h-12 w-12 rounded bg-transparent cursor-pointer"
+                                        />
+                                        <input
+                                            type="text" value={settings.headingColor || ''} onChange={(e) => handleChange('headingColor', e.target.value)}
+                                            className="flex-1 bg-black border border-white/20 rounded-lg p-3 text-white uppercase"
+                                        />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="block text-gray-400 mb-2">Color de Párrafos</label>
+                                    <div className="flex gap-2">
+                                        <input
+                                            type="color" value={settings.bodyColor || '#9ca3af'} onChange={(e) => handleChange('bodyColor', e.target.value)}
+                                            className="h-12 w-12 rounded bg-transparent cursor-pointer"
+                                        />
+                                        <input
+                                            type="text" value={settings.bodyColor || ''} onChange={(e) => handleChange('bodyColor', e.target.value)}
+                                            className="flex-1 bg-black border border-white/20 rounded-lg p-3 text-white uppercase"
+                                        />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="block text-gray-400 mb-2">Escala de Fuente ({settings.fontScale || 1}x)</label>
+                                    <input
+                                        type="range"
+                                        min="0.8"
+                                        max="1.5"
+                                        step="0.05"
+                                        value={settings.fontScale || 1}
+                                        onChange={(e) => handleChange('fontScale', e.target.value)}
+                                        className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                                    />
+                                </div>
+                            </div>
+                        </div>
                         <div>
                             <label className="block text-gray-400 mb-2">Color Primario (Hex)</label>
                             <div className="flex gap-2">

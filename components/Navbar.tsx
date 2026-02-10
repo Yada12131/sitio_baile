@@ -22,9 +22,10 @@ interface NavbarProps {
     logoUrl: string | null;
     navbarBgColor?: string;
     navbarTextColor?: string;
+    logoHeight?: number;
 }
 
-export default function Navbar({ siteName, logoUrl, navbarBgColor = '#000000', navbarTextColor = '#ffffff' }: NavbarProps) {
+export default function Navbar({ siteName, logoUrl, navbarBgColor = '#000000', navbarTextColor = '#ffffff', logoHeight = 40 }: NavbarProps) {
     // Settings passed as props
 
     const [isOpen, setIsOpen] = useState(false);
@@ -35,9 +36,9 @@ export default function Navbar({ siteName, logoUrl, navbarBgColor = '#000000', n
             style={{ backgroundColor: navbarBgColor }}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between h-20">
+                <div className="flex items-center justify-between" style={{ height: Math.max(80, logoHeight + 40) + 'px' }}> {/* Adjust navbar height based on logo */}
                     <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-[var(--primary-color)] to-[var(--accent-color)] bg-clip-text text-transparent hover:opacity-80 transition-opacity">
-                        {logoUrl ? <img src={logoUrl} alt={siteName} className="h-10" /> : siteName}
+                        {logoUrl ? <img src={logoUrl} alt={siteName} style={{ height: `${logoHeight}px` }} className="w-auto object-contain" /> : siteName}
                     </Link>
 
                     {/* Desktop Menu */}
@@ -55,7 +56,8 @@ export default function Navbar({ siteName, logoUrl, navbarBgColor = '#000000', n
                             ))}
                             <Link
                                 href="/feedback"
-                                className="px-4 py-2 rounded-full text-sm font-medium bg-pink-600 hover:bg-pink-700 text-white transition-colors"
+                                className="px-4 py-2 rounded-full text-sm font-medium text-white transition-opacity hover:opacity-90"
+                                style={{ backgroundColor: 'var(--primary-color)' }}
                             >
                                 Danos tu Opinión
                             </Link>
