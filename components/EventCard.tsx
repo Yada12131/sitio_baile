@@ -70,7 +70,8 @@ export default function EventCard({ event }: EventProps) {
 
                     <button
                         onClick={() => setIsOpen(true)}
-                        className="w-full py-2 border border-white/20 text-white rounded-lg hover:bg-white hover:text-black transition-colors font-semibold mt-auto"
+                        className="w-full py-3 text-white font-bold rounded-lg hover:opacity-90 transition-opacity mt-auto uppercase tracking-wide text-sm"
+                        style={{ background: 'linear-gradient(to right, var(--primary-color), var(--accent-color))' }}
                     >
                         Más Detalles
                     </button>
