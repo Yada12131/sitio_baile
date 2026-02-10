@@ -301,6 +301,13 @@ export default function SettingsManager({ initialSettings }: { initialSettings: 
                                 className="w-full bg-black border border-white/20 rounded-lg p-3 text-white"
                             />
                         </div>
+                        <div>
+                            <label className="block text-gray-400 mb-2">YouTube</label>
+                            <input
+                                type="text" value={settings.youtubeUrl || ''} onChange={(e) => handleChange('youtubeUrl', e.target.value)}
+                                className="w-full bg-black border border-white/20 rounded-lg p-3 text-white"
+                            />
+                        </div>
                     </div>
                 </section>
 

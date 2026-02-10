@@ -29,32 +29,35 @@ export default async function About() {
 
                 {/* Hero Section */}
                 <div className="text-center space-y-6">
-                    <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
+                    <h1
+                        className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent"
+                        style={{ backgroundImage: 'linear-gradient(to right, var(--primary-color), var(--accent-color))' }}
+                    >
                         {title}
                     </h1>
-                    <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed whitespace-pre-line text-center">
+                    <p className="text-xl max-w-3xl mx-auto leading-relaxed whitespace-pre-line text-center" style={{ color: 'var(--body-color)' }}>
                         {description}
                     </p>
                 </div>
 
                 {/* Mission & Vision Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="bg-zinc-900/50 p-8 rounded-2xl border border-white/10 hover:border-pink-500/30 transition-colors">
-                        <div className="w-12 h-12 bg-pink-500/20 rounded-lg flex items-center justify-center mb-6">
-                            <Target className="text-pink-500" size={24} />
+                    <div className="bg-zinc-900/50 p-8 rounded-2xl border border-white/10 transition-colors hover:border-[var(--primary-color)]">
+                        <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-6" style={{ backgroundColor: 'rgba(var(--primary-color), 0.2)' }}>
+                            <Target style={{ color: 'var(--primary-color)' }} size={24} />
                         </div>
-                        <h3 className="text-2xl font-bold mb-4 text-white">Nuestra Misión</h3>
-                        <p className="text-gray-400 leading-relaxed">
+                        <h3 className="text-2xl font-bold mb-4" style={{ color: 'var(--heading-color)' }}>Nuestra Misión</h3>
+                        <p className="leading-relaxed" style={{ color: 'var(--body-color)' }}>
                             Promovemos el baile deportivo como un deporte artístico y competitivo, y como un medio de desarrollo integral
                             que combina la disciplina, el bienestar mental y la innovación.
                         </p>
                     </div>
-                    <div className="bg-zinc-900/50 p-8 rounded-2xl border border-white/10 hover:border-purple-500/30 transition-colors">
-                        <div className="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mb-6">
-                            <Heart className="text-purple-500" size={24} />
+                    <div className="bg-zinc-900/50 p-8 rounded-2xl border border-white/10 transition-colors hover:border-[var(--accent-color)]">
+                        <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-6" style={{ backgroundColor: 'rgba(var(--accent-color), 0.2)' }}>
+                            <Heart style={{ color: 'var(--accent-color)' }} size={24} />
                         </div>
-                        <h3 className="text-2xl font-bold mb-4 text-white">Nuestros Valores</h3>
-                        <p className="text-gray-400 leading-relaxed">
+                        <h3 className="text-2xl font-bold mb-4" style={{ color: 'var(--heading-color)' }}>Nuestros Valores</h3>
+                        <p className="leading-relaxed" style={{ color: 'var(--body-color)' }}>
                             Nos mueven la disciplina, la resiliencia y el sentido de pertenencia. Llevamos el deporte más allá del escenario,
                             generando experiencias memorables para todos.
                         </p>
@@ -63,13 +66,13 @@ export default async function About() {
 
                 {/* Team Section */}
                 <div>
-                    <h2 className="text-3xl font-bold mb-12 text-center flex items-center justify-center gap-3">
-                        <Users className="text-pink-500" /> Nuestro Equipo
+                    <h2 className="text-3xl font-bold mb-12 text-center flex items-center justify-center gap-3" style={{ color: 'var(--heading-color)' }}>
+                        <Users style={{ color: 'var(--primary-color)' }} /> Nuestro Equipo
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {teamMembers.map((member: any) => (
-                            <div key={member.id} className="bg-zinc-900 rounded-2xl overflow-hidden border border-white/5 hover:border-pink-500/50 transition-all duration-300 hover:-translate-y-1 group">
-                                <div className="h-2 bg-gradient-to-r from-pink-500 to-purple-600"></div>
+                            <div key={member.id} className="bg-zinc-900 rounded-2xl overflow-hidden border border-white/5 transition-all duration-300 hover:-translate-y-1 group hover:border-[var(--primary-color)]">
+                                <div className="h-2" style={{ backgroundImage: 'linear-gradient(to right, var(--primary-color), var(--accent-color))' }}></div>
                                 <div className="p-8">
                                     <div className="w-full aspect-[3/4] bg-zinc-800 flex items-center justify-center mb-6 mx-auto group-hover:scale-[1.02] transition-transform overflow-hidden relative">
                                         {member.image ? (
@@ -78,9 +81,9 @@ export default async function About() {
                                             <span className="text-4xl font-bold text-gray-700">{member.name.charAt(0)}</span>
                                         )}
                                     </div>
-                                    <h3 className="text-xl font-bold text-center text-white mb-2">{member.name}</h3>
-                                    <p className="text-pink-400 text-center text-xs font-bold uppercase tracking-wider mb-4">{member.role}</p>
-                                    <p className="text-gray-400 text-left text-sm leading-relaxed whitespace-pre-line">{member.description}</p>
+                                    <h3 className="text-xl font-bold text-center mb-2" style={{ color: 'var(--heading-color)' }}>{member.name}</h3>
+                                    <p className="text-center text-xs font-bold uppercase tracking-wider mb-4" style={{ color: 'var(--primary-color)' }}>{member.role}</p>
+                                    <p className="text-left text-sm leading-relaxed whitespace-pre-line" style={{ color: 'var(--body-color)' }}>{member.description}</p>
                                 </div>
                             </div>
                         ))}
@@ -90,8 +93,8 @@ export default async function About() {
                 {/* Closing Statement */}
                 <div className="text-center bg-gradient-to-r from-zinc-900 to-black p-12 rounded-3xl border border-white/10">
                     <Award className="w-12 h-12 text-yellow-500 mx-auto mb-6" />
-                    <h3 className="text-2xl font-bold text-white mb-4">Más que un Club</h3>
-                    <p className="text-gray-400 max-w-2xl mx-auto">
+                    <h3 className="text-2xl font-bold mb-4" style={{ color: 'var(--heading-color)' }}>Más que un Club</h3>
+                    <p className="max-w-2xl mx-auto" style={{ color: 'var(--body-color)' }}>
                         En Ritmos, el deporte se vive, se siente y se transforma en una verdadera forma de vida.
                         Ofrecemos desde presentaciones artísticas únicas hasta talleres psicodeportivos con intervenciones asistidas con perros.
                     </p>
