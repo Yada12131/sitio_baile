@@ -32,7 +32,7 @@ export default async function About() {
                     <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
                         {title}
                     </h1>
-                    <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed whitespace-pre-line text-justify">
+                    <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed whitespace-pre-line text-center">
                         {description}
                     </p>
                 </div>
@@ -80,7 +80,7 @@ export default async function About() {
                                     </div>
                                     <h3 className="text-xl font-bold text-center text-white mb-2">{member.name}</h3>
                                     <p className="text-pink-400 text-center text-xs font-bold uppercase tracking-wider mb-4">{member.role}</p>
-                                    <p className="text-gray-400 text-center text-sm leading-relaxed">{member.description}</p>
+                                    <p className="text-gray-400 text-left text-sm leading-relaxed whitespace-pre-line">{member.description}</p>
                                 </div>
                             </div>
                         ))}

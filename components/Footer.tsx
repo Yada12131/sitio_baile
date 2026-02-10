@@ -40,7 +40,7 @@ export default async function Footer() {
                 <div className="flex justify-center space-x-6 text-sm">
                     <a href="/privacy" className="hover:text-white transition-colors">Privacidad</a>
                     <a href="/terms" className="hover:text-white transition-colors">Términos</a>
-                    <a href="/admin/login" className="hover:text-white transition-colors">Admin Login</a>
+                    {/* <a href="/admin/login" className="hover:text-white transition-colors">Admin Login</a> */}
                 </div>
             </div>
         </footer>
