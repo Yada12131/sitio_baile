@@ -63,9 +63,14 @@ export default function FormBuilder() {
             if (res.ok) {
                 setNewField({ label: '', name: '', type: 'text', required: true, options: '' });
                 fetchFields();
+                alert('Campo agregado correctamente');
+            } else {
+                const err = await res.json();
+                alert('Error al agregar campo: ' + (err.error || 'Unknown error'));
             }
         } catch (error) {
             console.error(error);
+            alert('Error de conexión o servidor');
         }
     };
 
