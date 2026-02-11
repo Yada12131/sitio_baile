@@ -13,7 +13,7 @@ export default function BackgroundAnimation() {
     if (!isMounted) return null;
 
     return (
-        <div className="fixed inset-0 z-[9999] pointer-events-none bg-red-500/50 border-8 border-yellow-500">
+        <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-black">
             {/* Fog/Smoke Effect - Large subtle moving gradients */}
             <motion.div
                 animate={{
