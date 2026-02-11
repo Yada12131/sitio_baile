@@ -54,7 +54,7 @@ export default async function Home() {
       <Hero title={heroTitle} subtitle={heroSubtitle} />
 
       {/* Highlights Section */}
-      <section className="py-20 bg-black text-white">
+      <section className="py-20 bg-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2
@@ -87,7 +87,7 @@ export default async function Home() {
       </section>
 
       {/* Classes Preview Section */}
-      <section className="py-20 bg-zinc-900/50">
+      <section className="py-20 bg-black/20">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2
@@ -116,7 +116,7 @@ export default async function Home() {
       </section>
 
       {/* Events Slider Section */}
-      <section className="py-20 bg-gradient-to-b from-black to-purple-900/20">
+      <section className="py-20 bg-gradient-to-b from-transparent to-purple-900/20">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2

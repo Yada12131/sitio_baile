@@ -7,6 +7,8 @@ export const metadata: Metadata = {
   description: "El mejor club de baile de la ciudad.",
 };
 
+import BackgroundAnimation from "@/components/BackgroundAnimation";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -21,12 +23,13 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <body
-        className={`font-sans antialiased bg-black text-white`}
+        className={`font-sans antialiased text-white`}
         style={{
           '--primary-color': primaryColor,
           '--accent-color': accentColor,
         } as React.CSSProperties}
       >
+        <BackgroundAnimation />
         {children}
       </body>
     </html>
