@@ -18,6 +18,7 @@ export default function AdminLayout({
 
     const navItems = [
         { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
+        { name: 'Afiliados', href: '/admin/dashboard/affiliates', icon: Users },
         { name: 'Eventos', href: '/admin/dashboard/events', icon: Calendar },
         { name: 'Clases', href: '/admin/dashboard/classes', icon: Star },
         { name: 'Inscripciones', href: '/admin/dashboard/registrations', icon: MessageSquare },
