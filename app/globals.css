@@ -11,7 +11,6 @@
 }
 
 body {
-  background: var(--background);
   color: var(--body-color);
   font-family: Arial, Helvetica, sans-serif;
   overflow-x: hidden;

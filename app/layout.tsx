@@ -30,7 +30,9 @@ export default function RootLayout({
         } as React.CSSProperties}
       >
         <BackgroundAnimation />
-        {children}
+        <div className="relative z-10 w-full h-full">
+          {children}
+        </div>
       </body>
     </html>
   );
