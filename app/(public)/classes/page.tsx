@@ -21,7 +21,7 @@ export default async function PublicClassesPage() {
     }
 
     return (
-        <div className="pt-32">
+        <div>
             <ClassesPage classes={classes} settings={settingsObj} />
         </div>
     );
