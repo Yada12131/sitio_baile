@@ -150,6 +150,22 @@ El sistema incluye un **Panel de Administración (CMS)** robusto para gestionar 
     *   Carga de imágenes integrada.
 3.  **Configuración de Textos**:
     *   Edición de textos del Home, Misión, Visión y Footer.
+154: 
+155: ### 7.3. Gestión de Afiliados (NUEVO)
+156: 
+157: El sistema incorpora un módulo dinámico para la gestión de afiliaciones.
+158: 
+159: *   **Listado de Registros**:
+160:     *   Ubicación: `/admin/dashboard/affiliates` (Pestaña "Registros").
+161:     *   Permite visualizar todos los usuarios que han completado el formulario.
+162:     *   Búsqueda en tiempo real por cualquier dato (nombre, cédula, correo).
+163:     *   **Exportación a CSV**: Botón verde para descargar todos los datos en formato compatible con Excel.
+164: 
+165: *   **Constructor de Formulario (Form Builder)**:
+166:     *   Ubicación: `/admin/dashboard/affiliates` (Pestaña "Configurar Formulario").
+167:     *   Permite **Agregar, Editar, Eliminar y Reordenar** los campos del formulario público.
+168:     *   Tipos de campo soportados: Texto, Email, Teléfono, Número, Fecha, Texto Largo, Lista Desplegable.
+169:     *   Los cambios se reflejan **automáticamente** en la página pública `/affiliates`.
 
 ## 8. Seguridad
 
