@@ -16,7 +16,7 @@ export default function ClassesPage({ classes, settings }: { classes: ClassData[
     const [selectedClass, setSelectedClass] = useState<ClassData | null>(null);
 
     return (
-        <div className="bg-black min-h-screen text-white pt-32 pb-20 px-4">
+        <div className="bg-black min-h-screen text-white pt-24 pb-20 px-4">
             <div className="max-w-7xl mx-auto">
                 <h1
                     className="text-4xl md:text-6xl font-bold mb-8 text-center inline-block w-full"

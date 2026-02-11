@@ -30,7 +30,7 @@ export default async function ServicesPage() {
     const generalServices = items.filter((item: any) => item.category !== 'Afiliados');
 
     return (
-        <div className="min-h-screen bg-black text-white pt-32 pb-20">
+        <div className="min-h-screen bg-black text-white pt-24 pb-20">
             {/* General Services Section */}
             <ServicesList items={generalServices} servicesTitle={servicesTitle} />
 
