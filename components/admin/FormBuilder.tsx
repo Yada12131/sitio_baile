@@ -139,6 +139,25 @@ export default function FormBuilder() {
         }));
     };
 
+    const handleTypeChange = (type: string) => {
+        let defaultName = '';
+        switch (type) {
+            case 'email': defaultName = 'email'; break;
+            case 'tel': defaultName = 'phone'; break;
+            case 'date': defaultName = 'date'; break;
+            case 'number': defaultName = 'number'; break;
+            case 'textarea': defaultName = 'message'; break;
+            case 'select': defaultName = 'option'; break;
+            default: defaultName = 'text';
+        }
+
+        setNewField(prev => ({
+            ...prev,
+            type,
+            name: defaultName
+        }));
+    };
+
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Form Preview / List */}
@@ -249,7 +268,7 @@ export default function FormBuilder() {
                             <label className="block text-xs text-gray-400 mb-1">Tipo de Dato</label>
                             <select
                                 value={newField.type}
-                                onChange={e => setNewField({ ...newField, type: e.target.value })}
+                                onChange={e => handleTypeChange(e.target.value)}
                                 className="w-full bg-black/50 border border-white/10 rounded px-3 py-2 text-sm focus:border-pink-500 outline-none block"
                             >
                                 <option value="text">Texto Corto</option>
