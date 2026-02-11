@@ -5,7 +5,7 @@ import { sendTelegramNotification } from '@/lib/telegram';
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const { name, email, phone, subject, message } = body;
+        const { name, email, phone, subject, message, idNumber, birthdate } = body;
 
         // Simple validation
         if (!name || !email || !subject || !message) {
@@ -23,14 +23,18 @@ export async function POST(request: Request) {
         }
 
         // Send Telegram Notification
+        let telegramMsg = `📩 <b>Nuevo Mensaje de Contacto</b>\n\n` +
+            `<b>De:</b> ${name} (${email})\n` +
+            `<b>Teléfono:</b> ${phone || 'N/A'}\n`;
+
+        if (idNumber) telegramMsg += `<b>Cédula/ID:</b> ${idNumber}\n`;
+        if (birthdate) telegramMsg += `<b>Fecha Nacimiento:</b> ${birthdate}\n`;
+
+        telegramMsg += `<b>Asunto:</b> ${subject}\n\n` +
+            `${message}`;
+
         try {
-            await sendTelegramNotification(
-                `📩 <b>Nuevo Mensaje de Contacto</b>\n\n` +
-                `<b>De:</b> ${name} (${email})\n` +
-                `<b>Teléfono:</b> ${phone || 'N/A'}\n` +
-                `<b>Asunto:</b> ${subject}\n\n` +
-                `${message}`
-            );
+            await sendTelegramNotification(telegramMsg);
         } catch (tgError) {
             console.error('Telegram notification failed:', tgError);
             // Continue execution, do not fail the request just because notification failed

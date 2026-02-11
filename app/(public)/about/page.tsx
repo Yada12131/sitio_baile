@@ -131,7 +131,7 @@ export default async function About() {
                                         {member.name}
                                     </h3>
                                     <p className="text-center text-xs font-bold uppercase tracking-wider mb-4" style={{ color: 'var(--primary-color)' }}>{member.role}</p>
-                                    <p className="text-left text-sm leading-relaxed whitespace-pre-line" style={{ color: 'var(--body-color)' }}>{member.description}</p>
+                                    <p className="text-justify text-sm leading-relaxed whitespace-pre-line text-gray-300">{member.description}</p>
                                 </div>
                             </div>
                         ))}
