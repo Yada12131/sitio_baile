@@ -26,5 +26,23 @@ export default async function ServicesPage() {
         items = [];
     }
 
-    return <ServicesList items={items} servicesTitle={servicesTitle} />;
+    const affiliateServices = items.filter((item: any) => item.category === 'Afiliados');
+    const generalServices = items.filter((item: any) => item.category !== 'Afiliados');
+
+    return (
+        <div className="min-h-screen bg-black text-white pt-32 pb-20">
+            {/* General Services Section */}
+            <ServicesList items={generalServices} servicesTitle={servicesTitle} />
+
+            {/* Affiliates Section - Only show if there are affiliate items */}
+            {affiliateServices.length > 0 && (
+                <div className="mt-20 border-t border-white/10 pt-20">
+                    <ServicesList
+                        items={affiliateServices}
+                        servicesTitle="Descuentos para Afiliados"
+                    />
+                </div>
+            )}
+        </div>
+    );
 }

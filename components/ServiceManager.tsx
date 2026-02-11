@@ -20,9 +20,13 @@ export default function ServiceManager() {
         title: '',
         description: '',
         price: '',
-        category: 'Eventos',
+        category: '',
         image: ''
     });
+
+    const [categories, setCategories] = useState<{ id: number, name: string }[]>([]);
+    const [newCategoryName, setNewCategoryName] = useState('');
+    const [showCategoryInput, setShowCategoryInput] = useState(false);
 
     // Editing State
     const [isEditing, setIsEditing] = useState<number | null>(null);
@@ -30,7 +34,54 @@ export default function ServiceManager() {
 
     useEffect(() => {
         fetchServices();
+        fetchCategories();
     }, []);
+
+    const fetchCategories = async () => {
+        try {
+            const res = await fetch('/api/service-categories');
+            if (res.ok) {
+                const data = await res.json();
+                setCategories(data);
+                // Set default category if none selected and categories exist
+                if (data.length > 0 && !newService.category) {
+                    setNewService(prev => ({ ...prev, category: data[0].name }));
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+        }
+    };
+
+    const handleAddCategory = async () => {
+        if (!newCategoryName.trim()) return;
+
+        try {
+            const res = await fetch('/api/service-categories', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: newCategoryName.trim() })
+            });
+
+            if (res.ok) {
+                await fetchCategories();
+                setNewCategoryName('');
+                setShowCategoryInput(false);
+            }
+        } catch (error) {
+            console.error('Error creating category:', error);
+        }
+    };
+
+    const handleDeleteCategory = async (id: number) => {
+        if (!confirm('¿Eliminar esta categoría?')) return;
+        try {
+            await fetch(`/api/service-categories?id=${id}`, { method: 'DELETE' });
+            fetchCategories();
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const fetchServices = async () => {
         try {
@@ -48,13 +99,16 @@ export default function ServiceManager() {
 
     const handleAdd = async (e: React.FormEvent) => {
         e.preventDefault();
+        // Use first category as default if empty
+        const categoryToUse = newService.category || (categories.length > 0 ? categories[0].name : 'General');
+
         const res = await fetch('/api/services', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newService),
+            body: JSON.stringify({ ...newService, category: categoryToUse }),
         });
         if (res.ok) {
-            setNewService({ title: '', description: '', price: '', category: 'Eventos', image: '' });
+            setNewService({ title: '', description: '', price: '', category: categories.length > 0 ? categories[0].name : '', image: '' });
             fetchServices();
         }
     };
@@ -90,7 +144,7 @@ export default function ServiceManager() {
         }
     };
 
-    const categories = ['Eventos', 'Shows', 'Multimedia', 'Clases', 'Otros'];
+    // const categories = ['Eventos', 'Shows', 'Multimedia', 'Clases', 'Otros']; // Replaced by dynamic state
 
     return (
         <div className="space-y-8 max-w-4xl text-white">
@@ -124,12 +178,31 @@ export default function ServiceManager() {
                         <Tag className="absolute left-3 top-3 text-gray-400" size={18} />
                         <select
                             value={newService.category} onChange={e => setNewService({ ...newService, category: e.target.value })}
-                            className="w-full bg-black/50 border border-white/10 rounded-lg p-3 pl-10 text-white appearance-none focus:ring-2 focus:ring-pink-500 outline-none"
+                            className="w-full bg-black/50 border border-white/10 rounded-lg p-3 pl-10 text-white appearance-none focus:ring-2 focus:ring-pink-500 outline-none mb-2"
                         >
                             {categories.map(cat => (
-                                <option key={cat} value={cat} className="bg-zinc-900">{cat}</option>
+                                <option key={cat.id} value={cat.name} className="bg-zinc-900">{cat.name}</option>
                             ))}
                         </select>
+                        <div className="flex gap-2">
+                            <button type="button" onClick={() => setShowCategoryInput(!showCategoryInput)} className="text-xs text-pink-400 hover:text-pink-300 underline">
+                                {showCategoryInput ? 'Cancelar' : '+ Nueva Categoría'}
+                            </button>
+                        </div>
+                        {showCategoryInput && (
+                            <div className="flex gap-2 mt-2">
+                                <input
+                                    type="text"
+                                    value={newCategoryName}
+                                    onChange={(e) => setNewCategoryName(e.target.value)}
+                                    placeholder="Nombre de categoría"
+                                    className="bg-black/50 border border-white/10 rounded px-2 py-1 text-sm flex-1"
+                                />
+                                <button type="button" onClick={handleAddCategory} className="bg-pink-600 px-3 py-1 rounded text-xs font-bold">
+                                    OK
+                                </button>
+                            </div>
+                        )}
                     </div>
                     <div className="relative">
                         <ImageUpload
@@ -190,7 +263,7 @@ export default function ServiceManager() {
                                             onChange={e => setEditData({ ...editData!, category: e.target.value })}
                                             className="bg-zinc-800 p-2 rounded border border-pink-500/50 outline-none w-full"
                                         >
-                                            {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                                            {categories.map(cat => <option key={cat.id} value={cat.name}>{cat.name}</option>)}
                                         </select>
                                         <div className="w-full">
                                             <ImageUpload
