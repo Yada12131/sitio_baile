@@ -1,11 +1,36 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Check, Send, Star, Gift, Users } from 'lucide-react';
 
+interface FormField {
+    id: number;
+    label: string;
+    name: string;
+    type: string;
+    required: boolean;
+    options?: string;
+    order_index: number;
+}
+
 export default function AffiliatesPage() {
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+    const [fields, setFields] = useState<FormField[]>([]);
+    const [loadingFields, setLoadingFields] = useState(true);
+
+    useEffect(() => {
+        fetch('/api/form-fields?type=affiliate')
+            .then(res => res.json())
+            .then(data => {
+                setFields(data);
+                setLoadingFields(false);
+            })
+            .catch(err => {
+                console.error(err);
+                setLoadingFields(false);
+            });
+    }, []);
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -13,13 +38,14 @@ export default function AffiliatesPage() {
         const formData = new FormData(e.currentTarget);
         const data = Object.fromEntries(formData);
 
+        // Add subject for internal reference if needed, though API handles it
         const payload = {
             ...data,
-            subject: `[Registro Afiliado]: ${data.name} - ${data.idNumber}`
+            subject: `[Registro Afiliado] Nuevo registro`
         };
 
         try {
-            const res = await fetch('/api/contact', {
+            const res = await fetch('/api/affiliates', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
@@ -53,8 +79,46 @@ export default function AffiliatesPage() {
         }
     ];
 
+    const renderField = (field: FormField) => {
+        const commonClasses = "w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition-all";
+
+        if (field.type === 'textarea') {
+            return (
+                <textarea
+                    name={field.name}
+                    required={field.required}
+                    rows={3}
+                    className={commonClasses}
+                    placeholder={field.label}
+                />
+            );
+        }
+
+        if (field.type === 'select') {
+            const options = field.options ? field.options.split(',').map(o => o.trim()) : [];
+            return (
+                <select name={field.name} required={field.required} className={commonClasses}>
+                    <option value="">Selecciona una opción</option>
+                    {options.map((opt, idx) => (
+                        <option key={idx} value={opt} className="bg-zinc-900">{opt}</option>
+                    ))}
+                </select>
+            );
+        }
+
+        return (
+            <input
+                type={field.type}
+                name={field.name}
+                required={field.required}
+                className={commonClasses}
+                placeholder={field.label}
+            />
+        );
+    };
+
     return (
-        <div className="min-h-screen bg-black text-white pt-32 pb-20">
+        <div className="min-h-screen bg-black text-white pt-24 pb-20">
             {/* Hero Section */}
             <div className="container mx-auto px-4 mb-20">
                 <div className="text-center max-w-4xl mx-auto">
@@ -121,68 +185,27 @@ export default function AffiliatesPage() {
                                     Enviar otra solicitud
                                 </button>
                             </motion.div>
+                        ) : loadingFields ? (
+                            <div className="text-center py-12 text-gray-500">
+                                Cargando formulario...
+                            </div>
                         ) : (
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-400 mb-2">Nombre Completo</label>
-                                        <input
-                                            type="text" name="name" required
-                                            className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition-all"
-                                            placeholder="Tu nombre"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-400 mb-2">Cédula / ID</label>
-                                        <input
-                                            type="text" name="idNumber" required
-                                            className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition-all"
-                                            placeholder="Número de documento"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-400 mb-2">Correo Electrónico</label>
-                                        <input
-                                            type="email" name="email" required
-                                            className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition-all"
-                                            placeholder="tucorreo@email.com"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-400 mb-2">Teléfono / WhatsApp</label>
-                                        <input
-                                            type="tel" name="phone" required
-                                            className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition-all"
-                                            placeholder="+57 300 123 4567"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-400 mb-2">Fecha de Nacimiento</label>
-                                    <input
-                                        type="date" name="birthdate" required
-                                        className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition-all"
-                                    />
-                                    <p className="text-xs text-gray-500 mt-1">Para recibir beneficios en tu cumpleaños.</p>
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-400 mb-2">Mensaje Adicional (Opcional)</label>
-                                    <textarea
-                                        name="message" rows={3}
-                                        className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition-all"
-                                        placeholder="¿Cómo nos conociste? ¿Tienes alguna duda?"
-                                    />
+                                    {fields.map((field) => (
+                                        <div key={field.id} className={field.type === 'textarea' ? 'md:col-span-2' : ''}>
+                                            <label className="block text-sm font-medium text-gray-400 mb-2">
+                                                {field.label} {field.required && <span className="text-pink-500">*</span>}
+                                            </label>
+                                            {renderField(field)}
+                                        </div>
+                                    ))}
                                 </div>
 
                                 <button
                                     type="submit"
                                     disabled={status === 'loading'}
-                                    className="w-full py-4 text-white font-bold rounded-xl hover:opacity-90 transition-all transform hover:scale-[1.01] shadow-lg shadow-pink-500/20 flex items-center justify-center gap-2 text-lg"
+                                    className="w-full py-4 text-white font-bold rounded-xl hover:opacity-90 transition-all transform hover:scale-[1.01] shadow-lg shadow-pink-500/20 flex items-center justify-center gap-2 text-lg mt-8"
                                     style={{ background: 'linear-gradient(to right, var(--primary-color), var(--accent-color))' }}
                                 >
                                     {status === 'loading' ? 'Enviando Solicitud...' : <><Send size={20} /> Enviar Solicitud de Afiliación</>}

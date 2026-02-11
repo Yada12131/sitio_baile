@@ -142,6 +142,27 @@ export const initDb = async () => {
             value TEXT
         )`);
 
+        // form_fields
+        await query(`CREATE TABLE IF NOT EXISTS form_fields (
+            id SERIAL PRIMARY KEY,
+            form_type TEXT NOT NULL,
+            label TEXT NOT NULL,
+            name TEXT NOT NULL,
+            type TEXT NOT NULL,
+            required BOOLEAN DEFAULT FALSE,
+            order_index INTEGER DEFAULT 0,
+            options TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )`);
+
+        // affiliates
+        await query(`CREATE TABLE IF NOT EXISTS affiliates (
+            id SERIAL PRIMARY KEY,
+            data JSONB NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            status TEXT DEFAULT 'pending'
+        )`);
+
         console.log('Tables checked/created.');
         await seedData();
 
@@ -151,6 +172,30 @@ export const initDb = async () => {
 };
 
 const seedData = async () => {
+    try {
+        const fieldsCount = await query("SELECT COUNT(*) FROM form_fields WHERE form_type = 'affiliate'");
+        if (parseInt(fieldsCount.rows[0].count) === 0) {
+            console.log('Seeding Affiliate Form Fields...');
+            const fields = [
+                { label: 'Nombre Completo', name: 'name', type: 'text', required: true, order_index: 1 },
+                { label: 'Cédula / ID', name: 'idNumber', type: 'text', required: true, order_index: 2 },
+                { label: 'Correo Electrónico', name: 'email', type: 'email', required: true, order_index: 3 },
+                { label: 'Teléfono / WhatsApp', name: 'phone', type: 'tel', required: true, order_index: 4 },
+                { label: 'Fecha de Nacimiento', name: 'birthdate', type: 'date', required: true, order_index: 5 },
+                { label: 'Mensaje Adicional', name: 'message', type: 'textarea', required: false, order_index: 6 }
+            ];
+
+            for (const f of fields) {
+                await query(
+                    'INSERT INTO form_fields (form_type, label, name, type, required, order_index) VALUES ($1, $2, $3, $4, $5, $6)',
+                    ['affiliate', f.label, f.name, f.type, f.required, f.order_index]
+                );
+            }
+        }
+    } catch (e) {
+        console.error('Seeding form fields error:', e);
+    }
+
     try {
         const servicesCount = await query('SELECT COUNT(*) FROM services');
         if (parseInt(servicesCount.rows[0].count) === 0) {
