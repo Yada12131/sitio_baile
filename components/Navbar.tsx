@@ -11,6 +11,7 @@ const navLinks = [
     { name: 'Clases', href: '/classes' },
     { name: 'Servicios', href: '/services' },
     { name: 'Eventos', href: '/events' },
+    { name: 'Afiliados', href: '/affiliates' },
     { name: 'Contáctenos', href: '/contact' },
 ];
 
