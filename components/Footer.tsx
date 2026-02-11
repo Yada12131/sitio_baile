@@ -16,7 +16,7 @@ export default async function Footer() {
     }
 
     return (
-        <footer className="bg-black py-10 border-t border-white/10 text-center text-gray-400">
+        <footer className="bg-black/80 backdrop-blur-md py-10 border-t border-white/10 text-center text-gray-400">
             <div className="max-w-7xl mx-auto px-4">
                 <div className="flex justify-center space-x-6 mb-8">
                     {settingsObj.facebookUrl && (

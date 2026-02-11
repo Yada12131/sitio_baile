@@ -14,7 +14,7 @@ export default function Hero({ title, subtitle }: HeroProps) {
     // Settings passed as props
 
     return (
-        <div className="relative h-[90vh] flex items-center justify-center overflow-hidden bg-black">
+        <div className="relative h-[90vh] flex items-center justify-center overflow-hidden bg-transparent">
             {/* ... bg ... */}
             <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-black to-pink-900 opacity-50 z-0 animate-pulse" />
             <div className="absolute inset-0 bg-[url('/hero-bg.jpg')] bg-cover bg-center opacity-30 z-0" />
