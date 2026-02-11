@@ -23,7 +23,12 @@ export default function AffiliatesPage() {
         fetch('/api/form-fields?type=affiliate')
             .then(res => res.json())
             .then(data => {
-                setFields(data);
+                if (Array.isArray(data)) {
+                    setFields(data);
+                } else {
+                    console.error('Expected array but got:', data);
+                    setStatus('error'); // Show error state
+                }
                 setLoadingFields(false);
             })
             .catch(err => {
