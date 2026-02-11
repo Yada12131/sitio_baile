@@ -57,7 +57,7 @@ export default function BackgroundAnimation() {
                     repeat: Infinity,
                     ease: "linear"
                 }}
-                className="absolute top-[20%] left-[20%] w-[300px] h-[300px] bg-indigo-600/10 rounded-full blur-[80px]"
+                className="absolute top-[20%] left-[20%] w-[300px] h-[300px] bg-indigo-500/30 rounded-full blur-[80px]"
             />
 
             <motion.div
@@ -72,7 +72,7 @@ export default function BackgroundAnimation() {
                     ease: "linear",
                     delay: 5
                 }}
-                className="absolute top-[60%] right-[30%] w-[250px] h-[250px] bg-pink-600/10 rounded-full blur-[60px]"
+                className="absolute top-[60%] right-[30%] w-[250px] h-[250px] bg-pink-500/30 rounded-full blur-[60px]"
             />
 
             {/* Texture Overlay (Optional for 'smoke' grain) */}
