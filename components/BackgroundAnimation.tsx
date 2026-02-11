@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
 export default function BackgroundAnimation() {
+    // Animation active - v3
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
