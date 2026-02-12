@@ -20,21 +20,21 @@ export default function BackgroundAnimation() {
                 animate={{
                     x: [0, 100, 0],
                     y: [0, -50, 0],
-                    opacity: [0.5, 0.8, 0.5],
+                    opacity: [0.2, 0.4, 0.2],
                 }}
                 transition={{
                     duration: 20,
                     repeat: Infinity,
                     ease: "easeInOut"
                 }}
-                className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-purple-600/50 rounded-full blur-[100px]"
+                className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-purple-600/40 rounded-full blur-[100px]"
             />
 
             <motion.div
                 animate={{
                     x: [0, -100, 0],
                     y: [0, 100, 0],
-                    opacity: [0.4, 0.7, 0.4],
+                    opacity: [0.2, 0.4, 0.2],
                 }}
                 transition={{
                     duration: 25,
@@ -42,7 +42,7 @@ export default function BackgroundAnimation() {
                     ease: "easeInOut",
                     delay: 2
                 }}
-                className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-pink-600/50 rounded-full blur-[100px]"
+                className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-pink-600/40 rounded-full blur-[100px]"
             />
 
             {/* Floating Orbs/Circles */}
