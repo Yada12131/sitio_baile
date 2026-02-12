@@ -246,11 +246,11 @@ export default function SettingsManager({ initialSettings }: { initialSettings: 
                                 </div>
                             </div>
                         </div>
-                    </div >
-                </section >
+                    </div>
+                </section>
 
                 {/* Contenido Home */}
-                < section className="bg-zinc-900 p-6 rounded-xl border border-white/10" >
+                <section className="bg-zinc-900 p-6 rounded-xl border border-white/10">
                     <h2 className="text-xl font-bold text-pink-500 mb-4 border-b border-white/10 pb-2">Página de Inicio (Hero)</h2>
                     <div className="space-y-4">
                         <div>
@@ -268,10 +268,10 @@ export default function SettingsManager({ initialSettings }: { initialSettings: 
                             />
                         </div>
                     </div>
-                </section >
+                </section>
 
                 {/* Contenido Home (Destacados) */}
-                < section className="bg-zinc-900 p-6 rounded-xl border border-white/10" >
+                <section className="bg-zinc-900 p-6 rounded-xl border border-white/10">
                     <h2 className="text-xl font-bold text-pink-500 mb-4 border-b border-white/10 pb-2">Página de Inicio (Destacados)</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {[1, 2, 3].map((num) => (
@@ -294,10 +294,10 @@ export default function SettingsManager({ initialSettings }: { initialSettings: 
                             </div>
                         ))}
                     </div>
-                </section >
+                </section>
 
                 {/* Contenido Sobre Nosotros */}
-                < section className="bg-zinc-900 p-6 rounded-xl border border-white/10" >
+                <section className="bg-zinc-900 p-6 rounded-xl border border-white/10">
                     <h2 className="text-xl font-bold text-pink-500 mb-4 border-b border-white/10 pb-2">Sobre Nosotros</h2>
                     <div className="space-y-4">
                         <div>
@@ -315,10 +315,10 @@ export default function SettingsManager({ initialSettings }: { initialSettings: 
                             />
                         </div>
                     </div>
-                </section >
+                </section>
 
                 {/* Información de Contacto */}
-                < section className="bg-zinc-900 p-6 rounded-xl border border-white/10" >
+                <section className="bg-zinc-900 p-6 rounded-xl border border-white/10">
                     <h2 className="text-xl font-bold text-pink-500 mb-4 border-b border-white/10 pb-2">Contacto</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
