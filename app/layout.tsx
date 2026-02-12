@@ -9,16 +9,18 @@ export const metadata: Metadata = {
 
 import BackgroundAnimation from "@/components/BackgroundAnimation";
 
-export default function RootLayout({
+import { getSettings } from "@/lib/settings";
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settings = await getSettings();
+
   // Use default colors immediately to prevent blocking
-  // Dynamic fetching in RootLayout is complex with Async Server Components + Client Context
-  // For now, simpler is better for migration stability.
-  const primaryColor = '#ec4899';
-  const accentColor = '#a855f7';
+  const primaryColor = settings.primaryColor || '#ec4899';
+  const accentColor = settings.accentColor || '#a855f7';
 
   return (
     <html lang="es" suppressHydrationWarning>
@@ -29,7 +31,7 @@ export default function RootLayout({
           '--accent-color': accentColor,
         } as React.CSSProperties}
       >
-        <BackgroundAnimation />
+        <BackgroundAnimation settings={settings} />
         <div className="relative z-10 w-full h-full">
           {children}
         </div>

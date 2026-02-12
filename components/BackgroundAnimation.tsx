@@ -3,9 +3,15 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
-export default function BackgroundAnimation() {
+export default function BackgroundAnimation({ settings }: { settings?: any }) {
     // Animation active - v3
     const [isMounted, setIsMounted] = useState(false);
+
+    // Defaults
+    const color1 = settings?.animColor1 || '#9333ea'; // purple-600
+    const color2 = settings?.animColor2 || '#db2777'; // pink-600
+    const opacity = parseFloat(settings?.animOpacity || '0.3');
+    const speed = parseInt(settings?.animSpeed || '30');
 
     useEffect(() => {
         setIsMounted(true);
@@ -20,29 +26,31 @@ export default function BackgroundAnimation() {
                 animate={{
                     x: [0, 100, 0],
                     y: [0, -50, 0],
-                    opacity: [0.6, 0.9, 0.6],
+                    opacity: [opacity, opacity + 0.2, opacity],
                 }}
                 transition={{
-                    duration: 20,
+                    duration: speed * 0.6, // Relative to base speed
                     repeat: Infinity,
                     ease: "easeInOut"
                 }}
-                className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-purple-600/60 rounded-full blur-[100px]"
+                className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] rounded-full blur-[100px]"
+                style={{ backgroundColor: color1 }}
             />
 
             <motion.div
                 animate={{
                     x: [0, -100, 0],
                     y: [0, 100, 0],
-                    opacity: [0.5, 0.8, 0.5],
+                    opacity: [opacity - 0.1, opacity + 0.1, opacity - 0.1],
                 }}
                 transition={{
-                    duration: 25,
+                    duration: speed * 0.8,
                     repeat: Infinity,
                     ease: "easeInOut",
                     delay: 2
                 }}
-                className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-pink-600/60 rounded-full blur-[100px]"
+                className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] rounded-full blur-[100px]"
+                style={{ backgroundColor: color2 }}
             />
 
             {/* Floating Orbs/Circles */}
@@ -53,11 +61,12 @@ export default function BackgroundAnimation() {
                     scale: [1, 1.2, 0.8, 1],
                 }}
                 transition={{
-                    duration: 30,
+                    duration: speed,
                     repeat: Infinity,
                     ease: "linear"
                 }}
                 className="absolute top-[20%] left-[20%] w-[300px] h-[300px] bg-indigo-500/40 rounded-full blur-[80px]"
+                style={{ opacity: opacity }}
             />
 
             <motion.div
@@ -67,12 +76,13 @@ export default function BackgroundAnimation() {
                     scale: [1, 0.9, 1.1, 1],
                 }}
                 transition={{
-                    duration: 35,
+                    duration: speed * 1.2,
                     repeat: Infinity,
                     ease: "linear",
                     delay: 5
                 }}
-                className="absolute top-[60%] right-[30%] w-[250px] h-[250px] bg-pink-500/40 rounded-full blur-[60px]"
+                className="absolute top-[60%] right-[30%] w-[250px] h-[250px] bg-sky-500/40 rounded-full blur-[60px]"
+                style={{ opacity: opacity }}
             />
 
             {/* Texture Overlay (Optional for 'smoke' grain) */}
