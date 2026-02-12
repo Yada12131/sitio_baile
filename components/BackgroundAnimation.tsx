@@ -14,27 +14,27 @@ export default function BackgroundAnimation() {
     if (!isMounted) return null;
 
     return (
-        <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-transparent">
+        <div className="fixed inset-0 z-[5] overflow-hidden pointer-events-none bg-transparent">
             {/* Fog/Smoke Effect - Large subtle moving gradients */}
             <motion.div
                 animate={{
                     x: [0, 100, 0],
                     y: [0, -50, 0],
-                    opacity: [0.3, 0.5, 0.3],
+                    opacity: [0.5, 0.8, 0.5],
                 }}
                 transition={{
                     duration: 20,
                     repeat: Infinity,
                     ease: "easeInOut"
                 }}
-                className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-indigo-900/30 rounded-full blur-[120px]"
+                className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-purple-600/50 rounded-full blur-[100px]"
             />
 
             <motion.div
                 animate={{
                     x: [0, -100, 0],
                     y: [0, 100, 0],
-                    opacity: [0.2, 0.4, 0.2],
+                    opacity: [0.4, 0.7, 0.4],
                 }}
                 transition={{
                     duration: 25,
@@ -42,7 +42,7 @@ export default function BackgroundAnimation() {
                     ease: "easeInOut",
                     delay: 2
                 }}
-                className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-purple-900/30 rounded-full blur-[140px]"
+                className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-pink-600/50 rounded-full blur-[100px]"
             />
 
             {/* Floating Orbs/Circles */}
@@ -57,7 +57,7 @@ export default function BackgroundAnimation() {
                     repeat: Infinity,
                     ease: "linear"
                 }}
-                className="absolute top-[20%] left-[20%] w-[300px] h-[300px] bg-blue-900/20 rounded-full blur-[100px]"
+                className="absolute top-[20%] left-[20%] w-[300px] h-[300px] bg-indigo-500/40 rounded-full blur-[80px]"
             />
 
             <motion.div
@@ -72,7 +72,7 @@ export default function BackgroundAnimation() {
                     ease: "linear",
                     delay: 5
                 }}
-                className="absolute top-[60%] right-[30%] w-[250px] h-[250px] bg-violet-900/20 rounded-full blur-[80px]"
+                className="absolute top-[60%] right-[30%] w-[250px] h-[250px] bg-pink-500/40 rounded-full blur-[60px]"
             />
 
             {/* Texture Overlay (Optional for 'smoke' grain) */}
