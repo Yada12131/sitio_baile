@@ -34,28 +34,43 @@ export default function BackgroundAnimation({ settings }: { settings?: any }) {
     if (!isMounted) return null;
 
     return (
+    return (
         <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-transparent">
-            {/* Ambient Glow (Background Base) */}
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/10 to-black/40" />
+            {/* Ambient Nebula (Base Color Layer) */}
+            <motion.div
+                animate={{ opacity: [0.2, 0.4, 0.2] }}
+                transition={{ duration: 5, repeat: Infinity }}
+                className="absolute inset-0 bg-gradient-to-tr from-purple-900/20 via-transparent to-pink-900/20"
+            />
+
+            {/* Large Floating Orbs (Depth) */}
+            <motion.div
+                animate={{
+                    x: [0, 50, 0],
+                    y: [0, -30, 0],
+                }}
+                transition={{ duration: speed * 2, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-1/4 left-1/4 w-[50vw] h-[50vw] bg-purple-600/10 rounded-full blur-[100px]"
+            />
 
             {/* Particles */}
             {particles.map((p) => (
                 <motion.div
                     key={p.id}
-                    className="absolute rounded-full will-change-transform translate-z-0"
+                    className="absolute rounded-full will-change-transform translate-z-0 mix-blend-screen"
                     style={{
                         left: `${p.x}%`,
                         top: `${p.y}%`,
                         width: `${p.size}px`,
                         height: `${p.size}px`,
                         backgroundColor: p.color,
-                        boxShadow: `0 0 ${p.size * 3}px ${p.color}`,
+                        boxShadow: `0 0 ${p.size * 2}px ${p.color}, 0 0 ${p.size * 4}px ${p.color}`, // Double Glow
                     }}
                     animate={{
-                        y: [0, -120, 0], // Float up and around
-                        x: [0, Math.random() * 60 - 30, 0], // Slight horizontal drift
-                        opacity: [0.1, opacity + 0.3, 0.1], // Fade in/out (Boosted)
-                        scale: [0.5, 1.2, 0.5],
+                        y: [0, -150, 0],
+                        x: [0, Math.random() * 80 - 40, 0],
+                        opacity: [0.2, opacity + 0.4, 0.2], // Higher Base and Peak Opacity
+                        scale: [0.8, 1.4, 0.8],
                     }}
                     transition={{
                         duration: p.duration,
@@ -65,13 +80,6 @@ export default function BackgroundAnimation({ settings }: { settings?: any }) {
                     }}
                 />
             ))}
-
-            {/* Subtle Gradient Orbs (Reduced for cleanliness) */}
-            <motion.div
-                animate={{ opacity: [0.3, 0.5, 0.3] }}
-                transition={{ duration: 10, repeat: Infinity }}
-                className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-purple-900/10 to-transparent"
-            />
         </div>
     );
 }
