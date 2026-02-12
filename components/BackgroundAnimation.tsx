@@ -27,7 +27,7 @@ export default function BackgroundAnimation({ settings }: { settings?: any }) {
     }));
 
     return (
-        <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <div className="fixed inset-0 z-[50] overflow-hidden pointer-events-none mix-blend-screen">
             {/* CSS Styles for floating animation */}
             <style jsx global>{`
                 @keyframes float-up {
