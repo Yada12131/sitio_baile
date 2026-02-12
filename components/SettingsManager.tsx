@@ -343,10 +343,10 @@ export default function SettingsManager({ initialSettings }: { initialSettings: 
                             />
                         </div>
                     </div>
-                </section >
+                </section>
 
                 {/* Redes Sociales */}
-                < section className="bg-zinc-900 p-6 rounded-xl border border-white/10" >
+                <section className="bg-zinc-900 p-6 rounded-xl border border-white/10">
                     <h2 className="text-xl font-bold text-pink-500 mb-4 border-b border-white/10 pb-2">Redes Sociales (URLs)</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
@@ -378,8 +378,8 @@ export default function SettingsManager({ initialSettings }: { initialSettings: 
                             />
                         </div>
                     </div>
-                </section >
-            </div >
-        </div >
+                </section>
+            </div>
+        </div>
     );
 }
