@@ -130,31 +130,33 @@ export default function FormBuilder() {
         fetchFields();
     };
 
-    // Auto-generate name from label if empty
+    // Auto-generate name from label if empty or if user hasn't manually set a divergent name
+    // For simplicity and "forcing" the user requirement, we will always slugify the label into the name
+    // unless the user creates a complex pattern. Here we just strictly follow the label.
     const handleLabelChange = (val: string) => {
+        const slug = val.toLowerCase()
+            .replace(/\s+/g, '_')
+            .replace(/[áäâà]/g, 'a')
+            .replace(/[éëêè]/g, 'e')
+            .replace(/[íïîì]/g, 'i')
+            .replace(/[óöôò]/g, 'o')
+            .replace(/[úüûù]/g, 'u')
+            .replace(/ñ/g, 'n')
+            .replace(/[^a-z0-9_]/g, '');
+
         setNewField(prev => ({
             ...prev,
             label: val,
-            name: prev.name ? prev.name : val.toLowerCase().replace(/\s+/g, '_').replace(/á/g, 'a').replace(/é/g, 'e').replace(/í/g, 'i').replace(/ó/g, 'o').replace(/ú/g, 'u').replace(/ñ/g, 'n')
+            name: slug
         }));
     };
 
     const handleTypeChange = (type: string) => {
-        let defaultName = '';
-        switch (type) {
-            case 'email': defaultName = 'email'; break;
-            case 'tel': defaultName = 'phone'; break;
-            case 'date': defaultName = 'date'; break;
-            case 'number': defaultName = 'number'; break;
-            case 'textarea': defaultName = 'message'; break;
-            case 'select': defaultName = 'option'; break;
-            default: defaultName = 'text';
-        }
-
+        // Do NOT overwrite name when type changes. 
+        // Only set default options if needed or special handling.
         setNewField(prev => ({
             ...prev,
-            type,
-            name: defaultName
+            type
         }));
     };
 

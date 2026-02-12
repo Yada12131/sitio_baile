@@ -14,7 +14,7 @@ export default function BackgroundAnimation() {
     if (!isMounted) return null;
 
     return (
-        <div className="fixed inset-0 z-[50] overflow-hidden pointer-events-none bg-transparent">
+        <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-transparent">
             {/* Fog/Smoke Effect - Large subtle moving gradients */}
             <motion.div
                 animate={{
@@ -27,7 +27,7 @@ export default function BackgroundAnimation() {
                     repeat: Infinity,
                     ease: "easeInOut"
                 }}
-                className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-cyan-500/60 rounded-full blur-[100px]"
+                className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-purple-600/60 rounded-full blur-[100px]"
             />
 
             <motion.div
@@ -42,7 +42,7 @@ export default function BackgroundAnimation() {
                     ease: "easeInOut",
                     delay: 2
                 }}
-                className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-orange-500/60 rounded-full blur-[100px]"
+                className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-pink-600/60 rounded-full blur-[100px]"
             />
 
             {/* Floating Orbs/Circles */}
