@@ -160,112 +160,108 @@ export default function SettingsManager({ initialSettings }: { initialSettings: 
                                         />
                                     </div>
                                 </div>
-                            </div>
-                            <div>
-                                <label className="block text-gray-400 mb-2">Color Humo 2</label>
-                                <div className="flex gap-2">
-                                    <input
-                                        type="color" value={settings.animColor2 || '#db2777'} onChange={(e) => handleChange('animColor2', e.target.value)}
-                                        className="h-12 w-12 rounded bg-transparent cursor-pointer"
-                                    />
-                                    <input
-                                        type="text" value={settings.animColor2 || ''} onChange={(e) => handleChange('animColor2', e.target.value)}
-                                        className="flex-1 bg-black border border-white/20 rounded-lg p-3 text-white uppercase"
-                                    />
+                                <div>
+                                    <label className="block text-gray-400 mb-2">Color Humo 2</label>
+                                    <div className="flex gap-2">
+                                        <input
+                                            type="color" value={settings.animColor2 || '#db2777'} onChange={(e) => handleChange('animColor2', e.target.value)}
+                                            className="h-12 w-12 rounded bg-transparent cursor-pointer"
+                                        />
+                                        <input
+                                            type="text" value={settings.animColor2 || ''} onChange={(e) => handleChange('animColor2', e.target.value)}
+                                            className="flex-1 bg-black border border-white/20 rounded-lg p-3 text-white uppercase"
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                            <div>
-                                <label className="block text-gray-400 mb-2">Color Humo 3</label>
-                                <div className="flex gap-2">
-                                    <input
-                                        type="color" value={settings.animColor3 || '#06b6d4'} onChange={(e) => handleChange('animColor3', e.target.value)}
-                                        className="h-12 w-12 rounded bg-transparent cursor-pointer"
-                                    />
-                                    <input
-                                        type="text" value={settings.animColor3 || ''} onChange={(e) => handleChange('animColor3', e.target.value)}
-                                        className="flex-1 bg-black border border-white/20 rounded-lg p-3 text-white uppercase"
-                                    />
+                                <div>
+                                    <label className="block text-gray-400 mb-2">Color Humo 3</label>
+                                    <div className="flex gap-2">
+                                        <input
+                                            type="color" value={settings.animColor3 || '#06b6d4'} onChange={(e) => handleChange('animColor3', e.target.value)}
+                                            className="h-12 w-12 rounded bg-transparent cursor-pointer"
+                                        />
+                                        <input
+                                            type="text" value={settings.animColor3 || ''} onChange={(e) => handleChange('animColor3', e.target.value)}
+                                            className="flex-1 bg-black border border-white/20 rounded-lg p-3 text-white uppercase"
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                            <div>
-                                <label className="block text-gray-400 mb-2">Color Humo 3</label>
-                                <div className="flex gap-2">
+                                <div>
+                                    <label className="block text-gray-400 mb-2">Opacidad ({settings.animOpacity || 0.3})</label>
                                     <input
-                                        type="color" value={settings.animColor3 || '#06b6d4'} onChange={(e) => handleChange('animColor3', e.target.value)}
-                                        className="h-12 w-12 rounded bg-transparent cursor-pointer"
+                                        type="range"
+                                        min="0.1"
+                                        max="1.0"
+                                        step="0.1"
+                                        value={settings.animOpacity || 0.3}
+                                        onChange={(e) => handleChange('animOpacity', e.target.value)}
+                                        className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
                                     />
-                                    <input
-                                        type="text" value={settings.animColor3 || ''} onChange={(e) => handleChange('animColor3', e.target.value)}
-                                        className="flex-1 bg-black border border-white/20 rounded-lg p-3 text-white uppercase"
-                                    />
+                                    <p className="text-xs text-gray-500 mt-1">Más bajo es más sutil. Más alto es más visible.</p>
                                 </div>
-                            </div>
-                            <div>
-                                <label className="block text-gray-400 mb-2">Opacidad ({settings.animOpacity || 0.3})</label>
-                                <input
-                                    type="range"
-                                    min="0.1"
-                                    max="1.0"
-                                    step="0.1"
-                                    value={settings.animOpacity || 0.3}
-                                    onChange={(e) => handleChange('animOpacity', e.target.value)}
-                                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
-                                />
-                                <p className="text-xs text-gray-500 mt-1">Más bajo es más sutil. Más alto es más visible.</p>
-                            </div>
-                            <div>
-                                <label className="block text-gray-400 mb-2">Velocidad ({settings.animSpeed || 30}s)</label>
-                                <input
-                                    type="range"
-                                    min="10"
-                                    max="120"
-                                    step="5"
-                                    value={settings.animSpeed || 30}
-                                    onChange={(e) => handleChange('animSpeed', e.target.value)}
-                                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
-                                />
-                                <p className="text-xs text-gray-500 mt-1">Tiempo en completar un ciclo (Más alto = Más lento).</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Navbar Settings */}
-                    <div className="md:col-span-2 border-t border-white/10 pt-4 mt-2">
-                        <h3 className="text-lg font-semibold text-white mb-4">Personalización de Barra de Navegación</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label className="block text-gray-400 mb-2">Color de Fondo (Navbar)</label>
-                                <div className="flex gap-2">
+                                <div>
+                                    <label className="block text-gray-400 mb-2">Velocidad ({settings.animSpeed || 30}s)</label>
                                     <input
-                                        type="color" value={settings.navbarBgColor || '#000000'} onChange={(e) => handleChange('navbarBgColor', e.target.value)}
-                                        className="h-12 w-12 rounded bg-transparent cursor-pointer"
+                                        type="range"
+                                        min="10"
+                                        max="120"
+                                        step="5"
+                                        value={settings.animSpeed || 30}
+                                        onChange={(e) => handleChange('animSpeed', e.target.value)}
+                                        className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
                                     />
-                                    <input
-                                        type="text" value={settings.navbarBgColor || ''} onChange={(e) => handleChange('navbarBgColor', e.target.value)}
-                                        className="flex-1 bg-black border border-white/20 rounded-lg p-3 text-white uppercase"
-                                    />
-                                </div>
-                            </div>
-                            <div>
-                                <label className="block text-gray-400 mb-2">Color del Texto (Navbar)</label>
-                                <div className="flex gap-2">
-                                    <input
-                                        type="color" value={settings.navbarTextColor || '#ffffff'} onChange={(e) => handleChange('navbarTextColor', e.target.value)}
-                                        className="h-12 w-12 rounded bg-transparent cursor-pointer"
-                                    />
-                                    <input
-                                        type="text" value={settings.navbarTextColor || ''} onChange={(e) => handleChange('navbarTextColor', e.target.value)}
-                                        className="flex-1 bg-black border border-white/20 rounded-lg p-3 text-white uppercase"
-                                    />
+                                    <p className="text-xs text-gray-500 mt-1">Tiempo en completar un ciclo (Más alto = Más lento).</p>
                                 </div>
                             </div>
                         </div>
+                        max="120"
+                        step="5"
+                        value={settings.animSpeed || 30}
+                        onChange={(e) => handleChange('animSpeed', e.target.value)}
+                        className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                                />
+                        <p className="text-xs text-gray-500 mt-1">Tiempo en completar un ciclo (Más alto = Más lento).</p>
                     </div>
             </div>
-        </section>
+        </div>
 
-                {/* Contenido Home */ }
-    <section className="bg-zinc-900 p-6 rounded-xl border border-white/10">
+                    {/* Navbar Settings */ }
+    <div className="md:col-span-2 border-t border-white/10 pt-4 mt-2">
+        <h3 className="text-lg font-semibold text-white mb-4">Personalización de Barra de Navegación</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label className="block text-gray-400 mb-2">Color de Fondo (Navbar)</label>
+                <div className="flex gap-2">
+                    <input
+                        type="color" value={settings.navbarBgColor || '#000000'} onChange={(e) => handleChange('navbarBgColor', e.target.value)}
+                        className="h-12 w-12 rounded bg-transparent cursor-pointer"
+                    />
+                    <input
+                        type="text" value={settings.navbarBgColor || ''} onChange={(e) => handleChange('navbarBgColor', e.target.value)}
+                        className="flex-1 bg-black border border-white/20 rounded-lg p-3 text-white uppercase"
+                    />
+                </div>
+            </div>
+            <div>
+                <label className="block text-gray-400 mb-2">Color del Texto (Navbar)</label>
+                <div className="flex gap-2">
+                    <input
+                        type="color" value={settings.navbarTextColor || '#ffffff'} onChange={(e) => handleChange('navbarTextColor', e.target.value)}
+                        className="h-12 w-12 rounded bg-transparent cursor-pointer"
+                    />
+                    <input
+                        type="text" value={settings.navbarTextColor || ''} onChange={(e) => handleChange('navbarTextColor', e.target.value)}
+                        className="flex-1 bg-black border border-white/20 rounded-lg p-3 text-white uppercase"
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+            </div >
+        </section >
+
+        {/* Contenido Home */ }
+        < section className = "bg-zinc-900 p-6 rounded-xl border border-white/10" >
         <h2 className="text-xl font-bold text-pink-500 mb-4 border-b border-white/10 pb-2">Página de Inicio (Hero)</h2>
         <div className="space-y-4">
             <div>
@@ -283,10 +279,10 @@ export default function SettingsManager({ initialSettings }: { initialSettings: 
                 />
             </div>
         </div>
-    </section>
+    </section >
 
-    {/* Contenido Home (Destacados) */ }
-    <section className="bg-zinc-900 p-6 rounded-xl border border-white/10">
+        {/* Contenido Home (Destacados) */ }
+        < section className = "bg-zinc-900 p-6 rounded-xl border border-white/10" >
         <h2 className="text-xl font-bold text-pink-500 mb-4 border-b border-white/10 pb-2">Página de Inicio (Destacados)</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[1, 2, 3].map((num) => (
@@ -309,10 +305,10 @@ export default function SettingsManager({ initialSettings }: { initialSettings: 
                 </div>
             ))}
         </div>
-    </section>
+    </section >
 
-    {/* Contenido Sobre Nosotros */ }
-    <section className="bg-zinc-900 p-6 rounded-xl border border-white/10">
+        {/* Contenido Sobre Nosotros */ }
+        < section className = "bg-zinc-900 p-6 rounded-xl border border-white/10" >
         <h2 className="text-xl font-bold text-pink-500 mb-4 border-b border-white/10 pb-2">Sobre Nosotros</h2>
         <div className="space-y-4">
             <div>
@@ -332,10 +328,10 @@ export default function SettingsManager({ initialSettings }: { initialSettings: 
         </div>
 
 
-    </section>
+    </section >
 
-    {/* Información de Contacto */ }
-    <section className="bg-zinc-900 p-6 rounded-xl border border-white/10">
+        {/* Información de Contacto */ }
+        < section className = "bg-zinc-900 p-6 rounded-xl border border-white/10" >
         <h2 className="text-xl font-bold text-pink-500 mb-4 border-b border-white/10 pb-2">Contacto</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -360,10 +356,10 @@ export default function SettingsManager({ initialSettings }: { initialSettings: 
                 />
             </div>
         </div>
-    </section>
+    </section >
 
-    {/* Redes Sociales */ }
-    <section className="bg-zinc-900 p-6 rounded-xl border border-white/10">
+        {/* Redes Sociales */ }
+        < section className = "bg-zinc-900 p-6 rounded-xl border border-white/10" >
         <h2 className="text-xl font-bold text-pink-500 mb-4 border-b border-white/10 pb-2">Redes Sociales (URLs)</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
@@ -395,7 +391,7 @@ export default function SettingsManager({ initialSettings }: { initialSettings: 
                 />
             </div>
         </div>
-    </section>
+    </section >
 
 
 
