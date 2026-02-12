@@ -17,14 +17,14 @@ export default function BackgroundAnimation({ settings }: { settings?: any }) {
     useEffect(() => {
         setIsMounted(true);
         // Generate random particles only on client to avoid hydration mismatch
-        const particleCount = window.innerWidth < 768 ? 40 : 60; // Less on mobile for perf, but bigger
+        const particleCount = window.innerWidth < 768 ? 40 : 60;
 
         const newParticles = Array.from({ length: particleCount }).map((_, i) => ({
             id: i,
             x: Math.random() * 100, // %
             y: Math.random() * 100, // %
-            size: Math.random() * 8 + 4, // 4px - 12px (Bigger for mobile visibility)
-            duration: Math.random() * 20 + speed,
+            size: Math.random() * 10 + 5, // 5px - 15px (HUGE for visibility check)
+            duration: Math.random() * 20 + 20, // Slow movement
             delay: Math.random() * 5,
             color: Math.random() > 0.5 ? color1 : color2
         }));
@@ -34,13 +34,15 @@ export default function BackgroundAnimation({ settings }: { settings?: any }) {
     if (!isMounted) return null;
 
     return (
-    return (
-        <div className="fixed inset-0 z-[50] overflow-hidden pointer-events-none bg-transparent mix-blend-screen">
-            {/* Ambient Nebula (Base Color Layer) */}
+        <div className="fixed inset-0 z-[9999] overflow-hidden pointer-events-none bg-transparent">
+            {/* DEBUG INDICATOR - Remove after confirming visibility */}
+            {/* <div className="absolute bottom-5 right-5 text-white bg-red-600 px-2 rounded z-[99999]">Animation: ON</div> */}
+
+            {/* Ambient Nebula (Base Color Layer) - Increased Opacity */}
             <motion.div
-                animate={{ opacity: [0.2, 0.4, 0.2] }}
+                animate={{ opacity: [0.3, 0.5, 0.3] }}
                 transition={{ duration: 5, repeat: Infinity }}
-                className="absolute inset-0 bg-gradient-to-tr from-purple-900/20 via-transparent to-pink-900/20"
+                className="absolute inset-0 bg-gradient-to-tr from-purple-900/30 via-transparent to-pink-900/30"
             />
 
             {/* Large Floating Orbs (Depth) */}
@@ -49,28 +51,28 @@ export default function BackgroundAnimation({ settings }: { settings?: any }) {
                     x: [0, 50, 0],
                     y: [0, -30, 0],
                 }}
-                transition={{ duration: speed * 2, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute top-1/4 left-1/4 w-[50vw] h-[50vw] bg-purple-600/10 rounded-full blur-[100px]"
+                transition={{ duration: 60, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-1/4 left-1/4 w-[50vw] h-[50vw] bg-purple-600/20 rounded-full blur-[80px]"
             />
 
             {/* Particles */}
             {particles.map((p) => (
                 <motion.div
                     key={p.id}
-                    className="absolute rounded-full will-change-transform translate-z-0 mix-blend-screen"
+                    className="absolute rounded-full will-change-transform translate-z-0"
                     style={{
                         left: `${p.x}%`,
                         top: `${p.y}%`,
                         width: `${p.size}px`,
                         height: `${p.size}px`,
                         backgroundColor: p.color,
-                        boxShadow: `0 0 ${p.size * 2}px ${p.color}, 0 0 ${p.size * 4}px ${p.color}`, // Double Glow
+                        boxShadow: `0 0 ${p.size}px ${p.color}`, // Solid Glow
                     }}
                     animate={{
-                        y: [0, -150, 0],
-                        x: [0, Math.random() * 80 - 40, 0],
-                        opacity: [0.2, opacity + 0.4, 0.2], // Higher Base and Peak Opacity
-                        scale: [0.8, 1.4, 0.8],
+                        y: [0, -100, 0],
+                        x: [0, Math.random() * 40 - 20, 0],
+                        opacity: [0.4, 0.8, 0.4], // HIGH OPACITY (0.4 - 0.8)
+                        scale: [0.8, 1.2, 0.8],
                     }}
                     transition={{
                         duration: p.duration,
