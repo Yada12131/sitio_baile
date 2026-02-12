@@ -30,16 +30,16 @@ export default function AdminLayout({
     ];
 
     return (
-        <div className="flex h-screen bg-black text-white">
-            {/* Sidebar */}
-            <aside className="w-64 bg-zinc-900 border-r border-white/10 flex flex-col">
+        <div className="flex min-h-screen bg-black text-white">
+            {/* Sidebar - Sticky */}
+            <aside className="w-64 bg-zinc-900 border-r border-white/10 flex flex-col sticky top-0 h-screen z-20">
                 <div className="p-6">
                     <h1 className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
                         Admin Panel
                     </h1>
                 </div>
 
-                <nav className="flex-1 px-4 space-y-2">
+                <nav className="flex-1 px-4 space-y-2 overflow-y-auto">
                     {navItems.map((item) => (
                         <Link
                             key={item.href}
@@ -63,8 +63,8 @@ export default function AdminLayout({
                 </div>
             </aside>
 
-            {/* Main Content */}
-            <main className="flex-1 overflow-y-auto bg-black p-8">
+            {/* Main Content - Native Scroll */}
+            <main className="flex-1 bg-black p-8 relative z-10">
                 {children}
             </main>
         </div>
