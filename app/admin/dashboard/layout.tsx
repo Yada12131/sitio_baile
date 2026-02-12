@@ -30,9 +30,9 @@ export default function AdminLayout({
     ];
 
     return (
-        <div className="flex min-h-screen bg-transparent text-white">
+        <div className="flex min-h-screen bg-black text-white">
             {/* Sidebar - Sticky */}
-            <aside className="w-64 bg-zinc-900/90 backdrop-blur-md border-r border-white/10 flex flex-col sticky top-0 h-screen z-20">
+            <aside className="w-64 bg-zinc-900 border-r border-white/10 flex flex-col sticky top-0 h-screen z-20">
                 <div className="p-6">
                     <h1 className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
                         Admin Panel
@@ -64,7 +64,7 @@ export default function AdminLayout({
             </aside>
 
             {/* Main Content - Native Scroll */}
-            <main className="flex-1 bg-black/40 backdrop-blur-sm p-8 relative z-10">
+            <main className="flex-1 bg-black p-8 relative z-10">
                 {children}
             </main>
         </div>
