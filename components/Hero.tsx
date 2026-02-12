@@ -23,7 +23,7 @@ export default function Hero({ title, subtitle }: HeroProps) {
 
             <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
                 <motion.h1
-                    className="text-5xl md:text-7xl font-extrabold mb-6 drop-shadow-2xl inline-block"
+                    className="text-4xl sm:text-5xl md:text-7xl font-extrabold mb-6 drop-shadow-2xl inline-block"
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
@@ -39,7 +39,7 @@ export default function Hero({ title, subtitle }: HeroProps) {
                 </motion.h1>
 
                 <motion.p
-                    className="text-xl md:text-2xl text-gray-200 mb-10 max-w-2xl mx-auto"
+                    className="text-lg sm:text-xl md:text-2xl text-gray-200 mb-10 max-w-2xl mx-auto px-4"
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
