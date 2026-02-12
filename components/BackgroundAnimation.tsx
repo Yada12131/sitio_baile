@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 export default function BackgroundAnimation({ settings }: { settings?: any }) {
     // Animation active - v3
     const [isMounted, setIsMounted] = useState(false);
+    const [particles, setParticles] = useState<any[]>([]);
 
     // Defaults
     const color1 = settings?.animColor1 || '#9333ea'; // purple-600
@@ -15,78 +16,60 @@ export default function BackgroundAnimation({ settings }: { settings?: any }) {
 
     useEffect(() => {
         setIsMounted(true);
-    }, []);
+        // Generate random particles only on client to avoid hydration mismatch
+        const newParticles = Array.from({ length: 25 }).map((_, i) => ({
+            id: i,
+            x: Math.random() * 100, // %
+            y: Math.random() * 100, // %
+            size: Math.random() * 4 + 1, // 1px - 5px
+            duration: Math.random() * 20 + speed,
+            delay: Math.random() * 5,
+            color: Math.random() > 0.5 ? color1 : color2
+        }));
+        setParticles(newParticles);
+    }, [speed, color1, color2]);
 
     if (!isMounted) return null;
 
     return (
         <div className="fixed inset-0 z-[50] overflow-hidden pointer-events-none bg-transparent mix-blend-screen">
-            {/* Fog/Smoke Effect - Large subtle moving gradients */}
-            <motion.div
-                animate={{
-                    x: [0, 100, 0],
-                    y: [0, -50, 0],
-                    opacity: [opacity, opacity + 0.2, opacity],
-                }}
-                transition={{
-                    duration: speed * 0.6, // Relative to base speed
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                }}
-                className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] rounded-full blur-[100px]"
-                style={{ backgroundColor: color1 }}
-            />
+            {/* Ambient Glow (Background Base) */}
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/5 to-black/20" />
 
-            <motion.div
-                animate={{
-                    x: [0, -100, 0],
-                    y: [0, 100, 0],
-                    opacity: [opacity - 0.1, opacity + 0.1, opacity - 0.1],
-                }}
-                transition={{
-                    duration: speed * 0.8,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 2
-                }}
-                className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] rounded-full blur-[100px]"
-                style={{ backgroundColor: color2 }}
-            />
+            {/* Particles */}
+            {particles.map((p) => (
+                <motion.div
+                    key={p.id}
+                    className="absolute rounded-full"
+                    style={{
+                        left: `${p.x}%`,
+                        top: `${p.y}%`,
+                        width: p.size,
+                        height: p.size,
+                        backgroundColor: p.color,
+                        boxShadow: `0 0 ${p.size * 2}px ${p.color}`,
+                    }}
+                    animate={{
+                        y: [0, -100, 0], // Float up and around
+                        x: [0, Math.random() * 50 - 25, 0], // Slight horizontal drift
+                        opacity: [0, opacity, 0], // Fade in/out
+                        scale: [0, 1.5, 0],
+                    }}
+                    transition={{
+                        duration: p.duration,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: p.delay,
+                    }}
+                />
+            ))}
 
-            {/* Floating Orbs/Circles */}
+            {/* Subtle Gradient Orbs (Reduced for cleanliness) */}
             <motion.div
-                animate={{
-                    x: [0, 200, -200, 0],
-                    y: [0, -200, 200, 0],
-                    scale: [1, 1.2, 0.8, 1],
-                }}
-                transition={{
-                    duration: speed,
-                    repeat: Infinity,
-                    ease: "linear"
-                }}
-                className="absolute top-[20%] left-[20%] w-[300px] h-[300px] bg-indigo-500/40 rounded-full blur-[80px]"
-                style={{ opacity: opacity }}
+                animate={{ opacity: [0.3, 0.5, 0.3] }}
+                transition={{ duration: 10, repeat: Infinity }}
+                className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-purple-900/10 to-transparent"
             />
-
-            <motion.div
-                animate={{
-                    x: [0, -150, 150, 0],
-                    y: [0, 150, -150, 0],
-                    scale: [1, 0.9, 1.1, 1],
-                }}
-                transition={{
-                    duration: speed * 1.2,
-                    repeat: Infinity,
-                    ease: "linear",
-                    delay: 5
-                }}
-                className="absolute top-[60%] right-[30%] w-[250px] h-[250px] bg-sky-500/40 rounded-full blur-[60px]"
-                style={{ opacity: opacity }}
-            />
-
-            {/* Texture Overlay (Optional for 'smoke' grain) */}
-            <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E")' }} />
         </div>
     );
 }
