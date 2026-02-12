@@ -19,17 +19,24 @@ export default function BackgroundAnimation({ settings }: { settings?: any }) {
         // Generate random particles only on client to avoid hydration mismatch
         const particleCount = window.innerWidth < 768 ? 40 : 60;
 
-        const newParticles = Array.from({ length: particleCount }).map((_, i) => ({
-            id: i,
-            x: Math.random() * 100, // %
-            y: Math.random() * 100, // %
-            size: Math.random() * 6 + 3, // 3px - 9px (Elegant size)
-            duration: Math.random() * 20 + speed,
-            delay: Math.random() * 5,
-            color: Math.random() > 0.5 ? color1 : color2
-        }));
+        const newParticles = Array.from({ length: particleCount }).map((_, i) => {
+            const random = Math.random();
+            let selectedColor = color1;
+            if (random > 0.66) selectedColor = color2;
+            else if (random > 0.33) selectedColor = color3;
+
+            return {
+                id: i,
+                x: Math.random() * 100, // %
+                y: Math.random() * 100, // %
+                size: Math.random() * 6 + 3, // 3px - 9px (Elegant size)
+                duration: Math.random() * 20 + speed,
+                delay: Math.random() * 5,
+                color: selectedColor
+            };
+        });
         setParticles(newParticles);
-    }, [speed, color1, color2]);
+    }, [speed, color1, color2, color3]);
 
     if (!isMounted) return null;
 
