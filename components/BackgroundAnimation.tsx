@@ -34,7 +34,6 @@ export default function BackgroundAnimation({ settings }: { settings?: any }) {
     if (!isMounted) return null;
 
     return (
-    return (
         <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-transparent">
             {/* Ambient Nebula (Base Color Layer) */}
             <motion.div
