@@ -17,11 +17,13 @@ export default function BackgroundAnimation({ settings }: { settings?: any }) {
     useEffect(() => {
         setIsMounted(true);
         // Generate random particles only on client to avoid hydration mismatch
-        const newParticles = Array.from({ length: 40 }).map((_, i) => ({
+        const particleCount = window.innerWidth < 768 ? 40 : 60; // Less on mobile for perf, but bigger
+
+        const newParticles = Array.from({ length: particleCount }).map((_, i) => ({
             id: i,
             x: Math.random() * 100, // %
             y: Math.random() * 100, // %
-            size: Math.random() * 6 + 3, // 3px - 9px
+            size: Math.random() * 8 + 4, // 4px - 12px (Bigger for mobile visibility)
             duration: Math.random() * 20 + speed,
             delay: Math.random() * 5,
             color: Math.random() > 0.5 ? color1 : color2
@@ -32,7 +34,7 @@ export default function BackgroundAnimation({ settings }: { settings?: any }) {
     if (!isMounted) return null;
 
     return (
-        <div className="fixed inset-0 z-[50] overflow-hidden pointer-events-none bg-transparent mix-blend-screen">
+        <div className="fixed inset-0 z-[50] overflow-hidden pointer-events-none bg-transparent mix-blend-screen perspective-1000">
             {/* Ambient Glow (Background Base) */}
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/10 to-black/40" />
 
@@ -40,7 +42,7 @@ export default function BackgroundAnimation({ settings }: { settings?: any }) {
             {particles.map((p) => (
                 <motion.div
                     key={p.id}
-                    className="absolute rounded-full"
+                    className="absolute rounded-full will-change-transform translate-z-0"
                     style={{
                         left: `${p.x}%`,
                         top: `${p.y}%`,
