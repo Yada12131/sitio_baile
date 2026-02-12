@@ -34,7 +34,7 @@ export default function BackgroundAnimation({ settings }: { settings?: any }) {
     if (!isMounted) return null;
 
     return (
-        <div className="fixed inset-0 z-[50] overflow-hidden pointer-events-none bg-transparent mix-blend-screen perspective-1000">
+        <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-transparent">
             {/* Ambient Glow (Background Base) */}
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/10 to-black/40" />
 
