@@ -13,18 +13,35 @@ export async function GET(request: Request) {
     }
 }
 
+import { initDb } from '@/lib/db';
+
 export async function POST(request: Request) {
     try {
         const body = await request.json();
         const { form_type, label, name, type, required, order_index, options } = body;
 
-        const res = await query(
-            'INSERT INTO form_fields (form_type, label, name, type, required, order_index, options) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-            [form_type || 'affiliate', label, name, type, required, order_index, options]
-        );
-
-        return NextResponse.json(res.rows[0]);
+        try {
+            const res = await query(
+                'INSERT INTO form_fields (form_type, label, name, type, required, order_index, options) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+                [form_type || 'affiliate', label, name, type, required, order_index, options]
+            );
+            return NextResponse.json(res.rows[0]);
+        } catch (dbError: any) {
+            // Auto-heal: If table doesn't exist, create it and retry
+            if (dbError.code === '42P01') { // Postgres code for undefined table
+                console.log('Table form_fields missing. Attempting to create...');
+                await initDb();
+                // Retry insert
+                const resRetry = await query(
+                    'INSERT INTO form_fields (form_type, label, name, type, required, order_index, options) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+                    [form_type || 'affiliate', label, name, type, required, order_index, options]
+                );
+                return NextResponse.json(resRetry.rows[0]);
+            }
+            throw dbError;
+        }
     } catch (error) {
+        console.error('Error creating field:', error);
         return NextResponse.json({ error: 'Failed to create field' }, { status: 500 });
     }
 }
