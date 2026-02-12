@@ -10,6 +10,7 @@ export default function BackgroundAnimation({ settings }: { settings?: any }) {
     // Defaults
     const color1 = settings?.animColor1 || '#9333ea'; // purple-600
     const color2 = settings?.animColor2 || '#db2777'; // pink-600
+    const color3 = settings?.animColor3 || '#06b6d4'; // Cyan-500 (Configurable)
     const opacity = parseFloat(settings?.animOpacity || '0.3');
     const speed = parseInt(settings?.animSpeed || '30');
 
