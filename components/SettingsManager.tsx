@@ -188,6 +188,19 @@ export default function SettingsManager({ initialSettings }: { initialSettings: 
                                 </div>
                             </div>
                             <div>
+                                <label className="block text-gray-400 mb-2">Color Humo 3</label>
+                                <div className="flex gap-2">
+                                    <input
+                                        type="color" value={settings.animColor3 || '#06b6d4'} onChange={(e) => handleChange('animColor3', e.target.value)}
+                                        className="h-12 w-12 rounded bg-transparent cursor-pointer"
+                                    />
+                                    <input
+                                        type="text" value={settings.animColor3 || ''} onChange={(e) => handleChange('animColor3', e.target.value)}
+                                        className="flex-1 bg-black border border-white/20 rounded-lg p-3 text-white uppercase"
+                                    />
+                                </div>
+                            </div>
+                            <div>
                                 <label className="block text-gray-400 mb-2">Opacidad ({settings.animOpacity || 0.3})</label>
                                 <input
                                     type="range"
