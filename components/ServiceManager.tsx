@@ -69,7 +69,7 @@ export default function ServiceManager() {
                 setShowCategoryInput(false);
             } else {
                 const data = await res.json();
-                alert('Error: ' + (data.error || 'No se pudo crear la categoría'));
+                alert('Error: ' + (data.error || 'No se pudo crear la categoría') + (data.details ? '\nDetalles: ' + data.details : ''));
             }
         } catch (error) {
             console.error('Error creating category:', error);
