@@ -142,6 +142,13 @@ export const initDb = async () => {
             value TEXT
         )`);
 
+        // Service Categories
+        await query(`CREATE TABLE IF NOT EXISTS service_categories (
+            id SERIAL PRIMARY KEY,
+            name TEXT UNIQUE NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )`);
+
         // form_fields
         await query(`CREATE TABLE IF NOT EXISTS form_fields (
             id SERIAL PRIMARY KEY,
@@ -305,5 +312,19 @@ const seedData = async () => {
         }
     } catch (e) {
         console.error('Seeding settings error:', e);
+    }
+
+    // Seed Service Categories
+    try {
+        const categoriesCount = await query('SELECT COUNT(*) FROM service_categories');
+        if (parseInt(categoriesCount.rows[0].count) === 0) {
+            console.log('Seeding Service Categories...');
+            const categories = ['Eventos', 'Shows', 'Multimedia', 'Clases', 'Afiliados'];
+            for (const cat of categories) {
+                await query('INSERT INTO service_categories (name) VALUES ($1) ON CONFLICT (name) DO NOTHING', [cat]);
+            }
+        }
+    } catch (e) {
+        console.error('Seeding categories error:', e);
     }
 };

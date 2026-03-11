@@ -16,31 +16,34 @@ interface Service {
 interface ServicesListProps {
     items: Service[];
     servicesTitle: string;
+    hideHeader?: boolean;
 }
 
-export default function ServicesList({ items, servicesTitle }: ServicesListProps) {
+export default function ServicesList({ items, servicesTitle, hideHeader = false }: ServicesListProps) {
     const [selectedService, setSelectedService] = useState<Service | null>(null);
 
     return (
-        <div className="min-h-screen bg-black text-white pt-32 pb-20">
+        <div className={`bg-black text-white ${hideHeader ? 'pb-10' : 'pt-32 pb-20'}`}>
             <div className="container mx-auto px-4 relative z-10">
-                <div className="text-center max-w-3xl mx-auto mb-16">
-                    <h1
-                        className="text-5xl md:text-6xl font-black mb-6 tracking-tight inline-block"
-                        style={{
-                            backgroundImage: 'linear-gradient(to right, var(--primary-color), var(--accent-color))',
-                            WebkitBackgroundClip: 'text',
-                            backgroundClip: 'text',
-                            color: 'transparent',
-                            display: 'inline-block'
-                        }}
-                    >
-                        {servicesTitle}
-                    </h1>
-                    <p className="text-xl text-gray-400 leading-relaxed">
-                        Transformamos tu pasión en movimiento con nuestros servicios profesionales.
-                    </p>
-                </div>
+                {!hideHeader && (
+                    <div className="text-center max-w-3xl mx-auto mb-16">
+                        <h1
+                            className="text-5xl md:text-6xl font-black mb-6 tracking-tight inline-block"
+                            style={{
+                                backgroundImage: 'linear-gradient(to right, var(--primary-color), var(--accent-color))',
+                                WebkitBackgroundClip: 'text',
+                                backgroundClip: 'text',
+                                color: 'transparent',
+                                display: 'inline-block'
+                            }}
+                        >
+                            {servicesTitle}
+                        </h1>
+                        <p className="text-xl text-gray-400 leading-relaxed">
+                            Transformamos tu pasión en movimiento con nuestros servicios profesionales.
+                        </p>
+                    </div>
+                )}
 
                 {items.length === 0 ? (
                     <div className="text-center py-20 bg-zinc-900/40 rounded-2xl border border-white/10">
