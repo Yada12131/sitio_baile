@@ -67,9 +67,13 @@ export default function ServiceManager() {
                 await fetchCategories();
                 setNewCategoryName('');
                 setShowCategoryInput(false);
+            } else {
+                const data = await res.json();
+                alert('Error: ' + (data.error || 'No se pudo crear la categoría'));
             }
         } catch (error) {
             console.error('Error creating category:', error);
+            alert('Error de conexión al crear categoría');
         }
     };
 
@@ -180,10 +184,25 @@ export default function ServiceManager() {
                             value={newService.category} onChange={e => setNewService({ ...newService, category: e.target.value })}
                             className="w-full bg-black/50 border border-white/10 rounded-lg p-3 pl-10 text-white appearance-none focus:ring-2 focus:ring-pink-500 outline-none mb-2"
                         >
+                            {categories.length === 0 && <option value="">Cargando categorías...</option>}
                             {categories.map(cat => (
                                 <option key={cat.id} value={cat.name} className="bg-zinc-900">{cat.name}</option>
                             ))}
                         </select>
+                        <div className="flex flex-wrap gap-2 mb-2">
+                            {categories.map(cat => (
+                                <div key={cat.id} className="flex items-center gap-1 bg-white/5 px-2 py-1 rounded text-[10px] group">
+                                    <span>{cat.name}</span>
+                                    <button
+                                        type="button"
+                                        onClick={() => handleDeleteCategory(cat.id)}
+                                        className="text-red-400 hover:text-red-300 opacity-0 group-hover:opacity-100 transition-opacity"
+                                    >
+                                        <X size={10} />
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
                         <div className="flex gap-2">
                             <button type="button" onClick={() => setShowCategoryInput(!showCategoryInput)} className="text-xs text-pink-400 hover:text-pink-300 underline">
                                 {showCategoryInput ? 'Cancelar' : '+ Nueva Categoría'}
@@ -198,8 +217,12 @@ export default function ServiceManager() {
                                     placeholder="Nombre de categoría"
                                     className="bg-black/50 border border-white/10 rounded px-2 py-1 text-sm flex-1"
                                 />
-                                <button type="button" onClick={handleAddCategory} className="bg-pink-600 px-3 py-1 rounded text-xs font-bold">
-                                    OK
+                                <button
+                                    type="button"
+                                    onClick={handleAddCategory}
+                                    className="bg-pink-600 px-3 py-1 rounded text-xs font-bold hover:bg-pink-500 transition-colors"
+                                >
+                                    Guardar
                                 </button>
                             </div>
                         )}
