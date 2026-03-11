@@ -49,6 +49,14 @@ export const initDb = async () => {
     try {
         console.log('Checking/Creating Tables in Postgres...');
 
+        // Service Categories
+        console.log('Task: Creating service_categories table if not exists...');
+        await query(`CREATE TABLE IF NOT EXISTS service_categories (
+            id SERIAL PRIMARY KEY,
+            name TEXT UNIQUE NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )`);
+
         // Events
         await query(`CREATE TABLE IF NOT EXISTS events (
             id SERIAL PRIMARY KEY,

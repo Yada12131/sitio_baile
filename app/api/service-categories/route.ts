@@ -5,8 +5,9 @@ export async function GET() {
     try {
         const result = await query('SELECT * FROM service_categories ORDER BY name ASC');
         return NextResponse.json(result.rows);
-    } catch (error) {
-        return NextResponse.json({ error: 'Failed to fetch categories' }, { status: 500 });
+    } catch (error: any) {
+        console.error('GET categories error:', error);
+        return NextResponse.json({ error: 'Failed to fetch categories', details: error.message }, { status: 500 });
     }
 }
 
@@ -18,8 +19,9 @@ export async function POST(req: Request) {
             [name]
         );
         return NextResponse.json(result.rows[0]);
-    } catch (error) {
-        return NextResponse.json({ error: 'Failed to create category' }, { status: 500 });
+    } catch (error: any) {
+        console.error('POST categories error:', error);
+        return NextResponse.json({ error: 'Failed to create category', details: error.message }, { status: 500 });
     }
 }
 
@@ -31,7 +33,8 @@ export async function DELETE(req: Request) {
 
         await query('DELETE FROM service_categories WHERE id = $1', [id]);
         return NextResponse.json({ success: true });
-    } catch (error) {
-        return NextResponse.json({ error: 'Failed to delete category' }, { status: 500 });
+    } catch (error: any) {
+        console.error('DELETE categories error:', error);
+        return NextResponse.json({ error: 'Failed to delete category', details: error.message }, { status: 500 });
     }
 }
